@@ -1,0 +1,23 @@
+cash-register-view,
+#cash-register-view {
+    display: block;
+    padding: 0em;
+}
+
+
+.gridCashRegisters {
+    width: 8%;
+    height: 98%;
+    color: black;
+    background: yellow;
+}
+
+.gridCashReports {
+    width: 90%;
+    height: 50%;
+}
+
+.h01 {
+    width: 100%;
+    height: 98%;
+}

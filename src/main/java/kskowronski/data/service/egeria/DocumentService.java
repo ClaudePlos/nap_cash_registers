@@ -1,35 +1,36 @@
 package kskowronski.data.service.egeria;
 
-import kskowronski.data.entity.egeria.CashRegister;
+import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.global.ConsolidationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class CashRegisterService  extends CrudService<CashRegister, BigDecimal> {
+public class DocumentService extends CrudService<Document, BigDecimal> {
 
-    private CashRegisterRepo repo;
+    private DocumentRepo repo;
 
-    public CashRegisterService(@Autowired CashRegisterRepo repo) {
+    public DocumentService(@Autowired DocumentRepo repo) {
         this.repo = repo;
     }
 
     @Override
-    protected CashRegisterRepo getRepository() {
+    protected DocumentRepo getRepository() {
         return repo;
     }
 
     @Autowired
     ConsolidationService consolidationService;
 
-    public List<CashRegister> getAllCashRegister(){
+    public Optional<List<Document>> getAllCashReports(BigDecimal casId, BigDecimal frmId){
         consolidationService.setConsolidateCompany();
-        List<CashRegister> cashRegisters = this.repo.findAll(Sort.by("casName").ascending());
-        return cashRegisters;
+        Optional<List<Document>> cashReports = this.repo.findByDocCasIdAndFrm(casId, frmId);
+        return cashReports;
     }
+
 }
