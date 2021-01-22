@@ -16,10 +16,13 @@ public class EatFirma {
     private BigDecimal frmId;
 
     @Column(name = "FRM_NAZWA")
-    private String frmNazwa;
+    private String frmName;
 
     @Column(name = "FRM_KL_ID")
     private BigDecimal frmKlId;
+
+    @Column(name = "FRM_OPIS")
+    private String frmDesc;
 
     public EatFirma() {
     }
@@ -32,12 +35,12 @@ public class EatFirma {
         this.frmId = frmId;
     }
 
-    public String getFrmNazwa() {
-        return frmNazwa;
+    public String getFrmName() {
+        return frmName;
     }
 
-    public void setFrmNazwa(String frmNazwa) {
-        this.frmNazwa = frmNazwa;
+    public void setFrmName(String frmName) {
+        this.frmName = frmName;
     }
 
     public BigDecimal getFrmKlId() {
@@ -46,5 +49,13 @@ public class EatFirma {
 
     public void setFrmKlId(BigDecimal frmKlId) {
         this.frmKlId = frmKlId;
+    }
+
+    public String getFrmDesc() {
+        return frmDesc;
+    }
+
+    public void setFrmDesc(String frmDesc) {
+        this.frmDesc = frmDesc;
     }
 }

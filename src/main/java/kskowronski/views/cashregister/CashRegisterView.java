@@ -5,6 +5,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -46,7 +47,12 @@ public class CashRegisterView extends HorizontalLayout {
         this.gridCashRegisters = new Grid<>(CashRegisterDTO.class);
         gridCashRegisters.setClassName("gridCashRegisters");
         gridCashRegisters.setColumns();
-        gridCashRegisters.addColumn("casName");
+        gridCashRegisters.addColumn(TemplateRenderer.<CashRegisterDTO>of(
+                "<div title='[[item.casDesc]] Firma:[[item.frmName]]'>[[item.casName]]</div>")
+                .withProperty("frmName", CashRegisterDTO::getFrmName)
+                .withProperty("casName", CashRegisterDTO::getCasName)
+                .withProperty("casDesc", CashRegisterDTO::getCasDesc)
+                ).setHeader("KASA");
         gridCashRegisters.addItemClickListener( event -> {
              getCashReports(event.getItem().getCasId(), event.getItem().getCasFrmId());
         });

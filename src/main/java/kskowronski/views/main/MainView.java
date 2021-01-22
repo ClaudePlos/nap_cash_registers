@@ -19,11 +19,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;
 import kskowronski.views.cashregister.CashRegisterView;
-import kskowronski.views.main.MainView;
-import kskowronski.views.helloworld.HelloWorldView;
 import kskowronski.views.about.AboutView;
 
 /**

@@ -20,7 +20,6 @@ public class Application extends SpringBootServletInitializer implements AppShel
 
     public static void main(String[] args) {
         LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
-
     }
 
 }
