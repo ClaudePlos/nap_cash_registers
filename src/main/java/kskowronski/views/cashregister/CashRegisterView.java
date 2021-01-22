@@ -113,7 +113,12 @@ public class CashRegisterView extends HorizontalLayout {
 
     private void addNewReportItem(){
         Document report = new Document();
-        report.setDocNo(BigDecimal.valueOf(35L));
+
+        // nzp_obj_rk.wstaw
+        BigDecimal docId = documentService.addNewCashReport();
+
+        report.setDocNo(docId);
+
         reports.add(report);
         gridCashReports.getDataProvider().refreshAll();
     }
