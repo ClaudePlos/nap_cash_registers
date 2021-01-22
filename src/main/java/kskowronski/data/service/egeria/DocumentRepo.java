@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface DocumentRepo extends JpaRepository<Document, BigDecimal> {
 
-    @Query("select d from Document d where  d.docCasId >= :casId and d.docFrmId = :frmId order by d.docNo desc")
+    @Query("select d from Document d where d.docCasId = :casId and d.docFrmId = :frmId order by d.docNo desc")
     Optional<List<Document>> findByDocCasIdAndFrm(@Param("casId") BigDecimal casId, @Param("frmId") BigDecimal frmId);
 
 }
