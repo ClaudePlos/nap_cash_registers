@@ -1,10 +1,13 @@
 package kskowronski.views.cashregister;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -16,8 +19,10 @@ import kskowronski.data.service.egeria.CashRegisterService;
 import kskowronski.data.service.egeria.DocumentService;
 import kskowronski.views.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +38,9 @@ public class CashRegisterView extends HorizontalLayout {
     private Grid<CashRegisterDTO> gridCashRegisters;
     private Grid<Document> gridCashReports;
 
+    private List<CashRegisterDTO> cashRegisters;
+    private List<Document> reports;
+
     @Autowired
     public CashRegisterView(CashRegisterService cashRegisterService, DocumentService documentService) {
         this.cashRegisterService = cashRegisterService;
@@ -42,6 +50,11 @@ public class CashRegisterView extends HorizontalLayout {
 
         HorizontalLayout h01 = new HorizontalLayout();
         h01.setClassName("h01");
+
+        VerticalLayout vlReports = new VerticalLayout();
+        vlReports.setClassName("vlReports");
+        HorizontalLayout hlReportsHeader = new HorizontalLayout();
+        hlReportsHeader.setClassName("hlReportsHeader");
 
         //first grid
         this.gridCashRegisters = new Grid<>(CashRegisterDTO.class);
@@ -59,33 +72,49 @@ public class CashRegisterView extends HorizontalLayout {
 
 
         //second grid
+        Button butAdd = new Button("Dodaj Raport Kasowy", e ->{ addNewReportItem(); });
+        butAdd.setClassName("butAdd");
+
         this.gridCashReports = new Grid<>(Document.class);
         gridCashReports.setClassName("gridCashReports");
         gridCashReports.setColumns();
-        gridCashReports.addColumn("docNo");
+        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo");
         gridCashReports.addColumn("docOwnNumber");
 
         gridCashReports.addColumn("docInitialState");
         gridCashReports.addColumn("docWn");
         gridCashReports.addColumn("docMa");
 
+        GridSortOrder<Document> order = new GridSortOrder<>(docNo, SortDirection.DESCENDING);
+        gridCashReports.sort(Arrays.asList(order));
 
-        h01.add(gridCashRegisters,gridCashReports);
+
+        hlReportsHeader.add(butAdd);
+        vlReports.add(hlReportsHeader, gridCashReports);
+        h01.add(gridCashRegisters, vlReports);
         add(h01);
         getCashRegisters();
     }
 
     private void getCashRegisters(){
-        List<CashRegisterDTO> cashRegisters = cashRegisterService.getAllCashRegister();
+        cashRegisters = cashRegisterService.getAllCashRegister();
         gridCashRegisters.setItems(cashRegisters);
     }
 
     private void getCashReports(BigDecimal casId, BigDecimal frmId){
         gridCashReports.setItems();
-        Optional<List<Document>> reports = documentService.getAllCashReports(casId, frmId);
-        if ( reports.get().size() == 0 ){
+        Optional<List<Document>> reportsDB = documentService.getAllCashReports(casId, frmId);
+        if ( reportsDB.get().size() == 0 ){
             Notification.show("Brak raprotów dla tej kasy", 3000, Notification.Position.MIDDLE);
         }
-        gridCashReports.setItems(reports.get());
+        reports = reportsDB.get();
+        gridCashReports.setItems(reports);
+    }
+
+    private void addNewReportItem(){
+        Document report = new Document();
+        report.setDocNo(BigDecimal.valueOf(35L));
+        reports.add(report);
+        gridCashReports.getDataProvider().refreshAll();
     }
 }

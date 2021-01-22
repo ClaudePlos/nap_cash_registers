@@ -1,7 +1,8 @@
 cash-register-view,
 #cash-register-view {
-    display: block;
+    /*display: block;*/
     padding: 0em;
+    margin: 5px;
 }
 
 
@@ -13,11 +14,26 @@ cash-register-view,
 }
 
 .gridCashReports {
-    width: 90%;
-    height: 50%;
+    margin: 0px;
 }
 
 .h01 {
     width: 100%;
     height: 98%;
+}
+
+. butAdd {
+    margin: 2px;
+    padding: 0em;
+}
+
+.vlReports {
+    width: 90%;
+    height: 50%;
+    margin-right: 15px;
+    margin: 0px;
+}
+
+.hlReportsHeader {
+    margin: 0px;
 }
