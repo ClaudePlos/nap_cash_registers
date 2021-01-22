@@ -1,5 +1,6 @@
 package kskowronski.security;
 
+import kskowronski.data.service.global.GlobalDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,9 @@ public class MyUserDetailsService implements UserDetailsService
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private GlobalDataService globalDataService;
+
     //@Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //BigDecimal.valueOf(Long.parseLong(username))
@@ -24,6 +28,7 @@ public class MyUserDetailsService implements UserDetailsService
         if (user.get() == null) {
             throw new UsernameNotFoundException("Could not find user with this username and pass");
         }
+        globalDataService.getGlobalData();
         return new MyUserDetails(user.get());
     }
 

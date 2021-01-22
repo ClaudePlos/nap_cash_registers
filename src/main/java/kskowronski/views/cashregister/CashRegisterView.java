@@ -9,6 +9,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import kskowronski.data.entity.egeria.CashRegister;
+import kskowronski.data.entity.egeria.CashRegisterDTO;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.egeria.CashRegisterService;
 import kskowronski.data.service.egeria.DocumentService;
@@ -28,7 +29,7 @@ public class CashRegisterView extends HorizontalLayout {
     private CashRegisterService cashRegisterService;
     private DocumentService documentService;
 
-    private Grid<CashRegister> gridCashRegisters;
+    private Grid<CashRegisterDTO> gridCashRegisters;
     private Grid<Document> gridCashReports;
 
     @Autowired
@@ -42,7 +43,7 @@ public class CashRegisterView extends HorizontalLayout {
         h01.setClassName("h01");
 
         //first grid
-        this.gridCashRegisters = new Grid<>(CashRegister.class);
+        this.gridCashRegisters = new Grid<>(CashRegisterDTO.class);
         gridCashRegisters.setClassName("gridCashRegisters");
         gridCashRegisters.setColumns();
         gridCashRegisters.addColumn("casName");
@@ -69,7 +70,7 @@ public class CashRegisterView extends HorizontalLayout {
     }
 
     private void getCashRegisters(){
-        List<CashRegister> cashRegisters = cashRegisterService.getAllCashRegister();
+        List<CashRegisterDTO> cashRegisters = cashRegisterService.getAllCashRegister();
         gridCashRegisters.setItems(cashRegisters);
     }
 
