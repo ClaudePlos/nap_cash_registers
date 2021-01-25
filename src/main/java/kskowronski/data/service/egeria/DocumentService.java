@@ -12,6 +12,7 @@ import org.vaadin.artur.helpers.CrudService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.print.Doc;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Types;
@@ -37,6 +38,10 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
 
     @Autowired
     ConsolidationService consolidationService;
+
+    public List<Document> findAll(){
+        return repo.findAll();
+    }
 
     public Optional<List<Document>> getAllCashReports(BigDecimal casId, BigDecimal frmId){
         consolidationService.setConsolidateCompany();
