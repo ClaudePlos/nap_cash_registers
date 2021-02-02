@@ -50,7 +50,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
     }
 
     public BigDecimal addNewCashReport(){
-
+    //pCasId IN NUMBER, pFrmId NUMBER, pLp NUMBER, pOdDnia DATE, pDoDnia DATE, pStanPoczatkowy NUMBER
         Session session = em.unwrap( Session.class );
 
         Integer docId = session.doReturningWork(
