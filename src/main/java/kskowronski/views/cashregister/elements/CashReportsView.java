@@ -1,6 +1,7 @@
 package kskowronski.views.cashregister.elements;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -23,8 +26,14 @@ public class CashReportsView extends VerticalLayout {
     private DocumentService documentService;
 
     private Grid<Document> gridCashReports;
+    private DatePicker from = new DatePicker();
+    private DatePicker to = new DatePicker();
 
-    private List<Document> reports;
+    private BigDecimal casId;
+    private BigDecimal frmId;
+    private BigDecimal lp;
+    private BigDecimal initialValue = BigDecimal.ZERO;
+
 
     @Autowired
     public CashReportsView(DocumentService documentService) {
@@ -39,38 +48,51 @@ public class CashReportsView extends VerticalLayout {
         Button butAdd = new Button("Dodaj Raport Kasowy", e ->{ addNewReportItem(); });
         butAdd.setClassName("butAdd");
 
+        LocalDate now = LocalDate.now();
+        from.setValue(now);
+        to.setValue(now);
+
         this.gridCashReports = new Grid<>(Document.class);
         gridCashReports.setClassName("gridCashReports");
         gridCashReports.setColumns();
-        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo");
-        gridCashReports.addColumn("docOwnNumber");
-
-        gridCashReports.addColumn("docInitialState");
-        gridCashReports.addColumn("docWn");
-        gridCashReports.addColumn("docMa");
+        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo").setHeader("Lp");
+        gridCashReports.addColumn("docOwnNumber").setHeader("Numer raportu");
+        gridCashReports.addColumn("docFrom").setHeader("Od dnia");
+        gridCashReports.addColumn("docTo").setHeader("Do dnia");
+        gridCashReports.addColumn("docInitialState").setHeader("Stan początkowy");
+        gridCashReports.addColumn("docWn").setHeader("WN");
+        gridCashReports.addColumn("docMa").setHeader("MA");
 
         GridSortOrder<Document> order = new GridSortOrder<>(docNo, SortDirection.DESCENDING);
         gridCashReports.sort(Arrays.asList(order));
 
-        hlReportsHeader.add(butAdd);
+        hlReportsHeader.add(from, to, butAdd);
 
         add(hlReportsHeader, gridCashReports);
         return this;
     }
 
-    public void setItems(List<Document> reports){
+    public void setItems(List<Document> reports, BigDecimal casId, BigDecimal frmId){
+        this.casId = casId;
+        this.frmId = frmId;
         gridCashReports.setItems(reports);
+
+        //Document doc = reports.get(reports.size()-1); // last row
+        Document doc = reports.get(0);
+        lp = doc.getDocNo();
+        if (doc.getDocWn() != null && doc.getDocMa() != null){
+            initialValue = doc.getDocInitialState().subtract(doc.getDocWn().subtract(doc.getDocMa()));
+        }
     }
 
     private void addNewReportItem(){
         Document report = new Document();
 
         // nzp_obj_rk.wstaw
-        BigDecimal docId = documentService.addNewCashReport();
+        BigDecimal docId = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
 
         report.setDocNo(docId);
 
-        reports.add(report);
         gridCashReports.getDataProvider().refreshAll();
     }
 }

@@ -1,5 +1,6 @@
 package kskowronski.data.service.egeria;
 
+import com.vaadin.flow.component.datepicker.DatePicker;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.global.ConsolidationService;
 import org.hibernate.Session;
@@ -16,6 +17,8 @@ import javax.print.Doc;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +52,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return cashReports;
     }
 
-    public BigDecimal addNewCashReport(){
+    public BigDecimal addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
     //pCasId IN NUMBER, pFrmId NUMBER, pLp NUMBER, pOdDnia DATE, pDoDnia DATE, pStanPoczatkowy NUMBER
         Session session = em.unwrap( Session.class );
 
@@ -57,9 +60,14 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                 connection -> {
                     try (CallableStatement function = connection
                             .prepareCall(
-                                    "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_add_cash_reports(?) }" )) {
+                                    "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_add_cash_reports(?,?,?,?,?,?) }" )) {
                         function.registerOutParameter( 1, Types.INTEGER );
-                        function.setInt( 2, 1 );
+                        function.setBigDecimal( 2, casId );
+                        function.setBigDecimal( 3, frmId );
+                        function.setBigDecimal( 4, lp );
+                        function.setDate( 5, java.sql.Date.valueOf(from.now()));
+                        function.setDate( 6, java.sql.Date.valueOf(to.now()));
+                        function.setBigDecimal( 7, initialValue );
                         function.execute();
                         return function.getInt( 1 );
                     }

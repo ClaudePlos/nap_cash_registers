@@ -85,7 +85,7 @@ public class CashRegisterView extends HorizontalLayout {
             Notification.show("Brak raprotów dla tej kasy", 3000, Notification.Position.MIDDLE);
         }
         reports = reportsDB.get();
-        cashReportsView.setItems(reports);
+        cashReportsView.setItems(reports, casId, frmId);
     }
 
 

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "kgt_dokumenty")
@@ -49,6 +50,12 @@ public class Document {
 
     @Column(name = "DOK_FRM_ID")
     private BigDecimal docFrmId;
+
+    @Column(name = "DOK_DATA_OPERACJI")
+    private Date docFrom;
+
+    @Column(name = "DOK_DATA_DO")
+    private Date docTo;
 
     public Document() {
     }
@@ -155,5 +162,21 @@ public class Document {
 
     public void setDocFrmId(BigDecimal docFrmId) {
         this.docFrmId = docFrmId;
+    }
+
+    public Date getDocFrom() {
+        return docFrom;
+    }
+
+    public void setDocFrom(Date docFrom) {
+        this.docFrom = docFrom;
+    }
+
+    public Date getDocTo() {
+        return docTo;
+    }
+
+    public void setDocTo(Date docTo) {
+        this.docTo = docTo;
     }
 }
