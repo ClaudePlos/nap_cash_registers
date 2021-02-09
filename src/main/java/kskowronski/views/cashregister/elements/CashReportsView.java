@@ -89,10 +89,9 @@ public class CashReportsView extends VerticalLayout {
         Document report = new Document();
 
         // nzp_obj_rk.wstaw
-        BigDecimal docId = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
+        Document doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
 
-        report.setDocNo(docId);
-
+        gridCashReports.setItems(doc);
         gridCashReports.getDataProvider().refreshAll();
     }
 }
