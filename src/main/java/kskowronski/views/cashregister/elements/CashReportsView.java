@@ -16,14 +16,13 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Component
 @UIScope
 public class CashReportsView extends VerticalLayout {
 
-    private DocumentService documentService;
+    private transient DocumentService documentService;
 
     private Grid<Document> gridCashReports;
     private DatePicker from = new DatePicker();
@@ -45,7 +44,7 @@ public class CashReportsView extends VerticalLayout {
         HorizontalLayout hlReportsHeader = new HorizontalLayout();
         hlReportsHeader.setClassName("hlReportsHeader");
 
-        Button butAdd = new Button("Dodaj Raport Kasowy", e ->{ addNewReportItem(); });
+        Button butAdd = new Button("Dodaj Raport Kasowy", e -> addNewReportItem());
         butAdd.setClassName("butAdd");
 
         LocalDate now = LocalDate.now();
@@ -86,11 +85,8 @@ public class CashReportsView extends VerticalLayout {
     }
 
     private void addNewReportItem(){
-        Document report = new Document();
-
         // nzp_obj_rk.wstaw
         Document doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
-
         gridCashReports.setItems(doc);
         gridCashReports.getDataProvider().refreshAll();
     }
