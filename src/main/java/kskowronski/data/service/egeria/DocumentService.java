@@ -45,7 +45,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return this.repo.findByDocCasIdAndFrm(casId, frmId);
     }
 
-    public Document addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
+    public Optional<Document> addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
         Session session = em.unwrap( Session.class );
         Integer docId = session.doReturningWork(
                 connection -> {
@@ -63,7 +63,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                         return function.getInt( 1 );
                     }
                 });
-        return repo.getOne(BigDecimal.valueOf(docId));
+        return repo.findById(BigDecimal.valueOf(docId));
     }
 
 }

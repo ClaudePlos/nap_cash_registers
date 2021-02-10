@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Component
 @UIScope
@@ -28,9 +27,9 @@ public class CashReportsView extends VerticalLayout {
     private DatePicker from = new DatePicker();
     private DatePicker to = new DatePicker();
 
+    private transient List<Document> reports;
     private BigDecimal casId;
     private BigDecimal frmId;
-    private BigDecimal lp;
     private BigDecimal initialValue = BigDecimal.ZERO;
 
 
@@ -72,22 +71,25 @@ public class CashReportsView extends VerticalLayout {
     }
 
     public void setItems(List<Document> reports, BigDecimal casId, BigDecimal frmId){
+        this.reports = reports;
         this.casId = casId;
         this.frmId = frmId;
-        gridCashReports.setItems(reports);
-
-        //Document doc = reports.get(reports.size()-1); // last row
-        Document doc = reports.get(0);
-        lp = doc.getDocNo();
-        if (doc.getDocWn() != null && doc.getDocMa() != null){
-            initialValue = doc.getDocInitialState().subtract(doc.getDocWn().subtract(doc.getDocMa()));
-        }
+        gridCashReports.setItems(this.reports);
     }
 
     private void addNewReportItem(){
+        //Calculate data
+        Document docCal = this.reports.get(0);
+        BigDecimal lp = docCal.getDocNo();
+        if (docCal.getDocWn() != null && docCal.getDocMa() != null){
+            initialValue = docCal.getDocInitialState().subtract(docCal.getDocWn().subtract(docCal.getDocMa()));
+        }
         // nzp_obj_rk.wstaw
-        Document doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
-        gridCashReports.setItems(doc);
-        gridCashReports.getDataProvider().refreshAll();
+        Optional<Document> doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
+        if (doc.isPresent()){
+            this.reports.add(doc.get());
+            this.reports.sort(Comparator.comparing(Document::getDocNo).reversed()); //order by desc
+            gridCashReports.getDataProvider().refreshAll();
+        }
     }
 }
