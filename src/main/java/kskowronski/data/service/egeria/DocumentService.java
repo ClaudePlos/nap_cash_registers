@@ -45,6 +45,11 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return this.repo.findByDocCasIdAndFrm(casId, frmId);
     }
 
+    public Optional<List<Document>> getAllCashKpKw(BigDecimal docId, BigDecimal frmId){
+        consolidationService.setConsolidateCompany();
+        return this.repo.findByDocKpKwAndFrm(docId, frmId);
+    }
+
     public Optional<Document> addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
         Session session = em.unwrap( Session.class );
         Integer docId = session.doReturningWork(
@@ -65,5 +70,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                 });
         return repo.findById(BigDecimal.valueOf(docId));
     }
+
+    public void save(Document document){ repo.save(document);}
 
 }

@@ -15,4 +15,7 @@ public interface DocumentRepo extends JpaRepository<Document, BigDecimal> {
     @Query("select d from Document d where d.docCasId = :casId and d.docFrmId = :frmId order by d.docNo desc")
     Optional<List<Document>> findByDocCasIdAndFrm(@Param("casId") BigDecimal casId, @Param("frmId") BigDecimal frmId);
 
+    @Query("select d from Document d where d.docDocIdZap = :docId and d.docFrmId = :frmId order by d.docNo desc")
+    Optional<List<Document>> findByDocKpKwAndFrm(@Param("docId") BigDecimal docId, @Param("frmId") BigDecimal frmId);
+
 }

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -56,6 +58,12 @@ public class Document {
 
     @Column(name = "DOK_DATA_DO")
     private Date docTo;
+
+    @Column(name = "DOK_DOK_ID_ZAP")
+    private BigDecimal docDocIdZap;
+
+    @Column(name = "DOK_RDOK_KOD")
+    private String docRdocCode;
 
     public Document() {
     }
@@ -164,14 +172,6 @@ public class Document {
         this.docFrmId = docFrmId;
     }
 
-    public Date getDocFrom() {
-        return docFrom;
-    }
-
-    public void setDocFrom(Date docFrom) {
-        this.docFrom = docFrom;
-    }
-
     public Date getDocTo() {
         return docTo;
     }
@@ -179,4 +179,30 @@ public class Document {
     public void setDocTo(Date docTo) {
         this.docTo = docTo;
     }
+
+    public BigDecimal getDocDocIdZap() {
+        return docDocIdZap;
+    }
+
+    public void setDocDocIdZap(BigDecimal docDocIdZap) {
+        this.docDocIdZap = docDocIdZap;
+    }
+
+    public String getDocRdocCode() {
+        return docRdocCode;
+    }
+
+    public void setDocRdocCode(String docRdocCode) {
+        this.docRdocCode = docRdocCode;
+    }
+
+    public LocalDate getDocFrom() {
+        return docFrom.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public void setDocFrom(Date docFrom) {
+        this.docFrom = docFrom;
+    }
+
+
 }

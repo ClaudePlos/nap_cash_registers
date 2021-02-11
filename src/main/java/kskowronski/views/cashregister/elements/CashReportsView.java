@@ -7,6 +7,7 @@ import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.egeria.DocumentService;
@@ -32,13 +33,12 @@ public class CashReportsView extends VerticalLayout {
     private BigDecimal frmId;
     private BigDecimal initialValue = BigDecimal.ZERO;
 
+    @Autowired
+    private CashKpKwView cashKpKwView;
 
     @Autowired
     public CashReportsView(DocumentService documentService) {
         this.documentService = documentService;
-    }
-
-    public VerticalLayout openReports(){
 
         HorizontalLayout hlReportsHeader = new HorizontalLayout();
         hlReportsHeader.setClassName("hlReportsHeader");
@@ -60,6 +60,14 @@ public class CashReportsView extends VerticalLayout {
         gridCashReports.addColumn("docInitialState").setHeader("Stan początkowy");
         gridCashReports.addColumn("docWn").setHeader("WN");
         gridCashReports.addColumn("docMa").setHeader("MA");
+        gridCashReports.addColumn(new NativeButtonRenderer<Document>("KP/KW",
+                item -> {
+                    VerticalLayout vertical = new VerticalLayout ();
+                    cashKpKwView.openKpKw(item);
+                    cashKpKwView.add(vertical);
+                    cashKpKwView.open();
+                }
+        )).setWidth("50px");
 
         GridSortOrder<Document> order = new GridSortOrder<>(docNo, SortDirection.DESCENDING);
         gridCashReports.sort(Arrays.asList(order));
@@ -67,6 +75,10 @@ public class CashReportsView extends VerticalLayout {
         hlReportsHeader.add(from, to, butAdd);
 
         add(hlReportsHeader, gridCashReports);
+
+    }
+
+    public VerticalLayout openReports(){
         return this;
     }
 
