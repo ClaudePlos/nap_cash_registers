@@ -1,5 +1,6 @@
 package kskowronski.views.cashregister.elements;
 
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 
 @Component
 @UIScope
+@CssImport("./styles/views/cashregister/cash-kpkw-view.css")
 public class CashKpKwView extends Dialog {
 
     static Logger logger = Logger.getLogger(CashKpKwView.class.getName());
@@ -35,6 +37,7 @@ public class CashKpKwView extends Dialog {
 
     @Autowired
     public CashKpKwView(DocumentService documentService) {
+        logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
         setWidth("800px");
         setHeight("800px");
@@ -42,11 +45,10 @@ public class CashKpKwView extends Dialog {
 
         this.gridCashKpKw = new Grid<>(Document.class);
         gridCashKpKw.setClassName("gridCashKpKw");
+        formKpKw.setClassName("formKpKw");
         gridCashKpKw.setColumns();
-        Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("50px");
+        Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("20px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
-        formKpKw.setWidth("400px");
-        gridCashKpKw.setWidth("100px");
         VerticalLayout v01 = new VerticalLayout();
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
         v01.add(filterText, h01);
@@ -59,13 +61,13 @@ public class CashKpKwView extends Dialog {
     }
 
     public void openKpKw(Document item){
+        gridCashKpKw.setItems();
         this.item = item;
         formKpKw.setDocument(null);
         updateList();
     }
 
     public void updateList() {
-        logger.log(Level.INFO, "Msg");
         listDocKpKw = documentService.getAllCashKpKw(item.getDocId(), item.getDocFrmId());
         if (listDocKpKw.isPresent()) {
             this.listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //order by asc

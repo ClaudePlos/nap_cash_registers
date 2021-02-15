@@ -1,0 +1,14 @@
+cash-kpkw-view,
+#cash-kpkw-view {
+    /*display: block;*/
+    padding: 0em;
+    margin: 5px;
+}
+
+.gridCashKpKw {
+    width: 250px;
+}
+
+.formKpKw {
+    width: 400px;
+}

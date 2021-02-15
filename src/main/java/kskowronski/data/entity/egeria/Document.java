@@ -26,6 +26,9 @@ public class Document {
     @Column(name = "DOK_NUMER_KOLEJNY")
     private BigDecimal docNextNumber;
 
+    @Column(name = "DOK_KWOTA")
+    private BigDecimal docAmount;
+
     @Column(name = "DOK_NUMER_W_PACZCE")
     private BigDecimal docNumberInPackage;
 
@@ -51,7 +54,7 @@ public class Document {
     private BigDecimal docFrmId;
 
     @Column(name = "DOK_DATA_OPERACJI")
-    private Date docFrom;
+    private LocalDate docFrom;
 
     @Column(name = "DOK_DATA_DO")
     private Date docTo;
@@ -62,6 +65,9 @@ public class Document {
     @Enumerated(EnumType.STRING)
     @Column(name = "DOK_RDOK_KOD")
     private KpKwType docRdocCode;
+
+    @Column(name = "DOK_F_ZATWIERDZONY")
+    private String docApproved;
 
     public Document() {
     }
@@ -195,12 +201,26 @@ public class Document {
     }
 
     public LocalDate getDocFrom() {
-        return docFrom.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return docFrom;
     }
 
-    public void setDocFrom(Date docFrom) {
+    public void setDocFrom(LocalDate docFrom) {
         this.docFrom = docFrom;
     }
 
+    public String getDocApproved() {
+        return docApproved;
+    }
 
+    public void setDocApproved(String docApproved) {
+        this.docApproved = docApproved;
+    }
+
+    public BigDecimal getDocAmount() {
+        return docAmount;
+    }
+
+    public void setDocAmount(BigDecimal docAmount) {
+        this.docAmount = docAmount;
+    }
 }
