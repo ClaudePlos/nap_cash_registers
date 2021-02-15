@@ -1,9 +1,6 @@
 package kskowronski.data.entity.egeria;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -62,8 +59,9 @@ public class Document {
     @Column(name = "DOK_DOK_ID_ZAP")
     private BigDecimal docDocIdZap;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "DOK_RDOK_KOD")
-    private String docRdocCode;
+    private KpKwType docRdocCode;
 
     public Document() {
     }
@@ -188,11 +186,11 @@ public class Document {
         this.docDocIdZap = docDocIdZap;
     }
 
-    public String getDocRdocCode() {
+    public KpKwType getDocRdocCode() {
         return docRdocCode;
     }
 
-    public void setDocRdocCode(String docRdocCode) {
+    public void setDocRdocCode(KpKwType docRdocCode) {
         this.docRdocCode = docRdocCode;
     }
 

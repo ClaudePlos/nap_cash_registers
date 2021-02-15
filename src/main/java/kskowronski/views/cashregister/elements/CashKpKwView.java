@@ -43,7 +43,7 @@ public class CashKpKwView extends Dialog {
         this.gridCashKpKw = new Grid<>(Document.class);
         gridCashKpKw.setClassName("gridCashKpKw");
         gridCashKpKw.setColumns();
-        Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("10px");
+        Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("50px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         formKpKw.setWidth("400px");
         gridCashKpKw.setWidth("100px");
@@ -52,11 +52,15 @@ public class CashKpKwView extends Dialog {
         v01.add(filterText, h01);
 
         add(v01);
+
+
+        gridCashKpKw.asSingleSelect().addValueChangeListener(event ->
+                formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue()));
     }
 
     public void openKpKw(Document item){
         this.item = item;
-        formKpKw.setCustomer(null);
+        formKpKw.setDocument(null);
         updateList();
     }
 
@@ -66,6 +70,7 @@ public class CashKpKwView extends Dialog {
         if (listDocKpKw.isPresent()) {
             this.listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //order by asc
             gridCashKpKw.setItems(listDocKpKw.get());
+            formKpKw.setDocument(listDocKpKw.get().get(0));
         }
     }
 

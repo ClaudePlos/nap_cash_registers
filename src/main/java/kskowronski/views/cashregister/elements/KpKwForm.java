@@ -2,16 +2,19 @@ package kskowronski.views.cashregister.elements;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import kskowronski.data.entity.egeria.Document;
+import kskowronski.data.entity.egeria.KpKwType;
 
 
 public class KpKwForm extends FormLayout {
-    private TextField docRdocCode = new TextField("Kod rodzaju");
+    private TextField docOwnNumber = new TextField("Numer");
+    private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docFrom = new DatePicker("Data wyst.");
 
     private Button save = new Button("Save");
@@ -20,10 +23,11 @@ public class KpKwForm extends FormLayout {
 
     public KpKwForm(CashKpKwView cashKpKwView) {
         this.cashKpKwView = cashKpKwView;
+        docRdocCode.setItems(KpKwType.values());
 
         HorizontalLayout buttons = new HorizontalLayout(save);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(docRdocCode, docFrom, buttons);
+        add(docOwnNumber, docRdocCode, docFrom, buttons);
 
         binder.bindInstanceFields(this);
 
@@ -32,7 +36,7 @@ public class KpKwForm extends FormLayout {
 
 
 
-    public void setCustomer(Document doc) {
+    public void setDocument(Document doc) {
         binder.setBean(doc);
 
         if (doc == null) {
@@ -47,6 +51,6 @@ public class KpKwForm extends FormLayout {
         Document doc = binder.getBean();
         cashKpKwView.documentService.save(doc);
         cashKpKwView.updateList();
-        setCustomer(null);
+        setDocument(null);
     }
 }
