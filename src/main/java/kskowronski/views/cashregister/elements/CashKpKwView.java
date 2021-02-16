@@ -9,6 +9,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.egeria.DocumentService;
+import kskowronski.data.service.egeria.ckk.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,17 +29,20 @@ public class CashKpKwView extends Dialog {
     private Grid<Document> gridCashKpKw;
 
     public transient DocumentService documentService;
+    private transient ClientService clientService;
 
     private transient Optional<List<Document>> listDocKpKw;
     private transient Document item;
 
     private TextField filterText = new TextField();
-    private KpKwForm formKpKw = new KpKwForm(this);
+    private KpKwForm formKpKw;
 
     @Autowired
-    public CashKpKwView(DocumentService documentService) {
+    public CashKpKwView(DocumentService documentService, ClientService clientService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
+        this.clientService = clientService;
+        this.formKpKw = new KpKwForm(this, clientService);
         setWidth("800px");
         setHeight("800px");
         filterText.setPlaceholder("Search..");

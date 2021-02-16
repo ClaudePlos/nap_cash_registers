@@ -5,17 +5,14 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.textfield.TextFieldVariant;
 import com.vaadin.flow.data.binder.Binder;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.entity.egeria.KpKwType;
-
-import java.math.BigDecimal;
+import kskowronski.data.service.egeria.ckk.ClientService;
+import kskowronski.views.components.ClientDialog;
 
 
 public class KpKwForm extends FormLayout {
@@ -24,20 +21,33 @@ public class KpKwForm extends FormLayout {
     private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
+    private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
+    private Button butFindClient = new Button("Znajdź Klienta");
 
     private Button save = new Button("Save");
+    private Button butAccept = new Button("Zatwierdź Dokument");
+    private Button butClose = new Button("Zamknij");
     private CashKpKwView cashKpKwView;
 
-    public KpKwForm(CashKpKwView cashKpKwView) {
+    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService) {
         this.cashKpKwView = cashKpKwView;
         docOwnNumber.setEnabled(false);
+        docKlKodPod.setEnabled(false);
         docRdocCode.setItems(KpKwType.values());
         editableElements(false);
         //docAmount.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
 
-        HorizontalLayout buttons = new HorizontalLayout(save);
+        butFindClient.addClickListener( e ->{
+            ClientDialog clientDialog = new ClientDialog(clientService);
+            clientDialog.open();
+        });
+
+        butClose.addClickListener( e -> cashKpKwView.close());
+
+        HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butClose);
+        HorizontalLayout clientDiv = new HorizontalLayout(butFindClient, butFindClient);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(docOwnNumber, docRdocCode, docFrom, docAmount, buttons);
+        add(docOwnNumber, docRdocCode, docFrom, docAmount, docKlKodPod, clientDiv, buttons);
 
         binder.bindInstanceFields(this);
 

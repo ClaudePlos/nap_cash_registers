@@ -69,6 +69,9 @@ public class Document {
     @Column(name = "DOK_F_ZATWIERDZONY")
     private String docApproved;
 
+    @Column(name = "DOK_KL_KOD_POD")
+    private BigDecimal docKlKodPod;
+
     public Document() {
     }
 
@@ -222,5 +225,13 @@ public class Document {
 
     public void setDocAmount(BigDecimal docAmount) {
         this.docAmount = docAmount;
+    }
+
+    public BigDecimal getDocKlKodPod() {
+        return docKlKodPod;
+    }
+
+    public void setDocKlKodPod(BigDecimal docKlKodPod) {
+        this.docKlKodPod = docKlKodPod;
     }
 }
