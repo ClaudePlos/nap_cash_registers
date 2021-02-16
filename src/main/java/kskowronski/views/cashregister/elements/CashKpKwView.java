@@ -29,7 +29,6 @@ public class CashKpKwView extends Dialog {
     private Grid<Document> gridCashKpKw;
 
     public transient DocumentService documentService;
-    private transient ClientService clientService;
 
     private transient Optional<List<Document>> listDocKpKw;
     private transient Document item;
@@ -41,10 +40,9 @@ public class CashKpKwView extends Dialog {
     public CashKpKwView(DocumentService documentService, ClientService clientService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
-        this.clientService = clientService;
         this.formKpKw = new KpKwForm(this, clientService);
         setWidth("800px");
-        setHeight("800px");
+        setHeight("600px");
         filterText.setPlaceholder("Search..");
 
         this.gridCashKpKw = new Grid<>(Document.class);

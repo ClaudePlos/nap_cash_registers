@@ -27,13 +27,13 @@ import java.util.Optional;
 @RouteAlias(value = "", layout = MainView.class)
 public class CashRegisterView extends HorizontalLayout {
 
-    private CashRegisterService cashRegisterService;
-    private DocumentService documentService;
+    private transient CashRegisterService  cashRegisterService;
+    private transient DocumentService documentService;
 
     private Grid<CashRegisterDTO> gridCashRegisters;
 
-    private List<CashRegisterDTO> cashRegisters;
-    private List<Document> reports;
+    private transient List<CashRegisterDTO> cashRegisters;
+    private transient List<Document> reports;
 
     CashReportsView cashReportsView;
 
@@ -62,9 +62,7 @@ public class CashRegisterView extends HorizontalLayout {
                 .withProperty("casName", CashRegisterDTO::getCasName)
                 .withProperty("casDesc", CashRegisterDTO::getCasDesc)
                 ).setHeader("KASA");
-        gridCashRegisters.addItemClickListener( event -> {
-             getCashReports(event.getItem().getCasId(), event.getItem().getCasFrmId());
-        });
+        gridCashRegisters.addItemClickListener( event -> getCashReports(event.getItem().getCasId(), event.getItem().getCasFrmId()) );
 
         //second grid
         vlReports = cashReportsView.openReports();
@@ -81,11 +79,12 @@ public class CashRegisterView extends HorizontalLayout {
 
     private void getCashReports(BigDecimal casId, BigDecimal frmId){
         Optional<List<Document>> reportsDB = documentService.getAllCashReports(casId, frmId);
-        if ( reportsDB.get().size() == 0 ){
+        if ( reportsDB.isPresent() ){
+            reports = reportsDB.get();
+            cashReportsView.setItems(reports, casId, frmId);
+        } else {
             Notification.show("Brak raprotów dla tej kasy", 3000, Notification.Position.MIDDLE);
         }
-        reports = reportsDB.get();
-        cashReportsView.setItems(reports, casId, frmId);
     }
 
 

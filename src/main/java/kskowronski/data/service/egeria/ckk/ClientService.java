@@ -7,6 +7,7 @@ import org.vaadin.artur.helpers.CrudService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,6 @@ public class ClientService extends CrudService<Client, BigDecimal> {
 
     public Optional<Client> getClientByKlKod(BigDecimal klKod){ return repo.getClientByKlKod(klKod); }
 
-    public Optional<List<Client>> findFastClient(String word){ return repo.findFastClient(word); }
+    public Optional<List<Client>> findFastClient(String word){ return repo.findFastClient(word.toUpperCase()); }
 
 }

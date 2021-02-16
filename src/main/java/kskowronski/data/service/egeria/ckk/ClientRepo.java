@@ -15,8 +15,8 @@ public interface ClientRepo  extends JpaRepository<Client, BigDecimal> {
 
 
     @Query("select c from Client c where c.kldZatwierdzony = 'T' and (trim(replace(c.kldNip,'-','')) like %:word% " +
-            "or c.kldNazwa like %:word% " +
+            "or upper(c.kldNazwa) like %:word% " +
             "or to_char(c.klKod) like %:word% " +
-            "or c.kldCity like %:word%)")
+            "or upper(c.kldCity) like %:word%)")
     Optional<List<Client>> findFastClient(@Param("word") String word);
 }

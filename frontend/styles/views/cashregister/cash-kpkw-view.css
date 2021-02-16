@@ -12,3 +12,10 @@ cash-kpkw-view,
 .formKpKw {
     width: 400px;
 }
+
+
+.gridClient {
+    white-space: normal;
+    word-wrap: break-word;
+    width: 100%;
+}
