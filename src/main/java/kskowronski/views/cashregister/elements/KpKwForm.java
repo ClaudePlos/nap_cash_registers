@@ -6,6 +6,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -18,22 +19,30 @@ import kskowronski.data.service.egeria.ckk.ClientService;
 import kskowronski.views.components.ClientDialog;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @UIScope
 public class KpKwForm extends FormLayout {
+
+    private String txtFindClient = "Znajdź Klienta";
+    private String txtClient = "Klient";
+
     private Binder<Document> binder = new Binder<>(Document.class);
     private TextField docOwnNumber = new TextField("Numer");
     private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
     private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
-    private Button butFindClient = new Button("Znajdź Klienta");
+    private Button butFindClient = new Button(txtFindClient);
     private Label labCompanyName = new Label();
 
     private Button save = new Button("Save");
     private Button butAccept = new Button("Zatwierdź Dokument");
     private Button butClose = new Button("Zamknij");
     private CashKpKwView cashKpKwView;
+
+
 
     public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService) {
         this.cashKpKwView = cashKpKwView;
@@ -45,8 +54,20 @@ public class KpKwForm extends FormLayout {
         //docAmount.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
 
         butFindClient.addClickListener( e ->{
-            ClientDialog clientDialog = new ClientDialog(clientService, this);
-            clientDialog.open();
+            if (butFindClient.getText().equals(txtFindClient)){
+                ClientDialog clientDialog = new ClientDialog(clientService, this);
+                clientDialog.open();
+            } else {
+                if (docKlKodPod.getValue() != null ){
+                    Optional<Client> client = clientService.getClientByKlKod(docKlKodPod.getValue());
+                    if ( client.isPresent()){
+                        Notification.show(client.get().getKldNazwa() + " " + client.get().getKldCity() + " " + client.get().getKldNip()
+                                ,3000,  Notification.Position.MIDDLE);
+                    }
+                } else {
+                    Notification.show("Dokument nie ma kodu klienta",3000,  Notification.Position.MIDDLE);
+                }
+            }
         });
 
         butClose.addClickListener( e -> cashKpKwView.close());
@@ -74,8 +95,10 @@ public class KpKwForm extends FormLayout {
             docRdocCode.focus();
             if (doc.getDocApproved().equals("N")){
                 editableElements(true);
+                butFindClient.setText(txtFindClient);
             } else {
                 editableElements(false);
+                butFindClient.setText(txtClient);
             }
         }
 
@@ -92,6 +115,8 @@ public class KpKwForm extends FormLayout {
         docRdocCode.setEnabled(status);
         docFrom.setEnabled(status);
         docAmount.setEnabled(status);
+        save.setEnabled(status);
+        butAccept.setEnabled(status);
     }
 
     public void setClient(Client client){

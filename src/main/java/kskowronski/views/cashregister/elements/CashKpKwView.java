@@ -49,7 +49,7 @@ public class CashKpKwView extends Dialog {
         gridCashKpKw.setClassName("gridCashKpKw");
         formKpKw.setClassName("formKpKw");
         gridCashKpKw.setColumns();
-        Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("20px");
+        Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("10px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         VerticalLayout v01 = new VerticalLayout();
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
