@@ -1,7 +1,9 @@
 package kskowronski.data.service.egeria;
 
+import com.vaadin.flow.component.notification.Notification;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.global.ConsolidationService;
+import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +54,9 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
 
     public Optional<Document> addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
         Session session = em.unwrap( Session.class );
-        Integer docId = session.doReturningWork(
+        Integer docId = null;
+        try{
+            docId = session.doReturningWork(
                 connection -> {
                     try (CallableStatement function = connection
                             .prepareCall(
@@ -68,8 +72,81 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                         return function.getInt( 1 );
                     }
                 });
+        } catch (JDBCException ex){
+            Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+        }
         return repo.findById(BigDecimal.valueOf(docId));
     }
+
+    public Optional<Document> insertKpKw(BigDecimal CashReportDocId, BigDecimal frmId){
+        Session session = em.unwrap( Session.class );
+        Integer docId = null;
+        try {
+            docId = session.doReturningWork(
+                    connection -> {
+                        try (CallableStatement function = connection
+                                .prepareCall(
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_insert_kpkw(?,?) }")) {
+                            function.registerOutParameter(1, Types.INTEGER);
+                            function.setBigDecimal(2, CashReportDocId);
+                            function.setBigDecimal(3, frmId);
+                            function.execute();
+                            return function.getInt(1);
+                        }
+                    });
+        } catch (JDBCException ex){
+            Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+        }
+        return repo.findById(BigDecimal.valueOf(docId));
+    }
+
+
+    public Optional<Document> updateKpKw(Document document){
+        Session session = em.unwrap( Session.class );
+        try {
+            Integer docId = session.doReturningWork(
+                    connection -> {
+                        try (CallableStatement function = connection
+                                .prepareCall(
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_update_kpkw(?,?,?,?,?,?) }")) {
+                            function.registerOutParameter(1, Types.INTEGER);
+                            function.setBigDecimal(2, document.getDocId());
+                            function.setString(3, document.getDocRdocCode().toString());
+                            function.setDate(4, java.sql.Date.valueOf(document.getDocDateFrom()));
+                            function.setBigDecimal(5, document.getDocAmount());
+                            function.setBigDecimal(6, document.getDocKlKodPod());
+                            function.setBigDecimal(7, document.getDocFrmId());
+                            function.execute();
+                            return function.getInt(1);
+                        }
+                    });
+        } catch (JDBCException ex){
+            Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+        }
+        return repo.findById(document.getDocId());
+    }
+
+    public Optional<Document> acceptKpKw(BigDecimal docId, BigDecimal docFrmId){
+        Session session = em.unwrap( Session.class );
+        try {
+            session.doReturningWork(
+                    connection -> {
+                        try (CallableStatement function = connection
+                                .prepareCall(
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_accept_document(?,?) }")) {
+                            function.registerOutParameter(1, Types.INTEGER);
+                            function.setBigDecimal(2, docId);
+                            function.setBigDecimal(3, docFrmId);
+                            function.execute();
+                            return function.getInt(1);
+                        }
+                    });
+        } catch (JDBCException ex){
+            Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+        }
+        return repo.findById(docId);
+    }
+
 
     public void save(Document document){ repo.save(document);}
 

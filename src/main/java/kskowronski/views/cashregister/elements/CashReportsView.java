@@ -11,6 +11,7 @@ import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.egeria.DocumentService;
+import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,10 +54,10 @@ public class CashReportsView extends VerticalLayout {
         this.gridCashReports = new Grid<>(Document.class);
         gridCashReports.setClassName("gridCashReports");
         gridCashReports.setColumns();
-        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo").setHeader("Lp");
-        gridCashReports.addColumn("docOwnNumber").setHeader("Numer raportu");
-        gridCashReports.addColumn("docFrom").setHeader("Od dnia");
-        gridCashReports.addColumn("docTo").setHeader("Do dnia");
+        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo").setHeader("Lp").setWidth("20px");
+        gridCashReports.addColumn("docOwnNumber").setHeader("Numer raportu").setWidth("200px");
+        gridCashReports.addColumn("docDateFrom").setHeader("Od dnia");
+        gridCashReports.addColumn("docDateTo").setHeader("Do dnia");
         gridCashReports.addColumn("docInitialState").setHeader("Stan początkowy");
         gridCashReports.addColumn("docWn").setHeader("WN");
         gridCashReports.addColumn("docMa").setHeader("MA");

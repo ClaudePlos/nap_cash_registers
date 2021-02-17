@@ -1,4 +1,4 @@
-package kskowronski.views.cashregister.elements;
+package kskowronski.views.cashregister.elements.kpkw;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -16,6 +16,7 @@ import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.entity.egeria.KpKwType;
 import kskowronski.data.entity.egeria.ckk.Client;
 import kskowronski.data.service.egeria.ckk.ClientService;
+import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
 import kskowronski.views.components.ClientDialog;
 import org.springframework.stereotype.Component;
 
@@ -31,13 +32,13 @@ public class KpKwForm extends FormLayout {
     private Binder<Document> binder = new Binder<>(Document.class);
     private TextField docOwnNumber = new TextField("Numer");
     private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
-    private DatePicker docFrom = new DatePicker("Data wyst.");
+    private DatePicker docDateFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
     private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
     private Button butFindClient = new Button(txtFindClient);
     private Label labCompanyName = new Label();
 
-    private Button save = new Button("Save");
+    private Button save = new Button("Zapisz");
     private Button butAccept = new Button("Zatwierdź Dokument");
     private Button butClose = new Button("Zamknij");
     private CashKpKwView cashKpKwView;
@@ -51,7 +52,6 @@ public class KpKwForm extends FormLayout {
         docKlKodPod.setWidth("100px");
         docRdocCode.setItems(KpKwType.values());
         editableElements(false);
-        //docAmount.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
 
         butFindClient.addClickListener( e ->{
             if (butFindClient.getText().equals(txtFindClient)){
@@ -70,12 +70,21 @@ public class KpKwForm extends FormLayout {
             }
         });
 
+        butAccept.addClickListener( e -> {
+            Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocFrmId());
+            if ( document.isPresent()){
+                setDocument(document.get());
+                cashKpKwView.updateDocNOwnNumber(document.get().getDocOwnNumber());
+                Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
+            }
+        });
+
         butClose.addClickListener( e -> cashKpKwView.close());
 
         HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butClose);
         HorizontalLayout clientDiv = new HorizontalLayout(butFindClient, butFindClient, labCompanyName);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(docOwnNumber, docRdocCode, docFrom, docAmount, docKlKodPod, clientDiv, buttons);
+        add(docOwnNumber, docRdocCode, docDateFrom, docAmount, docKlKodPod, clientDiv, buttons);
 
         binder.bindInstanceFields(this);
 
@@ -106,14 +115,19 @@ public class KpKwForm extends FormLayout {
 
     private void save() {
         Document doc = binder.getBean();
-        cashKpKwView.documentService.save(doc);
+        Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
         cashKpKwView.updateList();
-        setDocument(null);
+        if (docReturned.isPresent()){
+            setDocument(docReturned.get());
+        } else {
+            setDocument(doc);
+        }
+        Notification.show("Zapisano", 1000, Notification.Position.MIDDLE);
     }
 
     public void editableElements(Boolean status){
         docRdocCode.setEnabled(status);
-        docFrom.setEnabled(status);
+        docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);

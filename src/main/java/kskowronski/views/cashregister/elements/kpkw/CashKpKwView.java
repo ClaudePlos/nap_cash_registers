@@ -1,5 +1,6 @@
-package kskowronski.views.cashregister.elements;
+package kskowronski.views.cashregister.elements.kpkw;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -31,9 +32,10 @@ public class CashKpKwView extends Dialog {
     public transient DocumentService documentService;
 
     private transient Optional<List<Document>> listDocKpKw;
-    private transient Document item;
+    private transient Document cashReportItem;
 
     private TextField filterText = new TextField();
+    private Button butAddNewKpKw = new Button("Dodaj KP/KW");
     private KpKwForm formKpKw;
 
     @Autowired
@@ -45,6 +47,14 @@ public class CashKpKwView extends Dialog {
         setHeight("600px");
         filterText.setPlaceholder("Search..");
 
+        butAddNewKpKw.addClickListener( e -> {
+            Optional<Document> newKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
+            if (newKpKw.isPresent()){
+                listDocKpKw.get().add(newKpKw.get());
+                gridCashKpKw.getDataProvider().refreshAll();
+            }
+        });
+
         this.gridCashKpKw = new Grid<>(Document.class);
         gridCashKpKw.setClassName("gridCashKpKw");
         formKpKw.setClassName("formKpKw");
@@ -53,7 +63,7 @@ public class CashKpKwView extends Dialog {
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         VerticalLayout v01 = new VerticalLayout();
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
-        v01.add(filterText, h01);
+        v01.add(filterText, butAddNewKpKw, h01);
 
         add(v01);
 
@@ -64,18 +74,22 @@ public class CashKpKwView extends Dialog {
 
     public void openKpKw(Document item){
         gridCashKpKw.setItems();
-        this.item = item;
+        this.cashReportItem = item;
         formKpKw.setDocument(null);
         updateList();
     }
 
     public void updateList() {
-        listDocKpKw = documentService.getAllCashKpKw(item.getDocId(), item.getDocFrmId());
+        listDocKpKw = documentService.getAllCashKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
         if (listDocKpKw.isPresent()) {
             this.listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //order by asc
             gridCashKpKw.setItems(listDocKpKw.get());
             formKpKw.setDocument(listDocKpKw.get().get(0));
         }
+    }
+
+    public void updateDocNOwnNumber(String docOwnNumber){
+        this.cashReportItem.setDocOwnNumber(docOwnNumber);
     }
 
 

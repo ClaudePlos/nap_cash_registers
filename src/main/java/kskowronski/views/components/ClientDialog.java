@@ -11,7 +11,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.ckk.Client;
 import kskowronski.data.service.egeria.ckk.ClientService;
-import kskowronski.views.cashregister.elements.KpKwForm;
+import kskowronski.views.cashregister.elements.kpkw.KpKwForm;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

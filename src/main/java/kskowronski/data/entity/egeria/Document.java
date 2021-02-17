@@ -3,8 +3,6 @@ package kskowronski.data.entity.egeria;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Entity
 @Table(name = "kgt_dokumenty")
@@ -54,10 +52,10 @@ public class Document {
     private BigDecimal docFrmId;
 
     @Column(name = "DOK_DATA_OPERACJI")
-    private LocalDate docFrom;
+    private LocalDate docDateFrom;
 
     @Column(name = "DOK_DATA_DO")
-    private Date docTo;
+    private LocalDate docDateTo;
 
     @Column(name = "DOK_DOK_ID_ZAP")
     private BigDecimal docDocIdZap;
@@ -179,12 +177,20 @@ public class Document {
         this.docFrmId = docFrmId;
     }
 
-    public Date getDocTo() {
-        return docTo;
+    public LocalDate getDocDateFrom() {
+        return docDateFrom;
     }
 
-    public void setDocTo(Date docTo) {
-        this.docTo = docTo;
+    public void setDocDateFrom(LocalDate docDateFrom) {
+        this.docDateFrom = docDateFrom;
+    }
+
+    public LocalDate getDocDateTo() {
+        return docDateTo;
+    }
+
+    public void setDocDateTo(LocalDate docDateTo) {
+        this.docDateTo = docDateTo;
     }
 
     public BigDecimal getDocDocIdZap() {
@@ -201,14 +207,6 @@ public class Document {
 
     public void setDocRdocCode(KpKwType docRdocCode) {
         this.docRdocCode = docRdocCode;
-    }
-
-    public LocalDate getDocFrom() {
-        return docFrom;
-    }
-
-    public void setDocFrom(LocalDate docFrom) {
-        this.docFrom = docFrom;
     }
 
     public String getDocApproved() {
