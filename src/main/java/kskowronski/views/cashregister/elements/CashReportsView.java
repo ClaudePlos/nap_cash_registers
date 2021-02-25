@@ -47,6 +47,10 @@ public class CashReportsView extends VerticalLayout {
         Button butAdd = new Button("Dodaj Raport Kasowy", e -> addNewReportItem());
         butAdd.setClassName("butAdd");
 
+        Button butAcceptReport = new Button("Zatwierdź", e -> acceptReportItem());
+        butAcceptReport.setEnabled(false);
+        butAdd.setClassName("butAcceptReport");
+
         LocalDate now = LocalDate.now();
         from.setValue(now);
         to.setValue(now);
@@ -70,10 +74,17 @@ public class CashReportsView extends VerticalLayout {
                 }
         )).setWidth("50px");
 
+        gridCashReports.addSelectionListener( e -> {
+            if ( e.getFirstSelectedItem().get().getDocApproved().equals("N") )
+                butAcceptReport.setEnabled(true);
+            else
+                butAcceptReport.setEnabled(false);
+        });
+
         GridSortOrder<Document> order = new GridSortOrder<>(docNo, SortDirection.DESCENDING);
         gridCashReports.sort(Arrays.asList(order));
 
-        hlReportsHeader.add(from, to, butAdd);
+        hlReportsHeader.add(from, to, butAdd, butAcceptReport);
 
         add(hlReportsHeader, gridCashReports);
 
@@ -104,5 +115,9 @@ public class CashReportsView extends VerticalLayout {
             this.reports.sort(Comparator.comparing(Document::getDocNo).reversed()); //order by desc
             gridCashReports.getDataProvider().refreshAll();
         }
+    }
+
+    private void acceptReportItem(){
+
     }
 }

@@ -16,7 +16,6 @@ import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.entity.egeria.KpKwType;
 import kskowronski.data.entity.egeria.ckk.Client;
 import kskowronski.data.service.egeria.ckk.ClientService;
-import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
 import kskowronski.views.components.ClientDialog;
 import org.springframework.stereotype.Component;
 
@@ -74,7 +73,7 @@ public class KpKwForm extends FormLayout {
             Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocFrmId());
             if ( document.isPresent()){
                 setDocument(document.get());
-                cashKpKwView.updateDocNOwnNumber(document.get().getDocOwnNumber());
+                cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
                 Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
             }
         });
@@ -116,7 +115,7 @@ public class KpKwForm extends FormLayout {
     private void save() {
         Document doc = binder.getBean();
         Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
-        cashKpKwView.updateList();
+        cashKpKwView.updateList(doc.getDocNo().intValue()-1);
         if (docReturned.isPresent()){
             setDocument(docReturned.get());
         } else {
