@@ -7,7 +7,6 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.egeria.DocumentService;
@@ -15,6 +14,7 @@ import kskowronski.data.service.egeria.ckk.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +48,11 @@ public class CashKpKwView extends Dialog {
 
         butAddNewKpKw.addClickListener( e -> {
             Optional<Document> newKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
-            if (newKpKw.isPresent()){
+            if (newKpKw.isPresent() && listDocKpKw.isPresent()){
                 listDocKpKw.get().add(newKpKw.get());
                 gridCashKpKw.getDataProvider().refreshAll();
+            } else {
+                updateList(0);
             }
         });
 

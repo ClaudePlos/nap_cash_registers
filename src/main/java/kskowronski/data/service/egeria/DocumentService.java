@@ -65,8 +65,8 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                         function.setBigDecimal( 2, casId );
                         function.setBigDecimal( 3, frmId );
                         function.setBigDecimal( 4, lp );
-                        function.setDate( 5, java.sql.Date.valueOf(from.now()));
-                        function.setDate( 6, java.sql.Date.valueOf(to.now()));
+                        function.setDate( 5, java.sql.Date.valueOf(from));
+                        function.setDate( 6, java.sql.Date.valueOf(to));
                         function.setBigDecimal( 7, initialValue );
                         function.execute();
                         return function.getInt( 1 );
@@ -127,6 +127,11 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
     }
 
     public Optional<Document> acceptKpKw(BigDecimal docId, BigDecimal docFrmId){
+        Optional<Document> docs =  acceptDocument(docId,docFrmId);
+        return docs;
+    }
+
+    public Optional<Document> acceptDocument(BigDecimal docId, BigDecimal docFrmId){
         Session session = em.unwrap( Session.class );
         try {
             session.doReturningWork(
@@ -143,6 +148,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                     });
         } catch (JDBCException ex){
             Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+            return null;
         }
         return repo.findById(docId);
     }

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
@@ -34,6 +35,11 @@ public class CashReportsView extends VerticalLayout {
     private BigDecimal frmId;
     private BigDecimal initialValue = BigDecimal.ZERO;
 
+    private transient Document selectedDocument = null;
+
+    Button butAdd = new Button("Dodaj Raport Kasowy", e -> addNewReportItem());
+    Button butAcceptReport = new Button("Zatwierdź", e -> acceptReportItem());
+
     @Autowired
     private CashKpKwView cashKpKwView;
 
@@ -44,10 +50,7 @@ public class CashReportsView extends VerticalLayout {
         HorizontalLayout hlReportsHeader = new HorizontalLayout();
         hlReportsHeader.setClassName("hlReportsHeader");
 
-        Button butAdd = new Button("Dodaj Raport Kasowy", e -> addNewReportItem());
         butAdd.setClassName("butAdd");
-
-        Button butAcceptReport = new Button("Zatwierdź", e -> acceptReportItem());
         butAcceptReport.setEnabled(false);
         butAdd.setClassName("butAcceptReport");
 
@@ -58,7 +61,7 @@ public class CashReportsView extends VerticalLayout {
         this.gridCashReports = new Grid<>(Document.class);
         gridCashReports.setClassName("gridCashReports");
         gridCashReports.setColumns();
-        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo").setHeader("Lp").setWidth("20px");
+        Grid.Column<Document> docNo = gridCashReports.addColumn("docNo").setHeader("Lp").setWidth("30px");
         gridCashReports.addColumn("docOwnNumber").setHeader("Numer raportu").setWidth("200px");
         gridCashReports.addColumn("docDateFrom").setHeader("Od dnia");
         gridCashReports.addColumn("docDateTo").setHeader("Do dnia");
@@ -75,10 +78,13 @@ public class CashReportsView extends VerticalLayout {
         )).setWidth("50px");
 
         gridCashReports.addSelectionListener( e -> {
-            if ( e.getFirstSelectedItem().get().getDocApproved().equals("N") )
-                butAcceptReport.setEnabled(true);
-            else
-                butAcceptReport.setEnabled(false);
+            if ( e.getFirstSelectedItem().isPresent() ){
+                selectedDocument = e.getFirstSelectedItem().get();
+                if ( selectedDocument.getDocApproved().equals("N") )
+                    butAcceptReport.setEnabled(true);
+                else
+                    butAcceptReport.setEnabled(false);
+            }
         });
 
         GridSortOrder<Document> order = new GridSortOrder<>(docNo, SortDirection.DESCENDING);
@@ -95,6 +101,7 @@ public class CashReportsView extends VerticalLayout {
     }
 
     public void setItems(List<Document> reports, BigDecimal casId, BigDecimal frmId){
+        gridCashReports.deselectAll();
         this.reports = reports;
         this.casId = casId;
         this.frmId = frmId;
@@ -118,6 +125,14 @@ public class CashReportsView extends VerticalLayout {
     }
 
     private void acceptReportItem(){
-
+        Optional<Document> doc = documentService.acceptDocument(selectedDocument.getDocId(), selectedDocument.getDocFrmId());
+        if (doc.isPresent()){
+            Document document = (Document) gridCashReports.getDataProvider().getId(selectedDocument);
+            document.setDocOwnNumber(doc.get().getDocOwnNumber());
+            document.setDocApproved(doc.get().getDocApproved());
+            gridCashReports.getDataProvider().refreshAll();
+            butAcceptReport.setEnabled(false);
+            Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
+        }
     }
 }
