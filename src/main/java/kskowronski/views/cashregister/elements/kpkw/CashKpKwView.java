@@ -46,6 +46,7 @@ public class CashKpKwView extends Dialog {
         setWidth("800px");
         setHeight("600px");
 
+        butAddNewKpKw.setEnabled(false);
         butAddNewKpKw.addClickListener( e -> {
             Optional<Document> newKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
             if (newKpKw.isPresent() && listDocKpKw.isPresent()){
@@ -76,6 +77,12 @@ public class CashKpKwView extends Dialog {
     public void openKpKw(Document item){
         gridCashKpKw.setItems();
         this.cashReportItem = item;
+
+        if (this.cashReportItem.getDocApproved().equals("T"))
+            butAddNewKpKw.setEnabled(false);
+        else
+            butAddNewKpKw.setEnabled(true);
+
         formKpKw.setDocument(null);
         updateList(0);
     }

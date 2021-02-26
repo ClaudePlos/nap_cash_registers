@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -33,7 +34,7 @@ public class CashReportsView extends VerticalLayout {
     private transient List<Document> reports;
     private BigDecimal casId;
     private BigDecimal frmId;
-    private BigDecimal initialValue = BigDecimal.ZERO;
+    private BigDecimal endValue = BigDecimal.ZERO;
 
     private transient Document selectedDocument = null;
 
@@ -66,8 +67,9 @@ public class CashReportsView extends VerticalLayout {
         gridCashReports.addColumn("docDateFrom").setHeader("Od dnia");
         gridCashReports.addColumn("docDateTo").setHeader("Do dnia");
         gridCashReports.addColumn("docInitialState").setHeader("Stan początkowy");
-        gridCashReports.addColumn("docWn").setHeader("WN");
-        gridCashReports.addColumn("docMa").setHeader("MA");
+        gridCashReports.addColumn("docWn").setHeader("Wpłaty");
+        gridCashReports.addColumn("docMa").setHeader("Wypłaty");
+        gridCashReports.addComponentColumn(item -> createEndState(item)).setHeader("Stan końcowy");
         gridCashReports.addColumn(new NativeButtonRenderer<Document>("KP/KW",
                 item -> {
                     VerticalLayout vertical = new VerticalLayout ();
@@ -96,6 +98,10 @@ public class CashReportsView extends VerticalLayout {
 
     }
 
+    private Label createEndState(Document item) {
+        return new Label(item.docEndState().toString());
+    }
+
     public VerticalLayout openReports(){
         return this;
     }
@@ -113,10 +119,10 @@ public class CashReportsView extends VerticalLayout {
         Document docCal = this.reports.get(0);
         BigDecimal lp = docCal.getDocNo();
         if (docCal.getDocWn() != null && docCal.getDocMa() != null){
-            initialValue = docCal.getDocInitialState().subtract(docCal.getDocWn().subtract(docCal.getDocMa()));
+            endValue = docCal.docEndState();
         }
         // nzp_obj_rk.wstaw
-        Optional<Document> doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), initialValue );
+        Optional<Document> doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), endValue );
         if (doc.isPresent()){
             this.reports.add(doc.get());
             this.reports.sort(Comparator.comparing(Document::getDocNo).reversed()); //order by desc
@@ -125,11 +131,14 @@ public class CashReportsView extends VerticalLayout {
     }
 
     private void acceptReportItem(){
-        Optional<Document> doc = documentService.acceptDocument(selectedDocument.getDocId(), selectedDocument.getDocFrmId());
+        Optional<Document> doc = documentService.acceptDocument(selectedDocument.getDocId(), selectedDocument.getDocId(), selectedDocument.getDocFrmId());
         if (doc.isPresent()){
             Document document = (Document) gridCashReports.getDataProvider().getId(selectedDocument);
             document.setDocOwnNumber(doc.get().getDocOwnNumber());
             document.setDocApproved(doc.get().getDocApproved());
+            document.setDocInitialState(doc.get().getDocInitialState());
+            document.setDocWn(doc.get().getDocWn());
+            document.setDocMa(doc.get().getDocMa());
             gridCashReports.getDataProvider().refreshAll();
             butAcceptReport.setEnabled(false);
             Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);

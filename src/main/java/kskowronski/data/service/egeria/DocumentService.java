@@ -126,22 +126,23 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return repo.findById(document.getDocId());
     }
 
-    public Optional<Document> acceptKpKw(BigDecimal docId, BigDecimal docFrmId){
-        Optional<Document> docs =  acceptDocument(docId,docFrmId);
+    public Optional<Document> acceptKpKw(BigDecimal docId, BigDecimal casRapId, BigDecimal docFrmId){
+        Optional<Document> docs =  acceptDocument(docId, casRapId, docFrmId);
         return docs;
     }
 
-    public Optional<Document> acceptDocument(BigDecimal docId, BigDecimal docFrmId){
+    public Optional<Document> acceptDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
         Session session = em.unwrap( Session.class );
         try {
             session.doReturningWork(
                     connection -> {
                         try (CallableStatement function = connection
                                 .prepareCall(
-                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_accept_document(?,?) }")) {
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_accept_document(?,?,?) }")) {
                             function.registerOutParameter(1, Types.INTEGER);
                             function.setBigDecimal(2, docId);
-                            function.setBigDecimal(3, docFrmId);
+                            function.setBigDecimal(3, casRapId);
+                            function.setBigDecimal(4, docFrmId);
                             function.execute();
                             return function.getInt(1);
                         }

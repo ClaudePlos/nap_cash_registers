@@ -73,6 +73,10 @@ public class Document {
     public Document() {
     }
 
+    public BigDecimal docEndState(){
+        return docInitialState.add(docWn.subtract(docMa));
+    }
+
     public BigDecimal getDocId() {
         return docId;
     }

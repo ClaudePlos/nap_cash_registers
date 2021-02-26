@@ -70,7 +70,7 @@ public class KpKwForm extends FormLayout {
         });
 
         butAccept.addClickListener( e -> {
-            Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocFrmId());
+            Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
             if ( document.isPresent()){
                 setDocument(document.get());
                 cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
