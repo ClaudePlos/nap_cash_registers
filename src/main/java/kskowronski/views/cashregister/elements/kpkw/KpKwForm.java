@@ -17,8 +17,11 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.entity.egeria.KpKwType;
 import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.entity.egeria.ek.Worker;
 import kskowronski.data.service.egeria.ckk.ClientService;
+import kskowronski.data.service.egeria.ek.WorkerService;
 import kskowronski.views.components.ClientDialog;
+import kskowronski.views.components.WorkerDialog;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -31,16 +34,20 @@ public class KpKwForm extends FormLayout {
     private String txtFindClient = "Znajdź Klienta";
     private String txtClient = "Klient";
 
+    private String txtFindWorker = "Znajdź Pracownika";
+    private String txtWorker = "Pracownik";
+
     private Binder<Document> binder = new Binder<>(Document.class);
     private TextField docOwnNumber = new TextField("Numer");
     private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docDateFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
-    private BigDecimalField docPrcId = new BigDecimalField("Numer Pracownika");
-    private Button butFindWorker = new Button("Znajdź Pracownika");
+    private BigDecimalField docPrcIdPod = new BigDecimalField("Numer Pracownika");
+    private Button butFindWorker = new Button(txtFindWorker);
     private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
     private Button butFindClient = new Button(txtFindClient);
     private Label labCompanyName = new Label();
+    private Label labWorkerName = new Label();
 
     private Button save = new Button("Zapisz");
     private Button butAccept = new Button("Zatwierdź Dokument");
@@ -49,16 +56,32 @@ public class KpKwForm extends FormLayout {
     private RadioButtonGroup<String> radioWorkerClient = new RadioButtonGroup<>();
 
 
-    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService) {
+    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService) {
         this.cashKpKwView = cashKpKwView;
         docOwnNumber.setEnabled(false);
         docKlKodPod.setEnabled(false);
+        docPrcIdPod.setEnabled(false);
         docKlKodPod.setWidth("100px");
         docRdocCode.setItems(KpKwType.values());
         docRdocCode.setClassName("docRdocCode");
         editableElements(false);
 
+        butFindWorker.addClickListener( e ->{
+            if (butFindWorker.getText().equals(txtFindWorker)){
+                WorkerDialog workerDialog = new WorkerDialog(workerService, this);
+                workerDialog.open();
+            } else {
+                if (docPrcIdPod.getValue() != null ){
+                    Optional<Worker> worker = workerService.findById(docPrcIdPod.getValue());
+                    if ( worker.isPresent()){
+                        Notification.show(worker.get().getNazwImie(),3000,  Notification.Position.MIDDLE);
+                    }
+                } else {
+                    Notification.show("Dokument nie ma numeru pracownika",3000,  Notification.Position.MIDDLE);
+                }
+            }
 
+        });
 
         butFindClient.addClickListener( e ->{
             if (butFindClient.getText().equals(txtFindClient)){
@@ -95,7 +118,7 @@ public class KpKwForm extends FormLayout {
         HorizontalLayout divClient = new HorizontalLayout(docKlKodPod, butFindClient);
         divClient.setClassName("divClient");
         divClient.setVisible(true);
-        HorizontalLayout divWorker =  new HorizontalLayout(docPrcId, butFindWorker);
+        HorizontalLayout divWorker =  new HorizontalLayout(docPrcIdPod, butFindWorker);
         divWorker.setClassName("divWorker");
         divWorker.setVisible(false);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -109,7 +132,7 @@ public class KpKwForm extends FormLayout {
         });
 
 
-        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient, divClient, divWorker, labCompanyName,  buttons);
+        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient, divClient, divWorker, labCompanyName, labWorkerName,  buttons);
 
         binder.bindInstanceFields(this);
 
@@ -121,6 +144,7 @@ public class KpKwForm extends FormLayout {
     public void setDocument(Document doc) {
         binder.setBean(doc);
         labCompanyName.setText("");
+        labWorkerName.setText("");
 
         if (doc == null) {
             setVisible(false);
@@ -133,7 +157,12 @@ public class KpKwForm extends FormLayout {
             } else {
                 editableElements(false);
                 butFindClient.setText(txtClient);
+                butFindWorker.setText(txtWorker);
             }
+            if (doc.getDocPrcIdPod() != null)
+                radioWorkerClient.setValue("Pracownik");
+            else
+                radioWorkerClient.setValue("Klient");
         }
 
     }
@@ -161,5 +190,10 @@ public class KpKwForm extends FormLayout {
     public void setClient(Client client){
         docKlKodPod.setValue(client.getKlKod());
         labCompanyName.setText(client.getKldNazwa());
+    }
+
+    public void setWorker(Worker worker){
+        docPrcIdPod.setValue(worker.getPrcId());
+        labWorkerName.setText(worker.getNazwImie());
     }
 }

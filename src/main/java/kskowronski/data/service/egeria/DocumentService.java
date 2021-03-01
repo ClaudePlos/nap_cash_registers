@@ -108,14 +108,15 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                     connection -> {
                         try (CallableStatement function = connection
                                 .prepareCall(
-                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_update_kpkw(?,?,?,?,?,?) }")) {
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_update_kpkw(?,?,?,?,?,?,?) }")) {
                             function.registerOutParameter(1, Types.INTEGER);
                             function.setBigDecimal(2, document.getDocId());
                             function.setString(3, document.getDocRdocCode().toString());
                             function.setDate(4, java.sql.Date.valueOf(document.getDocDateFrom()));
                             function.setBigDecimal(5, document.getDocAmount());
                             function.setBigDecimal(6, document.getDocKlKodPod());
-                            function.setBigDecimal(7, document.getDocFrmId());
+                            function.setBigDecimal(7, document.getDocPrcIdPod());
+                            function.setBigDecimal(8, document.getDocFrmId());
                             function.execute();
                             return function.getInt(1);
                         }

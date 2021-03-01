@@ -70,6 +70,9 @@ public class Document {
     @Column(name = "DOK_KL_KOD_POD")
     private BigDecimal docKlKodPod;
 
+    @Column(name = "DOK_PRC_ID_POD")
+    private BigDecimal docPrcIdPod;
+
     public Document() {
     }
 
@@ -235,5 +238,13 @@ public class Document {
 
     public void setDocKlKodPod(BigDecimal docKlKodPod) {
         this.docKlKodPod = docKlKodPod;
+    }
+
+    public BigDecimal getDocPrcIdPod() {
+        return docPrcIdPod;
+    }
+
+    public void setDocPrcIdPod(BigDecimal docPrcIdPod) {
+        this.docPrcIdPod = docPrcIdPod;
     }
 }

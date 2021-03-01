@@ -11,6 +11,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.Document;
 import kskowronski.data.service.egeria.DocumentService;
 import kskowronski.data.service.egeria.ckk.ClientService;
+import kskowronski.data.service.egeria.ek.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,10 +40,10 @@ public class CashKpKwView extends Dialog {
     private KpKwForm formKpKw;
 
     @Autowired
-    public CashKpKwView(DocumentService documentService, ClientService clientService) {
+    public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
-        this.formKpKw = new KpKwForm(this, clientService);
+        this.formKpKw = new KpKwForm(this, clientService, workerService);
         setWidth("800px");
         setHeight("600px");
 
