@@ -24,6 +24,7 @@ import kskowronski.views.components.ClientDialog;
 import kskowronski.views.components.WorkerDialog;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -62,7 +63,7 @@ public class KpKwForm extends FormLayout {
         docKlKodPod.setEnabled(false);
         docPrcIdPod.setEnabled(false);
         docKlKodPod.setWidth("100px");
-        docRdocCode.setItems(KpKwType.values());
+        docRdocCode.setItems(KpKwType.KP, KpKwType.KW);
         docRdocCode.setClassName("docRdocCode");
         editableElements(false);
 
@@ -154,6 +155,7 @@ public class KpKwForm extends FormLayout {
             if (doc.getDocApproved().equals("N")){
                 editableElements(true);
                 butFindClient.setText(txtFindClient);
+                butFindWorker.setText(txtFindWorker);
             } else {
                 editableElements(false);
                 butFindClient.setText(txtClient);
