@@ -1,0 +1,28 @@
+kpkw-form,
+#kpkw-form {
+    /*display: block;*/
+    padding: 0em;
+    margin: 5px;
+}
+
+
+.divWorker {
+  display: block;
+}
+
+.divClient {
+    display: block;
+}
+
+.buttonsFooter {
+    margin-top: 40px;
+}
+
+.divTypeAndDate {
+    display: flex;
+    justify-content: space-between;
+}
+
+.docRdocCode {
+    width: 220px;
+}
