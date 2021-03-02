@@ -22,6 +22,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import kskowronski.views.cashregister.CashRegisterView;
 import kskowronski.views.about.AboutView;
+import kskowronski.views.settings.SettingsView;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,13 +90,6 @@ public class MainView extends AppLayout {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
-        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))){
-            tabs = new Tab[]{
-                    createTab("Kasy", CashRegisterView.class),
-                    createTab("About", AboutView.class)
-            };
-        }
-
         if (authorities.contains(new SimpleGrantedAuthority("USER"))){
             tabs = new Tab[]{
                     createTab("Kasy", CashRegisterView.class),
@@ -103,6 +97,20 @@ public class MainView extends AppLayout {
         }
 
         if (authorities.contains(new SimpleGrantedAuthority("ACCOUNTANT"))){
+            tabs = new Tab[]{
+                    createTab("Kasy", CashRegisterView.class),
+            };
+        }
+
+        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))){
+            tabs = new Tab[]{
+                    createTab("Kasy", CashRegisterView.class),
+                    createTab("Ustawienia", SettingsView.class),
+                    createTab("About", AboutView.class)
+            };
+        }
+
+        if (authorities.isEmpty()){
             tabs = new Tab[]{
                     createTab("Kasy", CashRegisterView.class),
             };
