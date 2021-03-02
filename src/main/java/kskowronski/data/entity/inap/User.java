@@ -1,9 +1,7 @@
 package kskowronski.data.entity.inap;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.*;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -25,6 +23,14 @@ public class User {
 
     @Column(name = "UZ_STANOWISKO")
     private BigDecimal uzStanowisko;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "npp_users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 
     public BigDecimal getUzId() {
         return uzId;
@@ -64,5 +70,13 @@ public class User {
 
     public void setUzStanowisko(BigDecimal uzStanowisko) {
         this.uzStanowisko = uzStanowisko;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

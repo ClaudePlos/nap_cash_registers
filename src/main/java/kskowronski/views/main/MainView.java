@@ -1,5 +1,6 @@
 package kskowronski.views.main;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
@@ -21,6 +22,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import kskowronski.views.cashregister.CashRegisterView;
 import kskowronski.views.about.AboutView;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -80,10 +85,30 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{
-                createTab("Kasy", CashRegisterView.class),
-                createTab("About", AboutView.class)
-        };
+        Tab[] tabs = null;
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        if (authorities.contains(new SimpleGrantedAuthority("ADMIN"))){
+            tabs = new Tab[]{
+                    createTab("Kasy", CashRegisterView.class),
+                    createTab("About", AboutView.class)
+            };
+        }
+
+        if (authorities.contains(new SimpleGrantedAuthority("USER"))){
+            tabs = new Tab[]{
+                    createTab("Kasy", CashRegisterView.class),
+            };
+        }
+
+        if (authorities.contains(new SimpleGrantedAuthority("ACCOUNTANT"))){
+            tabs = new Tab[]{
+                    createTab("Kasy", CashRegisterView.class),
+            };
+        }
+
+        return tabs;
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

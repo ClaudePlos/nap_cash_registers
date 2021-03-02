@@ -35,6 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().requiresChannel().anyRequest().requiresSecure()
                 .and().authorizeRequests()
                 .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+                //.antMatchers("/").hasAnyAuthority("USER", "CREATOR", "EDITOR", "ADMIN") // dobre, po zalogowaniu sprawdza role
 
                 .anyRequest().authenticated() //to daje ze jak nie ma autoryzacja to strona logowania
 
