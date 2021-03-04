@@ -73,6 +73,9 @@ public class Document {
     @Column(name = "DOK_PRC_ID_POD")
     private BigDecimal docPrcIdPod;
 
+    @Column(name = "DOK_DEF_0")
+    private String docDEf0;
+
     public Document() {
     }
 
@@ -246,5 +249,13 @@ public class Document {
 
     public void setDocPrcIdPod(BigDecimal docPrcIdPod) {
         this.docPrcIdPod = docPrcIdPod;
+    }
+
+    public String getDocDEf0() {
+        return docDEf0;
+    }
+
+    public void setDocDEf0(String docDEf0) {
+        this.docDEf0 = docDEf0;
     }
 }

@@ -21,10 +21,10 @@ import kskowronski.data.entity.egeria.ek.Worker;
 import kskowronski.data.service.egeria.ckk.ClientService;
 import kskowronski.data.service.egeria.ek.WorkerService;
 import kskowronski.views.components.ClientDialog;
+import kskowronski.views.components.MyNotification;
 import kskowronski.views.components.WorkerDialog;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -55,6 +55,8 @@ public class KpKwForm extends FormLayout {
     private Button butClose = new Button("Zamknij");
     private CashKpKwView cashKpKwView;
     private RadioButtonGroup<String> radioWorkerClient = new RadioButtonGroup<>();
+
+    private TextField docDef0 = new TextField("Dodatkowe Info.");
 
 
     public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService) {
@@ -122,18 +124,20 @@ public class KpKwForm extends FormLayout {
         HorizontalLayout divWorker =  new HorizontalLayout(docPrcIdPod, butFindWorker);
         divWorker.setClassName("divWorker");
         divWorker.setVisible(false);
+        HorizontalLayout divAccount =  new HorizontalLayout(docDef0);
+        divWorker.setClassName("divAccount");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         radioWorkerClient.setLabel("Transakcja z?");
-        radioWorkerClient.setItems("Klient", "Pracownik");
-        radioWorkerClient.setValue("Klient");
+        radioWorkerClient.setItems(txtClient, txtWorker);
+        radioWorkerClient.setValue(txtClient);
         radioWorkerClient.addValueChangeListener(event -> {
             divClient.setVisible(!divClient.isVisible());
             divWorker.setVisible(!divWorker.isVisible());
         });
 
 
-        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient, divClient, divWorker, labCompanyName, labWorkerName,  buttons);
+        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient, divClient, divWorker, labCompanyName, labWorkerName, divAccount, buttons);
 
         binder.bindInstanceFields(this);
 
@@ -171,6 +175,10 @@ public class KpKwForm extends FormLayout {
 
     private void save() {
         Document doc = binder.getBean();
+        if (doc.getDocDateFrom() == null){
+            MyNotification.openAlert("Brak daty wystawienia. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return;
+        }
         Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
         cashKpKwView.updateList(doc.getDocNo().intValue()-1);
         if (docReturned.isPresent()){
