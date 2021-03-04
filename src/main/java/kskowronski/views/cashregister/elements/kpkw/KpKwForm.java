@@ -80,7 +80,7 @@ public class KpKwForm extends FormLayout {
                         Notification.show(worker.get().getNazwImie(),3000,  Notification.Position.MIDDLE);
                     }
                 } else {
-                    Notification.show("Dokument nie ma numeru pracownika",3000,  Notification.Position.MIDDLE);
+                    MyNotification.openAlert("Dokument nie ma numeru pracownika",3000,  Notification.Position.MIDDLE);
                 }
             }
 
@@ -98,7 +98,7 @@ public class KpKwForm extends FormLayout {
                                 ,3000,  Notification.Position.MIDDLE);
                     }
                 } else {
-                    Notification.show("Dokument nie ma kodu klienta",3000,  Notification.Position.MIDDLE);
+                    MyNotification.openAlert("Dokument nie ma kodu klienta",3000,  Notification.Position.MIDDLE);
                 }
             }
         });
@@ -193,6 +193,7 @@ public class KpKwForm extends FormLayout {
         docRdocCode.setEnabled(status);
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
+        docDef0.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);
     }

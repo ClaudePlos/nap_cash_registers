@@ -74,7 +74,7 @@ public class Document {
     private BigDecimal docPrcIdPod;
 
     @Column(name = "DOK_DEF_0")
-    private String docDEf0;
+    private String docDef0;
 
     public Document() {
     }
@@ -251,11 +251,11 @@ public class Document {
         this.docPrcIdPod = docPrcIdPod;
     }
 
-    public String getDocDEf0() {
-        return docDEf0;
+    public String getDocDef0() {
+        return docDef0;
     }
 
-    public void setDocDEf0(String docDEf0) {
-        this.docDEf0 = docDEf0;
+    public void setDocDef0(String docDef0) {
+        this.docDef0 = docDef0;
     }
 }
