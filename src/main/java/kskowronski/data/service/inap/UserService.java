@@ -1,11 +1,13 @@
 package kskowronski.data.service.inap;
 
+import kskowronski.data.entity.egeria.ek.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
 import kskowronski.data.entity.inap.User;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +29,9 @@ public class UserService extends CrudService<User, BigDecimal> {
     }
 
     public Optional<User> findByPassword(String pesel){ return repo.findByPassword(pesel);};
+
+    public List<User> findAll(){ return repo.findAll();}
+
+    public Optional<List<User>> findFastUsers(String word){ return repo.findFastUsers(word.toLowerCase()); }
 
 }

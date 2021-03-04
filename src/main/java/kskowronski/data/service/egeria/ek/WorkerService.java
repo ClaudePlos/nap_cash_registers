@@ -30,4 +30,6 @@ public class WorkerService extends CrudService<Worker, BigDecimal> {
 
     public Optional<List<Worker>> findFastWorker(String word){ return repo.findFastWorker(word.toUpperCase()); }
 
+    public List<Worker> findAll(){ return repo.findAll();}
+
 }
