@@ -12,11 +12,12 @@ public class Role {
 
     @Column(name = "NAME")
     private String name;
-    public Integer getId() {
-        return id;
-    }
 
     public Role() {
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public void setId(Integer id) {

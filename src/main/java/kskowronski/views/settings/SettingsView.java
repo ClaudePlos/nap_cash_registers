@@ -51,7 +51,7 @@ public class SettingsView extends Div {
         gridWorkers.addColumn("username");
         gridWorkers.addColumn(new NativeButtonRenderer<>("Role",
                 item -> {
-                    rolesDialog.setDataForGrid(item);
+                    rolesDialog.setDataForGrid(item.getUzId());
                     rolesDialog.open();
                 }
         )).setWidth("50px");
