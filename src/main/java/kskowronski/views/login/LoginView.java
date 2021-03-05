@@ -8,6 +8,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 @Route("/login")
 @PageTitle("Login | Rekeep")
@@ -15,9 +17,12 @@ import com.vaadin.flow.router.Route;
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private LoginForm login = new LoginForm();
+    private transient Environment env;
 
-    public LoginView(){
+    @Autowired
+    public LoginView(Environment env){
         addClassName("login-view");
+        this.env = env;
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
@@ -40,6 +45,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     }
 
     private LoginI18n createPolandI18n() {
+        String dbInfo = env.getProperty("spring.datasource.url");
         final LoginI18n i18n = LoginI18n.createDefault();
 
         i18n.setHeader(new LoginI18n.Header());
@@ -53,7 +59,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         i18n.getErrorMessage().setTitle("Niepoprawna nazwa użytkownika lub hasło");
         i18n.getErrorMessage().setMessage("Sprawdź, czy podałeś poprawną nazwę użytkownika i hasło, i spróbuj ponownie.");
         i18n.setAdditionalInformation(
-                "Info: v2020/10");
+                "Info: v2021@" + dbInfo.substring(dbInfo.length()-3,dbInfo.length()));
         return i18n;
     }
 }

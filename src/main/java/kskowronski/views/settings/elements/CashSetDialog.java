@@ -99,7 +99,7 @@ public class CashSetDialog extends Dialog {
         gridUserHasCash.addDragStartListener(dragStartListener);
         gridUserHasCash.addDragEndListener(dragEndListener);
         gridUserHasCash.setRowsDraggable(true);
-        gridUserHasCash.setColumns("id", "name");
+        gridUserHasCash.setColumns("casName", "casFrmId");
 
         gridUserHasNoCash.setSelectionMode(Grid.SelectionMode.MULTI);
         gridUserHasNoCash.setId(txtUserHasNo);
@@ -107,7 +107,7 @@ public class CashSetDialog extends Dialog {
         gridUserHasNoCash.addDragStartListener(dragStartListener);
         gridUserHasNoCash.addDragEndListener(dragEndListener);
         gridUserHasNoCash.setRowsDraggable(true);
-        gridUserHasNoCash.setColumns("id", "name");
+        gridUserHasNoCash.setColumns("casName", "casFrmId");
 
         VerticalLayout divHasCashRegister = new VerticalLayout(new Label("Ma dodane"), gridUserHasCash);
         VerticalLayout divHasNotCashRegister = new VerticalLayout(new Label("Kasy do dodania"), gridUserHasNoCash);
