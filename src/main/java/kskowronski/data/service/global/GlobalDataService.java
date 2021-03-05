@@ -1,10 +1,9 @@
 package kskowronski.data.service.global;
 
-import kskowronski.data.entity.egeria.CashRegister;
-import kskowronski.data.entity.egeria.CashRegisterDTO;
+import kskowronski.data.entity.egeria.kg.CashRegister;
+import kskowronski.data.entity.egeria.kg.CashRegisterDTO;
 import kskowronski.data.entity.global.EatFirma;
-import kskowronski.data.service.egeria.CashRegisterRepo;
-import kskowronski.data.service.egeria.CashRegisterService;
+import kskowronski.data.service.egeria.kg.CashRegisterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

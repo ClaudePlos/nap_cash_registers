@@ -1,16 +1,31 @@
-package kskowronski.data.entity.egeria;
+package kskowronski.data.entity.egeria.kg;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CashRegisterDTO {
+@Entity
+@Table(name = "NZT_KASY")
+public class CashRegister implements Serializable {
 
+    @Id
+    @Column(name = "kas_Id", nullable = false)
     private BigDecimal casId;
-    private String casName;
-    private String casDesc;
-    private BigDecimal casFrmId;
-    private String frmName;
 
-    public CashRegisterDTO() {
+    @Column(name="kas_nazwa")
+    private String casName;
+
+    @Column(name="kas_opis")
+    private String casDesc;
+
+    @Column(name="kas_frm_id")
+    private BigDecimal casFrmId;
+
+    public CashRegister() {
     }
 
     public BigDecimal getCasId() {
@@ -43,13 +58,5 @@ public class CashRegisterDTO {
 
     public void setCasFrmId(BigDecimal casFrmId) {
         this.casFrmId = casFrmId;
-    }
-
-    public String getFrmName() {
-        return frmName;
-    }
-
-    public void setFrmName(String frmName) {
-        this.frmName = frmName;
     }
 }

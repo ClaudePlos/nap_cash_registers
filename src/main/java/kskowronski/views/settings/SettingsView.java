@@ -14,7 +14,8 @@ import com.vaadin.flow.router.Route;
 import kskowronski.data.entity.inap.User;
 import kskowronski.data.service.inap.UserService;
 import kskowronski.views.main.MainView;
-import kskowronski.views.settings.elements.RolesDialog;
+import kskowronski.views.settings.elements.CashSetDialog;
+import kskowronski.views.settings.elements.RolesSetDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Comparator;
@@ -31,7 +32,10 @@ public class SettingsView extends Div {
     private TextField filterText = new TextField();
 
     @Autowired
-    private RolesDialog rolesDialog;
+    private RolesSetDialog rolesSetDialog;
+
+    @Autowired
+    private CashSetDialog cashSetDialog;
 
     @Autowired
     public SettingsView(UserService userService) {
@@ -51,10 +55,15 @@ public class SettingsView extends Div {
         gridWorkers.addColumn("username");
         gridWorkers.addColumn(new NativeButtonRenderer<>("Role",
                 item -> {
-                    rolesDialog.setDataForGrid(item.getUzId());
-                    rolesDialog.open();
-                }
-        )).setWidth("50px");
+                    rolesSetDialog.setDataForGrid(item.getUzId());
+                    rolesSetDialog.open();
+                })).setWidth("50px");
+
+        gridWorkers.addColumn(new NativeButtonRenderer<>("Kasy",
+                item -> {
+                    cashSetDialog.setDataForGrid(item.getUzId());
+                    cashSetDialog.open();
+                })).setWidth("50px");
 
         HorizontalLayout divWorkers = new HorizontalLayout(gridWorkers);
         divWorkers.setClassName("divWorkers");

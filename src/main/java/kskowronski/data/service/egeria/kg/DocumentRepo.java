@@ -1,6 +1,6 @@
-package kskowronski.data.service.egeria;
+package kskowronski.data.service.egeria.kg;
 
-import kskowronski.data.entity.egeria.Document;
+import kskowronski.data.entity.egeria.kg.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

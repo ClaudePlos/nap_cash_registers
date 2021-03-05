@@ -1,7 +1,7 @@
-package kskowronski.data.service.egeria;
+package kskowronski.data.service.egeria.kg;
 
-import kskowronski.data.entity.egeria.CashRegister;
-import kskowronski.data.entity.egeria.CashRegisterDTO;
+import kskowronski.data.entity.egeria.kg.CashRegister;
+import kskowronski.data.entity.egeria.kg.CashRegisterDTO;
 import kskowronski.data.service.global.EatFirmaRepo;
 import kskowronski.data.service.global.GlobalDataService;
 import org.springframework.beans.factory.annotation.Autowired;

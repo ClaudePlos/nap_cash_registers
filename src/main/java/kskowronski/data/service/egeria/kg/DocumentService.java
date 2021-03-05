@@ -1,7 +1,7 @@
-package kskowronski.data.service.egeria;
+package kskowronski.data.service.egeria.kg;
 
 import com.vaadin.flow.component.notification.Notification;
-import kskowronski.data.entity.egeria.Document;
+import kskowronski.data.entity.egeria.kg.Document;
 import kskowronski.data.service.global.ConsolidationService;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;

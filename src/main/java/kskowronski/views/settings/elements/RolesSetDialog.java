@@ -22,23 +22,23 @@ import java.util.Optional;
 
 @Component
 @UIScope
-public class RolesDialog extends Dialog {
+public class RolesSetDialog extends Dialog {
 
     private transient RoleService roleService;
     private transient UserRolesService userRolesService;
 
-    private String txtWorkerRoleHas = "gridWorkerRoleHas";
-    private String txtWorkerRoleNoHas = "gridWorkerRoleNoHas";
+    private String txtUserRoleHas = "gridUserRoleHas";
+    private String txtUserRoleHasNo = "gridUserRoleHasNo";
 
-    private Grid<Role> gridWorkerRoleHas = new Grid<>(Role.class);
-    private Grid<Role> gridWorkerRoleNoHas = new Grid<>(Role.class);
+    private Grid<Role> gridUserRoleHas = new Grid<>(Role.class);
+    private Grid<Role> gridUserRoleHasNo = new Grid<>(Role.class);
     private transient List<Role> draggedItems = new ArrayList<>();
     Grid<Role> dragSource = null;
 
     private transient BigDecimal userId = null;
 
     @Autowired
-    public RolesDialog(RoleService roleService, UserRolesService userRolesService) {
+    public RolesSetDialog(RoleService roleService, UserRolesService userRolesService) {
         this.roleService = roleService;
         this.userRolesService = userRolesService;
         this.setWidth("700px");
@@ -46,18 +46,18 @@ public class RolesDialog extends Dialog {
         ComponentEventListener<GridDragStartEvent<Role>> dragStartListener = event -> {
             draggedItems = event.getDraggedItems();
             dragSource = event.getSource();
-            gridWorkerRoleHas.setDropMode(GridDropMode.BETWEEN);
-            gridWorkerRoleNoHas.setDropMode(GridDropMode.BETWEEN);
+            gridUserRoleHas.setDropMode(GridDropMode.BETWEEN);
+            gridUserRoleHasNo.setDropMode(GridDropMode.BETWEEN);
         };
 
         /**
          * System.out.println(draggedItems.get(0).getName() + " " + dragSource.getId());
          */
         ComponentEventListener<GridDragEndEvent<Role>> dragEndListener = event -> {
-            gridWorkerRoleHas.setDropMode(null);
-            gridWorkerRoleNoHas.setDropMode(null);
+            gridUserRoleHas.setDropMode(null);
+            gridUserRoleHasNo.setDropMode(null);
 
-            if ( dragSource.getId().get().equals(txtWorkerRoleHas)){
+            if ( dragSource.getId().get().equals(txtUserRoleHas)){
                 userRolesService.delete(userId, BigDecimal.valueOf(draggedItems.get(0).getId()));
             } else {
                 userRolesService.save(userId, BigDecimal.valueOf(draggedItems.get(0).getId()));
@@ -95,24 +95,24 @@ public class RolesDialog extends Dialog {
             targetGrid.setItems(targetItems);
         };
 
-        gridWorkerRoleHas.setSelectionMode(Grid.SelectionMode.MULTI);
-        gridWorkerRoleHas.setId(txtWorkerRoleHas);
-        gridWorkerRoleHas.addDropListener(dropListener);
-        gridWorkerRoleHas.addDragStartListener(dragStartListener);
-        gridWorkerRoleHas.addDragEndListener(dragEndListener);
-        gridWorkerRoleHas.setRowsDraggable(true);
-        gridWorkerRoleHas.setColumns("id", "name");
+        gridUserRoleHas.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridUserRoleHas.setId(txtUserRoleHas);
+        gridUserRoleHas.addDropListener(dropListener);
+        gridUserRoleHas.addDragStartListener(dragStartListener);
+        gridUserRoleHas.addDragEndListener(dragEndListener);
+        gridUserRoleHas.setRowsDraggable(true);
+        gridUserRoleHas.setColumns("id", "name");
 
-        gridWorkerRoleNoHas.setSelectionMode(Grid.SelectionMode.MULTI);
-        gridWorkerRoleNoHas.setId(txtWorkerRoleNoHas);
-        gridWorkerRoleNoHas.addDropListener(dropListener);
-        gridWorkerRoleNoHas.addDragStartListener(dragStartListener);
-        gridWorkerRoleNoHas.addDragEndListener(dragEndListener);
-        gridWorkerRoleNoHas.setRowsDraggable(true);
-        gridWorkerRoleNoHas.setColumns("id", "name");
+        gridUserRoleHasNo.setSelectionMode(Grid.SelectionMode.MULTI);
+        gridUserRoleHasNo.setId(txtUserRoleHasNo);
+        gridUserRoleHasNo.addDropListener(dropListener);
+        gridUserRoleHasNo.addDragStartListener(dragStartListener);
+        gridUserRoleHasNo.addDragEndListener(dragEndListener);
+        gridUserRoleHasNo.setRowsDraggable(true);
+        gridUserRoleHasNo.setColumns("id", "name");
 
-        VerticalLayout divHasRole = new VerticalLayout(new Label("Ma dodane"), gridWorkerRoleHas);
-        VerticalLayout divHasNotRole = new VerticalLayout(new Label("Role do dodania"), gridWorkerRoleNoHas);
+        VerticalLayout divHasRole = new VerticalLayout(new Label("Ma dodane"), gridUserRoleHas);
+        VerticalLayout divHasNotRole = new VerticalLayout(new Label("Role do dodania"), gridUserRoleHasNo);
         HorizontalLayout divGrids = new HorizontalLayout(divHasRole, divHasNotRole);
         add(divGrids);
     }
@@ -122,11 +122,11 @@ public class RolesDialog extends Dialog {
         List<Role> roles = roleService.findAll();
 
         List<Role> userRoles = roleService.findAllUserRoles(userId);
-        gridWorkerRoleHas.setItems(userRoles);
+        gridUserRoleHas.setItems(userRoles);
 
         userRoles.stream().forEach( item ->  roles.removeIf( x -> x.getName().equals(item.getName())) );
 
-        gridWorkerRoleNoHas.setItems(roles);
+        gridUserRoleHasNo.setItems(roles);
     }
 
 }
