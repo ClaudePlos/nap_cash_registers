@@ -2,6 +2,7 @@ package kskowronski.data.service.inap;
 
 import kskowronski.data.entity.egeria.ek.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
 import kskowronski.data.entity.inap.User;
@@ -30,7 +31,7 @@ public class UserService extends CrudService<User, BigDecimal> {
 
     public Optional<User> findByPassword(String pesel){ return repo.findByPassword(pesel);};
 
-    public List<User> findAll(){ return repo.findAll();}
+    public List<User> findAll(){ return repo.findAll(Sort.by(Sort.Direction.ASC, "username"));}
 
     public Optional<List<User>> findFastUsers(String word){ return repo.findFastUsers(word.toLowerCase()); }
 

@@ -10,6 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.kg.CashRegister;
+import kskowronski.data.service.egeria.kg.CashRegisterService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -21,6 +23,8 @@ import java.util.Optional;
 @UIScope
 public class CashSetDialog extends Dialog {
 
+    private transient CashRegisterService cashRegisterService;
+
     private String txtUserHas = "gridUserHas";
     private String txtUserHasNo = "gridUserHasNo";
 
@@ -30,7 +34,11 @@ public class CashSetDialog extends Dialog {
     private transient List<CashRegister> draggedItems = new ArrayList<>();
     Grid<CashRegister> dragSource = null;
 
-    public CashSetDialog() {
+    private transient BigDecimal userId = null;
+
+    @Autowired
+    public CashSetDialog(CashRegisterService cashRegisterService) {
+        this.cashRegisterService= cashRegisterService;
         this.setWidth("700px");
 
         ComponentEventListener<GridDragStartEvent<CashRegister>> dragStartListener = event -> {
@@ -47,11 +55,11 @@ public class CashSetDialog extends Dialog {
             gridUserHasCash.setDropMode(null);
             gridUserHasNoCash.setDropMode(null);
 
-//            if ( dragSource.getId().get().equals(txtUserCashRegisterHas)){
-//                userCashRegistersService.delete(userId, BigDecimal.valueOf(draggedItems.get(0).getId()));
-//            } else {
-//                userCashRegistersService.save(userId, BigDecimal.valueOf(draggedItems.get(0).getId()));
-//            }
+            if ( dragSource.getId().get().equals(txtUserHas)){
+                cashRegisterService.deleteSetting(userId, draggedItems.get(0).getCasId());
+            } else {
+                cashRegisterService.saveSetting(userId, draggedItems.get(0).getCasId());
+            }
         };
 
         ComponentEventListener<GridDropEvent<CashRegister>> dropListener = event -> {
@@ -108,6 +116,14 @@ public class CashSetDialog extends Dialog {
     }
 
     public void setDataForGrid(BigDecimal userId){
+        this.userId = userId;
+        List<CashRegister> cash = cashRegisterService.findAll();
 
+        List<CashRegister> userCash = cashRegisterService.findAllUserRoles(userId);
+        gridUserHasCash.setItems(userCash);
+
+        userCash.stream().forEach( item ->  cash.removeIf( x -> x.getCasId().equals(item.getCasId())) );
+
+        gridUserHasNoCash.setItems(cash);
     }
 }

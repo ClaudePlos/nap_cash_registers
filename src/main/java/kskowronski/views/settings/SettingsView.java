@@ -86,7 +86,6 @@ public class SettingsView extends Div {
 
     private void getAllUsers(){
         List<User> users = userService.findAll();
-        users.sort(Comparator.comparing(User::getUsername));
         gridWorkers.setItems(users);
     }
 

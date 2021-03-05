@@ -12,5 +12,4 @@ public interface RoleRepo extends JpaRepository<Role, BigDecimal> {
     @Query(value = "SELECT * from naprzod2.NPP_ROLES where ROLE_ID in (SELECT role_Id FROM naprzod2.NPP_USERS_ROLES  where user_Id = ?1)", nativeQuery = true)
     List<Role> findAllUserRoles(BigDecimal userId);
 
-
 }
