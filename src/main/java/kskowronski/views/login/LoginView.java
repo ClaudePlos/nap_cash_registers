@@ -46,7 +46,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private LoginI18n createPolandI18n() {
         String dbInfo  = env.getProperty("spring.datasource.url") + "";
-        if (dbInfo.substring(dbInfo.length()-1,dbInfo.length()).equals("DB1")){
+        if (dbInfo.substring(dbInfo.length()-3,dbInfo.length()).equals("DB1")){
             dbInfo = "";
         }
 

@@ -34,11 +34,11 @@ public class GlobalDataService {
     UserService userService;
 
     private List<EatFirma> companies;
-    public List<CashRegisterDTO> cashRegistersDTO = new ArrayList<>();
+    public List<CashRegisterDTO> cashRegistersDTO;
 
     public void getGlobalData(UserDetails userDetails, Collection<? extends GrantedAuthority> authorities ){
         List<CashRegister> crList = new ArrayList<>();
-
+        cashRegistersDTO = new ArrayList<>();
         companies = eatFirmaRepo.findAll();
 
         // get cash registers
