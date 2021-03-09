@@ -12,7 +12,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import kskowronski.data.entity.inap.User;
-import kskowronski.data.service.inap.UserService;
+import kskowronski.data.services.inap.UserService;
 import kskowronski.views.main.MainView;
 import kskowronski.views.settings.elements.CashSetDialog;
 import kskowronski.views.settings.elements.RolesSetDialog;

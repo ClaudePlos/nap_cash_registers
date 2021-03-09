@@ -1,4 +1,4 @@
-package kskowronski.data.service.global;
+package kskowronski.data.services.global;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import kskowronski.data.entity.global.EatFirma;

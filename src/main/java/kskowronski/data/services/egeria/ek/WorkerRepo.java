@@ -1,4 +1,4 @@
-package kskowronski.data.service.egeria.ek;
+package kskowronski.data.services.egeria.ek;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import kskowronski.data.entity.egeria.ek.Worker;

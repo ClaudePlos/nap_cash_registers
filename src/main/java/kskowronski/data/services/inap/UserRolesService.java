@@ -1,4 +1,4 @@
-package kskowronski.data.service.inap;
+package kskowronski.data.services.inap;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class UserRolesService  {

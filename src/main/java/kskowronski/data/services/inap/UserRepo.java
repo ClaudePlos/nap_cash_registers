@@ -1,6 +1,5 @@
-package kskowronski.data.service.inap;
+package kskowronski.data.services.inap;
 
-import kskowronski.data.entity.egeria.ek.Worker;
 import org.springframework.data.jpa.repository.JpaRepository;
 import kskowronski.data.entity.inap.User;
 import org.springframework.data.jpa.repository.Query;

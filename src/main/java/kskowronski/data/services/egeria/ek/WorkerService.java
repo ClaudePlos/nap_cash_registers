@@ -1,6 +1,5 @@
-package kskowronski.data.service.egeria.ek;
+package kskowronski.data.services.egeria.ek;
 
-import kskowronski.data.entity.egeria.ckk.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;

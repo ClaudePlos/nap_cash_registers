@@ -12,7 +12,7 @@ import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.kg.Document;
-import kskowronski.data.service.egeria.kg.DocumentService;
+import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

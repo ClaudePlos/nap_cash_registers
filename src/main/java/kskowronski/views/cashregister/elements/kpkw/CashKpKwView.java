@@ -9,9 +9,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.kg.Document;
-import kskowronski.data.service.egeria.kg.DocumentService;
-import kskowronski.data.service.egeria.ckk.ClientService;
-import kskowronski.data.service.egeria.ek.WorkerService;
+import kskowronski.data.services.egeria.kg.DocumentService;
+import kskowronski.data.services.egeria.ckk.ClientService;
+import kskowronski.data.services.egeria.ek.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -10,8 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.inap.Role;
-import kskowronski.data.service.inap.RoleService;
-import kskowronski.data.service.inap.UserRolesService;
+import kskowronski.data.services.inap.RoleService;
+import kskowronski.data.services.inap.UserRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

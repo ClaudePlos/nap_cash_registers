@@ -1,11 +1,11 @@
-package kskowronski.data.service.global;
+package kskowronski.data.services.global;
 
 import kskowronski.data.entity.egeria.kg.CashRegister;
 import kskowronski.data.entity.egeria.kg.CashRegisterDTO;
 import kskowronski.data.entity.global.EatFirma;
 import kskowronski.data.entity.inap.User;
-import kskowronski.data.service.egeria.kg.CashRegisterRepo;
-import kskowronski.data.service.inap.UserService;
+import kskowronski.data.services.egeria.kg.CashRegisterRepo;
+import kskowronski.data.services.inap.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,9 +48,8 @@ public class GlobalDataService {
         // get cash registers
         consolidationService.setConsolidateCompany();
         if (authorities.contains(new SimpleGrantedAuthority("USER"))){
-            Optional<User> user = userService.findByUsername(userDetails.getUsername());
-            if (user.isPresent())
-                crList = cashRegisterRepo.findAllUserCash(user.get().getUzId());
+            User user = userService.findByUsername(userDetails.getUsername());
+            crList = cashRegisterRepo.findAllUserCash(user.getUzId());
         } else {
             crList = cashRegisterRepo.findAll(Sort.by("casName").ascending());
         }

@@ -1,8 +1,8 @@
-package kskowronski.data.service.egeria.kg;
+package kskowronski.data.services.egeria.kg;
 
 import com.vaadin.flow.component.notification.Notification;
 import kskowronski.data.entity.egeria.kg.Document;
-import kskowronski.data.service.global.ConsolidationService;
+import kskowronski.data.services.global.ConsolidationService;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -22,7 +22,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import kskowronski.data.service.global.GlobalDataService;
+import kskowronski.data.services.global.GlobalDataService;
 import kskowronski.views.cashregister.CashRegisterView;
 import kskowronski.views.about.AboutView;
 import kskowronski.views.components.MyNotification;

@@ -1,4 +1,4 @@
-package kskowronski.data.service.inap;
+package kskowronski.data.services.inap;
 
 import kskowronski.data.entity.inap.Role;
 import org.springframework.beans.factory.annotation.Autowired;

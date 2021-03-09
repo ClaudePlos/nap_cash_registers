@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.kg.CashRegister;
-import kskowronski.data.service.egeria.kg.CashRegisterService;
+import kskowronski.data.services.egeria.kg.CashRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

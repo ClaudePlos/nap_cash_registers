@@ -1,4 +1,4 @@
-package kskowronski.data.service.egeria.ckk;
+package kskowronski.data.services.egeria.ckk;
 
 import kskowronski.data.entity.egeria.ckk.Client;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,6 @@ import org.vaadin.artur.helpers.CrudService;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

@@ -1,6 +1,6 @@
-package kskowronski.data.service.inap;
+package kskowronski.data.services.inap;
 
-import kskowronski.data.entity.egeria.ek.Worker;
+import kskowronski.data.services.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,10 @@ public class UserService extends CrudService<User, BigDecimal> {
         return repo.findById(prcId);
     }
 
-    public Optional<User> findByUsername(String username){ return repo.findByUsername(username);};
+    public User findByUsername(String username){
+        Optional<User> user = repo.findByUsername(username);
+        return user.orElseThrow(()-> new EntityNotFoundException("No findByUsername: " + username));
+    };
 
     public Optional<User> findByPassword(String pesel){ return repo.findByPassword(pesel);};
 

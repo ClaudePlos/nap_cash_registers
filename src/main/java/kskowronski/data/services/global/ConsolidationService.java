@@ -1,4 +1,4 @@
-package kskowronski.data.service.global;
+package kskowronski.data.services.global;
 
 
 import org.springframework.stereotype.Service;
