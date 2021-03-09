@@ -42,4 +42,21 @@ class ClientServiceTest {
         Assertions.assertEquals("Anfix", actual.get(0).getKldNazwa());
     }
 
+    @Test
+    public void shouldNoReturnAnyCompany(){
+        // given
+        Client client1 = new Client();
+        client1.setKldNazwa("Anfix");
+        Client client2 = new Client();
+        client2.setKldNazwa("Selgros");
+        Iterable<Client> all = Arrays.asList(client1, client2);
+        Mockito.doReturn(all).when(clientRepo).findAll();
+
+        // when
+        List<Client> actual = clientService.findFastClientForTest("Anfix22");
+
+        //then
+        assertTrue(actual.isEmpty());
+    }
+
 }
