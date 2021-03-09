@@ -1,0 +1,29 @@
+package kskowronski.controllers;
+
+import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.services.egeria.ckk.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+
+@RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, path = "/api/clients")
+@RestController
+public class ClientController {
+
+    private ClientService clientService;
+
+    @Autowired
+    public ClientController(ClientService clientService) { this.clientService = clientService; }
+
+    @GetMapping
+    public List<Client> getClients() { return clientService.findAllClients(); }
+
+    @GetMapping(value = "/filter")
+    public List<Client> getClientsByText(@RequestParam String text) { return clientService.findFastClient(text).get(); }
+}

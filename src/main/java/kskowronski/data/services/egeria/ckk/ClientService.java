@@ -23,6 +23,8 @@ public class ClientService extends CrudService<Client, BigDecimal> {
         return repo;
     }
 
+    public List<Client>findAllClients(){ return repo.findAll(); }
+
     public Optional<Client> getClientByKlKod(BigDecimal klKod){ return repo.getClientByKlKod(klKod); }
 
     public Optional<List<Client>> findFastClient(String word){ return repo.findFastClient(word.toUpperCase()); }

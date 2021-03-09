@@ -32,9 +32,9 @@ public class UserService extends CrudService<User, BigDecimal> {
     public User findByUsername(String username){
         Optional<User> user = repo.findByUsername(username);
         return user.orElseThrow(()-> new EntityNotFoundException("No findByUsername: " + username));
-    };
+    }
 
-    public Optional<User> findByPassword(String pesel){ return repo.findByPassword(pesel);};
+    public Optional<User> findByPassword(String pesel){ return repo.findByPassword(pesel);}
 
     public List<User> findAll(){ return repo.findAll(Sort.by(Sort.Direction.ASC, "username"));}
 
