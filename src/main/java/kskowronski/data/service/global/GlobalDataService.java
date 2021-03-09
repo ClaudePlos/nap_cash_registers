@@ -41,6 +41,10 @@ public class GlobalDataService {
         cashRegistersDTO = new ArrayList<>();
         companies = eatFirmaRepo.findAll();
 
+        if (authorities.size() == 0){
+            return;
+        }
+
         // get cash registers
         consolidationService.setConsolidateCompany();
         if (authorities.contains(new SimpleGrantedAuthority("USER"))){
