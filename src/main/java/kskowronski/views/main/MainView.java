@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,6 +25,7 @@ import com.vaadin.flow.router.RouterLink;
 import kskowronski.data.service.global.GlobalDataService;
 import kskowronski.views.cashregister.CashRegisterView;
 import kskowronski.views.about.AboutView;
+import kskowronski.views.components.MyNotification;
 import kskowronski.views.settings.SettingsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -94,13 +97,20 @@ public class MainView extends AppLayout {
     /*
     * Generate global data
      */
-    private Component[] createMenuItems() {
+    private Component[] createMenuItems()  {
+        Tab[] tabs = null;
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        if (authorities.isEmpty()){
+            MyNotification.openAlert("Brak uprawnień !!!", 3000,  Notification.Position.MIDDLE);
+            tabs = new Tab[]{};
+            new MyThread().start();
+            UI.getCurrent().getPage().executeJs("location.assign('logout')");
+            return tabs;
+        }
+
         globalDataService.getGlobalData(userDetails, authorities);
-
-        Tab[] tabs = null;
-
 
         if (authorities.contains(new SimpleGrantedAuthority("USER"))){
             tabs = new Tab[]{
@@ -152,5 +162,17 @@ public class MainView extends AppLayout {
 
     private String getCurrentPageTitle() {
         return getContent().getClass().getAnnotation(PageTitle.class).value();
+    }
+}
+
+class MyThread extends Thread{
+    @Override
+    public void run(){
+        try {
+            Thread.sleep(3000);
+            System.err.println("Brak uprawnień");
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

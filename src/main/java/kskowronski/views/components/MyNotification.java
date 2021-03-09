@@ -27,7 +27,7 @@ public class MyNotification extends Notification {
 
         // @formatter:off
         String styles = ".my-style { "
-                + "  color: red;"
+                + "  color: red; font-size: 24px"
                 + " }";
         // @formatter:on
 
