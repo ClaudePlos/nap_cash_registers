@@ -2,6 +2,7 @@ package kskowronski.data.services.egeria.ckk;
 
 import kskowronski.data.entity.egeria.ckk.Client;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,9 +25,8 @@ class ClientServiceTest {
     @InjectMocks
     private ClientService clientService = new ClientService();
 
-    @Test
-    //@DisplayName("Should Return Selected Company")
-    public void shouldReturnSelectedCompany(){
+    @BeforeEach
+    private void setUpRepository(){
         // given
         Client client1 = new Client();
         client1.setKldNazwa("Anfix");
@@ -34,6 +34,11 @@ class ClientServiceTest {
         client2.setKldNazwa("Selgros");
         Iterable<Client> all = Arrays.asList(client1, client2);
         Mockito.doReturn(all).when(clientRepo).findAll();
+    }
+
+    @Test
+    //@DisplayName("Should Return Selected Company")
+    public void shouldReturnSelectedCompany(){
 
         // when
         List<Client> actual = clientService.findFastClientForTest("Anfix");
@@ -44,13 +49,6 @@ class ClientServiceTest {
 
     @Test
     public void shouldNoReturnAnyCompany(){
-        // given
-        Client client1 = new Client();
-        client1.setKldNazwa("Anfix");
-        Client client2 = new Client();
-        client2.setKldNazwa("Selgros");
-        Iterable<Client> all = Arrays.asList(client1, client2);
-        Mockito.doReturn(all).when(clientRepo).findAll();
 
         // when
         List<Client> actual = clientService.findFastClientForTest("Anfix22");
