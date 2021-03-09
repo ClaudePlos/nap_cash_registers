@@ -4,11 +4,9 @@ import kskowronski.data.entity.egeria.ckk.Client;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -25,5 +23,8 @@ public class ClientController {
     public List<Client> getClients() { return clientService.findAllClients(); }
 
     @GetMapping(value = "/filter")
-    public List<Client> getClientsByText(@RequestParam String text) { return clientService.findFastClient(text).get(); }
+    public List<Client> getClientsByText(@RequestParam String text) { return clientService.findFastClientForRest(text); }
+
+    @GetMapping(value = "/{klKod}")
+    public Client getClientsByKlKod(@PathVariable BigDecimal klKod) { return clientService.getClientByKlKod(klKod).get(); }
 }

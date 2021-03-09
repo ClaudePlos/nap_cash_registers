@@ -1,6 +1,7 @@
 package kskowronski.data.services.egeria.ckk;
 
 import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.services.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
@@ -28,5 +29,9 @@ public class ClientService extends CrudService<Client, BigDecimal> {
     public Optional<Client> getClientByKlKod(BigDecimal klKod){ return repo.getClientByKlKod(klKod); }
 
     public Optional<List<Client>> findFastClient(String word){ return repo.findFastClient(word.toUpperCase()); }
+
+    public List<Client> findFastClientForRest(String word){
+        return repo.findFastClient(word.toUpperCase()).orElseThrow(()-> new EntityNotFoundException("No found with word: " + word));
+    }
 
 }
