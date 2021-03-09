@@ -45,7 +45,7 @@ public class CashRegisterService  extends CrudService<CashRegister, BigDecimal> 
 
     public List<CashRegister> findAll(){ return this.repo.findAll(Sort.by(Sort.Direction.ASC, "casName"));}
 
-    public List<CashRegister> findAllUserRoles(BigDecimal userId){ return repo.findAllUserRoles(userId);}
+    public List<CashRegister> findAllUserCash(BigDecimal userId){ return repo.findAllUserCash(userId);}
 
     @Transactional
     public void deleteSetting(BigDecimal userId, BigDecimal casId) {

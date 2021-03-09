@@ -20,9 +20,11 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
+import kskowronski.data.service.global.GlobalDataService;
 import kskowronski.views.cashregister.CashRegisterView;
 import kskowronski.views.about.AboutView;
 import kskowronski.views.settings.SettingsView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +40,11 @@ public class MainView extends AppLayout {
     private final Tabs menu;
     private H1 viewTitle;
 
-    public MainView() {
+    private transient GlobalDataService globalDataService;
+
+    @Autowired
+    public MainView(GlobalDataService globalDataService) {
+        this.globalDataService = globalDataService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -85,10 +91,16 @@ public class MainView extends AppLayout {
         return tabs;
     }
 
+    /*
+    * Generate global data
+     */
     private Component[] createMenuItems() {
-        Tab[] tabs = null;
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        globalDataService.getGlobalData(userDetails, authorities);
+
+        Tab[] tabs = null;
+
 
         if (authorities.contains(new SimpleGrantedAuthority("USER"))){
             tabs = new Tab[]{

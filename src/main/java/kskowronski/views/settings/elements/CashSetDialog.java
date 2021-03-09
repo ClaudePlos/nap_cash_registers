@@ -119,7 +119,7 @@ public class CashSetDialog extends Dialog {
         this.userId = userId;
         List<CashRegister> cash = cashRegisterService.findAll();
 
-        List<CashRegister> userCash = cashRegisterService.findAllUserRoles(userId);
+        List<CashRegister> userCash = cashRegisterService.findAllUserCash(userId);
         gridUserHasCash.setItems(userCash);
 
         userCash.stream().forEach( item ->  cash.removeIf( x -> x.getCasId().equals(item.getCasId())) );
