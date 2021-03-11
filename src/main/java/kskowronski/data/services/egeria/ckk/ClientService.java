@@ -1,6 +1,6 @@
 package kskowronski.data.services.egeria.ckk;
 
-import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.entities.egeria.ckk.Client;
 import kskowronski.data.services.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package kskowronski.data.entity.egeria.ek;
+package kskowronski.data.entities.egeria.ek;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

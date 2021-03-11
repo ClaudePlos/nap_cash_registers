@@ -1,4 +1,4 @@
-package kskowronski.data.entity.inap;
+package kskowronski.data.entities.inap;
 
 import java.util.*;
 import javax.persistence.*;

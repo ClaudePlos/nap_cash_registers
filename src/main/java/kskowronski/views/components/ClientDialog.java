@@ -9,7 +9,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.UIScope;
-import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.entities.egeria.ckk.Client;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.views.cashregister.elements.kpkw.KpKwForm;
 import org.springframework.stereotype.Component;

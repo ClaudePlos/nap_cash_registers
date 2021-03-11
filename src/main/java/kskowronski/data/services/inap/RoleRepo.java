@@ -1,6 +1,6 @@
 package kskowronski.data.services.inap;
 
-import kskowronski.data.entity.inap.Role;
+import kskowronski.data.entities.inap.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

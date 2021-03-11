@@ -1,6 +1,6 @@
 package kskowronski.data.services.egeria.kg;
 
-import kskowronski.data.entity.egeria.kg.CashRegister;
+import kskowronski.data.entities.egeria.kg.CashRegister;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

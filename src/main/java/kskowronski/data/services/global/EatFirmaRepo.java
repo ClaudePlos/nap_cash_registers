@@ -1,7 +1,7 @@
 package kskowronski.data.services.global;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import kskowronski.data.entity.global.EatFirma;
+import kskowronski.data.entities.global.EatFirma;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;

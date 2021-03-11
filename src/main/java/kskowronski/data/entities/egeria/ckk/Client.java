@@ -1,4 +1,4 @@
-package kskowronski.data.entity.egeria.ckk;
+package kskowronski.data.entities.egeria.ckk;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,7 +1,7 @@
 package kskowronski.views.cashregister.elements;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.html.Label;
@@ -11,7 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
-import kskowronski.data.entity.egeria.kg.Document;
+import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
 import kskowronski.views.components.MyNotification;
@@ -75,6 +75,13 @@ public class CashReportsView extends VerticalLayout {
                     cashKpKwView.open();
                 }
         )).setWidth("50px");
+        gridCashReports.addColumn(new NativeButtonRenderer<Document>("Raport",
+                item -> {
+                    Dialog dialog = new Dialog();
+                    dialog.add(new Label("TODO"));
+                    dialog.open();
+                }
+        )).setWidth("50px");
 
         gridCashReports.addSelectionListener( e -> {
             if ( e.getFirstSelectedItem().isPresent() ){
@@ -112,7 +119,7 @@ public class CashReportsView extends VerticalLayout {
     }
 
     private void addNewReportItem(){
-        if (this.reports.isEmpty()){
+        if (this.reports == null){
             MyNotification.openAlert("Bark wybranej kasy",3000,  Notification.Position.MIDDLE);
             return;
         }

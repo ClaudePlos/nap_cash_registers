@@ -3,7 +3,7 @@ package kskowronski.data.services.global;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
-import kskowronski.data.entity.global.EatFirma;
+import kskowronski.data.entities.global.EatFirma;
 
 import java.math.BigDecimal;
 import java.util.Optional;

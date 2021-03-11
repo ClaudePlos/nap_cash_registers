@@ -1,6 +1,6 @@
 package kskowronski.data.services.inap;
 
-import kskowronski.data.entity.inap.Role;
+import kskowronski.data.entities.inap.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;

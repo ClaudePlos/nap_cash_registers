@@ -1,7 +1,7 @@
 package kskowronski.data.services.inap;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import kskowronski.data.entity.inap.User;
+import kskowronski.data.entities.inap.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

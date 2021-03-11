@@ -1,13 +1,12 @@
 package kskowronski.security;
 
-import kskowronski.data.entity.inap.Role;
+import kskowronski.data.entities.inap.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import kskowronski.data.entity.inap.User;
+import kskowronski.data.entities.inap.User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.*;
 
 public class MyUserDetails implements UserDetails {

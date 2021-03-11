@@ -1,4 +1,4 @@
-package kskowronski.data.entity.egeria.kg;
+package kskowronski.data.entities.egeria.kg;
 
 import java.math.BigDecimal;
 

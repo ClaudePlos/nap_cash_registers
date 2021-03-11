@@ -3,7 +3,7 @@ package kskowronski.data.services.egeria.ek;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
-import kskowronski.data.entity.egeria.ek.Worker;
+import kskowronski.data.entities.egeria.ek.Worker;
 
 import java.math.BigDecimal;
 import java.util.List;

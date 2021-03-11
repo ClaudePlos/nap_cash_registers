@@ -1,4 +1,4 @@
-package kskowronski.data.entity.global;
+package kskowronski.data.entities.global;
 
 
 import javax.persistence.Column;

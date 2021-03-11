@@ -1,9 +1,9 @@
 package kskowronski.data.services.global;
 
-import kskowronski.data.entity.egeria.kg.CashRegister;
-import kskowronski.data.entity.egeria.kg.CashRegisterDTO;
-import kskowronski.data.entity.global.EatFirma;
-import kskowronski.data.entity.inap.User;
+import kskowronski.data.entities.egeria.kg.CashRegister;
+import kskowronski.data.entities.egeria.kg.CashRegisterDTO;
+import kskowronski.data.entities.global.EatFirma;
+import kskowronski.data.entities.inap.User;
 import kskowronski.data.services.egeria.kg.CashRegisterRepo;
 import kskowronski.data.services.inap.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GlobalDataService {

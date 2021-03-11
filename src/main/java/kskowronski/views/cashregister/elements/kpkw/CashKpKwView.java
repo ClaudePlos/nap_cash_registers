@@ -8,7 +8,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
-import kskowronski.data.entity.egeria.kg.Document;
+import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
@@ -44,7 +44,7 @@ public class CashKpKwView extends Dialog {
         this.documentService = documentService;
         this.formKpKw = new KpKwForm(this, clientService, workerService);
         setWidth("800px");
-        setHeight("600px");
+        setHeight("700px");
 
         butAddNewKpKw.setEnabled(false);
         butAddNewKpKw.addClickListener( e -> {

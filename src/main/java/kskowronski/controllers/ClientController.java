@@ -1,6 +1,6 @@
 package kskowronski.controllers;
 
-import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.entities.egeria.ckk.Client;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

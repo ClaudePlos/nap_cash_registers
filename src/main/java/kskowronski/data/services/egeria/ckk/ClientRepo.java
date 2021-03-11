@@ -1,7 +1,7 @@
 package kskowronski.data.services.egeria.ckk;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import kskowronski.data.entity.egeria.ckk.Client;
+import kskowronski.data.entities.egeria.ckk.Client;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

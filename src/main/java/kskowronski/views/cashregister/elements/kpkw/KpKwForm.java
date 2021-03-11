@@ -14,10 +14,10 @@ import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.spring.annotation.UIScope;
-import kskowronski.data.entity.egeria.kg.Document;
-import kskowronski.data.entity.egeria.kg.KpKwType;
-import kskowronski.data.entity.egeria.ckk.Client;
-import kskowronski.data.entity.egeria.ek.Worker;
+import kskowronski.data.entities.egeria.kg.Document;
+import kskowronski.data.entities.egeria.kg.KpKwType;
+import kskowronski.data.entities.egeria.ckk.Client;
+import kskowronski.data.entities.egeria.ek.Worker;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
 import kskowronski.views.components.ClientDialog;
@@ -32,11 +32,17 @@ import java.util.Optional;
 @CssImport("./styles/views/cashregister/elements/kpkw-form.css")
 public class KpKwForm extends FormLayout {
 
+    private String txtIncome = "Utarg";
+    private String txtBank = "Bank";
+    private String txtCashInvoice = "Faktura gotówkowa";
+    private String txtTransfer = "Przekaz";
+    private String txtCommission = "Prowizja";
+
     private String txtFindClient = "Znajdź Klienta";
     private String txtClient = "Klient";
 
     private String txtFindWorker = "Znajdź Pracownika";
-    private String txtWorker = "Pracownik";
+    private String txtWorker = "Zaliczka dla";
 
     private Binder<Document> binder = new Binder<>(Document.class);
     private TextField docOwnNumber = new TextField("Numer");
@@ -116,21 +122,27 @@ public class KpKwForm extends FormLayout {
 
         HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butClose);
         buttons.setClassName("buttonsFooter");
+
         HorizontalLayout divTypeAndDate = new HorizontalLayout(docRdocCode, docDateFrom);
         divTypeAndDate.setClassName("divTypeAndDate");
+
         HorizontalLayout divClient = new HorizontalLayout(docKlKodPod, butFindClient);
         divClient.setClassName("divClient");
         divClient.setVisible(true);
+
         HorizontalLayout divWorker =  new HorizontalLayout(docPrcIdPod, butFindWorker);
         divWorker.setClassName("divWorker");
         divWorker.setVisible(false);
+
         HorizontalLayout divAccount =  new HorizontalLayout(docDef0);
-        divWorker.setClassName("divAccount");
+        divAccount.setClassName("divAccount");
+
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        radioWorkerClient.setLabel("Transakcja z?");
-        radioWorkerClient.setItems(txtClient, txtWorker);
-        radioWorkerClient.setValue(txtClient);
+        radioWorkerClient.setLabel("Transakcja:");
+        radioWorkerClient.setItems(txtIncome, txtBank, txtCashInvoice, txtTransfer, txtCommission, txtWorker, txtClient);
+        radioWorkerClient.setValue(txtIncome);
+
         radioWorkerClient.addValueChangeListener(event -> {
             divClient.setVisible(!divClient.isVisible());
             divWorker.setVisible(!divWorker.isVisible());
@@ -165,10 +177,14 @@ public class KpKwForm extends FormLayout {
                 butFindClient.setText(txtClient);
                 butFindWorker.setText(txtWorker);
             }
+            //TODO
+            radioWorkerClient.setValue(txtIncome);
+
             if (doc.getDocPrcIdPod() != null)
-                radioWorkerClient.setValue("Pracownik");
-            else
-                radioWorkerClient.setValue("Klient");
+                radioWorkerClient.setValue(txtWorker);
+
+            if (doc.getDocKlKodPod() != null)
+                radioWorkerClient.setValue(txtClient);
         }
 
     }
