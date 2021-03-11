@@ -5,6 +5,10 @@ kpkw-form,
     margin: 5px;
 }
 
+.divIncome{
+    display: block;
+    height: 60px;
+}
 
 .divWorker {
   display: block;

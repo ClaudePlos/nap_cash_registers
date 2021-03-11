@@ -18,6 +18,7 @@ import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.entities.egeria.kg.KpKwType;
 import kskowronski.data.entities.egeria.ckk.Client;
 import kskowronski.data.entities.egeria.ek.Worker;
+import kskowronski.data.entities.egeria.kg.TransactionType;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
 import kskowronski.views.components.ClientDialog;
@@ -63,13 +64,23 @@ public class KpKwForm extends FormLayout {
     private RadioButtonGroup<String> radioWorkerClient = new RadioButtonGroup<>();
 
     private TextField docDef0 = new TextField("Dodatkowe Info.");
+    private TextField docDef1 = new TextField("Transfer");
 
+    private HorizontalLayout divIncome = new HorizontalLayout();
+    private HorizontalLayout divBank = new HorizontalLayout();
+    private HorizontalLayout divCashInvoice = new HorizontalLayout();
+    private HorizontalLayout divTransfer = new HorizontalLayout();
+    private HorizontalLayout divCommission = new HorizontalLayout();
+    private HorizontalLayout divWorker =  new HorizontalLayout();
+    private HorizontalLayout divClient = new HorizontalLayout();
 
     public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService) {
         this.cashKpKwView = cashKpKwView;
         docOwnNumber.setEnabled(false);
         docKlKodPod.setEnabled(false);
         docPrcIdPod.setEnabled(false);
+        docDef0.setEnabled(false);
+        docDef1.setEnabled(false);
         docKlKodPod.setWidth("100px");
         docRdocCode.setItems(KpKwType.KP, KpKwType.KW);
         docRdocCode.setClassName("docRdocCode");
@@ -126,15 +137,30 @@ public class KpKwForm extends FormLayout {
         HorizontalLayout divTypeAndDate = new HorizontalLayout(docRdocCode, docDateFrom);
         divTypeAndDate.setClassName("divTypeAndDate");
 
-        HorizontalLayout divClient = new HorizontalLayout(docKlKodPod, butFindClient);
-        divClient.setClassName("divClient");
-        divClient.setVisible(true);
+        divIncome.setVisible(true);
+        divIncome.setClassName("divIncome");
 
-        HorizontalLayout divWorker =  new HorizontalLayout(docPrcIdPod, butFindWorker);
+        divBank.setVisible(false);
+        divBank.setClassName("divBank");
+
+        divCashInvoice.setVisible(false);
+        divCashInvoice.setClassName("divCashInvoice");
+
+        divTransfer.setVisible(false);
+        divTransfer.setClassName("divTransfer");
+
+        divCommission.setVisible(false);
+        divCommission.setClassName("divCommission");
+
+        divClient.add(docKlKodPod, butFindClient);
+        divClient.setClassName("divClient");
+        divClient.setVisible(false);
+
+        divWorker.add(docPrcIdPod, butFindWorker);
         divWorker.setClassName("divWorker");
         divWorker.setVisible(false);
 
-        HorizontalLayout divAccount =  new HorizontalLayout(docDef0);
+        HorizontalLayout divAccount =  new HorizontalLayout(docDef0, docDef1);
         divAccount.setClassName("divAccount");
 
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -142,14 +168,13 @@ public class KpKwForm extends FormLayout {
         radioWorkerClient.setLabel("Transakcja:");
         radioWorkerClient.setItems(txtIncome, txtBank, txtCashInvoice, txtTransfer, txtCommission, txtWorker, txtClient);
         radioWorkerClient.setValue(txtIncome);
+        radioWorkerClient.addValueChangeListener(event -> onChangeTransaction(mapperTransaction(radioWorkerClient.getValue())));
 
-        radioWorkerClient.addValueChangeListener(event -> {
-            divClient.setVisible(!divClient.isVisible());
-            divWorker.setVisible(!divWorker.isVisible());
-        });
-
-
-        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient, divClient, divWorker, labCompanyName, labWorkerName, divAccount, buttons);
+        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient
+                , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
+                , labCompanyName, labWorkerName
+                , divAccount
+                , buttons);
 
         binder.bindInstanceFields(this);
 
@@ -177,14 +202,16 @@ public class KpKwForm extends FormLayout {
                 butFindClient.setText(txtClient);
                 butFindWorker.setText(txtWorker);
             }
-            //TODO
-            radioWorkerClient.setValue(txtIncome);
 
+            onChangeTransaction(doc.getDocDef1());
+
+            //TODO
             if (doc.getDocPrcIdPod() != null)
                 radioWorkerClient.setValue(txtWorker);
 
             if (doc.getDocKlKodPod() != null)
                 radioWorkerClient.setValue(txtClient);
+
         }
 
     }
@@ -206,10 +233,10 @@ public class KpKwForm extends FormLayout {
     }
 
     public void editableElements(Boolean status){
+        radioWorkerClient.setEnabled(status);
         docRdocCode.setEnabled(status);
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
-        docDef0.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);
     }
@@ -222,5 +249,33 @@ public class KpKwForm extends FormLayout {
     public void setWorker(Worker worker){
         docPrcIdPod.setValue(worker.getPrcId());
         labWorkerName.setText(worker.getNazwImie());
+    }
+
+    private void onChangeTransaction(String transaction){
+        //Div transaction update
+        divIncome.setVisible( checkTransaction(transaction, TransactionType.INCOME.name()) );
+        divBank.setVisible( checkTransaction(transaction, TransactionType.BANK.name()) );
+        divCashInvoice.setVisible( checkTransaction(transaction, TransactionType.CASH_INVOICE.name()) );
+        divTransfer.setVisible( checkTransaction(transaction, TransactionType.TRANSFER.name()) );
+        divCommission.setVisible( checkTransaction(transaction, TransactionType.COMMISSION.name()) );
+        divWorker.setVisible( checkTransaction(transaction, TransactionType.CASH_ADVANCE.name()) );
+        divClient.setVisible( checkTransaction(transaction, TransactionType.CLIENT.name()) );
+    }
+
+    private String mapperTransaction(String radioButtonName){
+         String transaction =
+               checkTransaction(radioButtonName,"Utarg") ? TransactionType.INCOME.name() :
+                checkTransaction(radioButtonName,"Bank") ? TransactionType.BANK.name() :
+                 checkTransaction(radioButtonName,"Faktura gotówkowa") ? TransactionType.CASH_INVOICE.name() :
+                  checkTransaction(radioButtonName,"Przekaz") ? TransactionType.TRANSFER.name() :
+                   checkTransaction(radioButtonName,"Prowizja") ? TransactionType.COMMISSION.name() :
+                    checkTransaction(radioButtonName,"Zaliczka dla") ? TransactionType.CASH_ADVANCE.name() :
+                     checkTransaction(radioButtonName,"Klient") ? TransactionType.CLIENT.name() : null;
+        docDef1.setValue(transaction);
+        return transaction;
+    }
+
+    private Boolean checkTransaction(String t1, String t2){
+        return t1.equals(t2);
     }
 }

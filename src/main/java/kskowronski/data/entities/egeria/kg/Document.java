@@ -76,6 +76,9 @@ public class Document {
     @Column(name = "DOK_DEF_0")
     private String docDef0;
 
+    @Column(name = "DOK_DEF_1")
+    private String docDef1;
+
     public Document() {
     }
 
@@ -257,5 +260,13 @@ public class Document {
 
     public void setDocDef0(String docDef0) {
         this.docDef0 = docDef0;
+    }
+
+    public String getDocDef1() {
+        return docDef1;
+    }
+
+    public void setDocDef1(String docDef1) {
+        this.docDef1 = docDef1;
     }
 }
