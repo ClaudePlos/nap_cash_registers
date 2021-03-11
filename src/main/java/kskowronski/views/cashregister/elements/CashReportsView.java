@@ -14,6 +14,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entity.egeria.kg.Document;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
+import kskowronski.views.components.MyNotification;
+import kskowronski.views.components.PeriodLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +30,7 @@ public class CashReportsView extends VerticalLayout {
     private transient DocumentService documentService;
 
     private Grid<Document> gridCashReports;
-    private DatePicker from = new DatePicker();
-    private DatePicker to = new DatePicker();
+    private PeriodLayout period = new PeriodLayout();
 
     private transient List<Document> reports;
     private BigDecimal casId;
@@ -54,10 +55,6 @@ public class CashReportsView extends VerticalLayout {
         butAdd.setClassName("butAdd");
         butAcceptReport.setEnabled(false);
         butAdd.setClassName("butAcceptReport");
-
-        LocalDate now = LocalDate.now();
-        from.setValue(now);
-        to.setValue(now);
 
         this.gridCashReports = new Grid<>(Document.class);
         gridCashReports.setClassName("gridCashReports");
@@ -92,7 +89,7 @@ public class CashReportsView extends VerticalLayout {
         GridSortOrder<Document> order = new GridSortOrder<>(docNo, SortDirection.DESCENDING);
         gridCashReports.sort(Arrays.asList(order));
 
-        hlReportsHeader.add(from, to, butAdd, butAcceptReport);
+        hlReportsHeader.add(period, butAdd, butAcceptReport);
 
         add(hlReportsHeader, gridCashReports);
 
@@ -115,14 +112,24 @@ public class CashReportsView extends VerticalLayout {
     }
 
     private void addNewReportItem(){
+        if (this.reports.isEmpty()){
+            MyNotification.openAlert("Bark wybranej kasy",3000,  Notification.Position.MIDDLE);
+            return;
+        }
         //Calculate data
         Document docCal = this.reports.get(0);
+        LocalDate from = period.getFirstDayOfPeriod();
+        LocalDate to = period.getLastDayOfPeriod();
+        if (docCal.getDocDateTo().isAfter(from) || docCal.getDocDateTo().isEqual(from)){
+            MyNotification.openAlert("Nowy okres nie może być wcześniej niż ostatni !",3000,  Notification.Position.MIDDLE);
+            return;
+        }
         BigDecimal lp = docCal.getDocNo();
         if (docCal.getDocWn() != null && docCal.getDocMa() != null){
             endValue = docCal.docEndState();
         }
         // nzp_obj_rk.wstaw
-        Optional<Document> doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from.getValue(), to.getValue(), endValue );
+        Optional<Document> doc = documentService.addNewCashReport(casId, frmId, lp.add(BigDecimal.ONE), from, to, endValue );
         if (doc.isPresent()){
             this.reports.add(doc.get());
             this.reports.sort(Comparator.comparing(Document::getDocNo).reversed()); //order by desc

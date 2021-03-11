@@ -15,12 +15,12 @@ import java.util.stream.StreamSupport;
 @Service
 public class ClientService extends CrudService<Client, BigDecimal> {
 
-    @Autowired
+    //@Autowired
     private ClientRepo repo;
 
-//    public ClientService(@Autowired ClientRepo repo) {
-//        this.repo = repo;
-//    }
+    public ClientService(@Autowired ClientRepo repo) {
+        this.repo = repo;
+    }
 
     @Override
     protected ClientRepo getRepository() {
