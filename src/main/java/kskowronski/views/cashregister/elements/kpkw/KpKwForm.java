@@ -63,6 +63,8 @@ public class KpKwForm extends FormLayout {
     private CashKpKwView cashKpKwView;
     private RadioButtonGroup<String> radioWorkerClient = new RadioButtonGroup<>();
 
+    private TextField docDef2 = new TextField("Numer dowodu:");
+
     private TextField docDef0 = new TextField("Dodatkowe Info.");
     private TextField docDef1 = new TextField("Transfer");
     private TextField docSettlement = new TextField("Roz?");
@@ -80,6 +82,7 @@ public class KpKwForm extends FormLayout {
         docOwnNumber.setEnabled(false);
         docKlKodPod.setEnabled(false);
         docPrcIdPod.setEnabled(false);
+        docDef2.setEnabled(false);
         docDef0.setEnabled(false);
         docDef0.setWidth("100px");
         docDef1.setEnabled(false);
@@ -89,6 +92,7 @@ public class KpKwForm extends FormLayout {
         docRdocCode.setItems(KpKwType.KP, KpKwType.KW);
         docRdocCode.setClassName("docRdocCode");
         editableElements(false);
+
 
         butFindWorker.addClickListener( e ->{
             if (butFindWorker.getText().equals(txtFindWorker)){
@@ -147,6 +151,7 @@ public class KpKwForm extends FormLayout {
         divBank.setVisible(false);
         divBank.setClassName("divBank");
 
+        divCashInvoice.add(docDef2);
         divCashInvoice.setVisible(false);
         divCashInvoice.setClassName("divCashInvoice");
 
@@ -242,6 +247,7 @@ public class KpKwForm extends FormLayout {
         docRdocCode.setEnabled(status);
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
+        docDef2.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);
     }
