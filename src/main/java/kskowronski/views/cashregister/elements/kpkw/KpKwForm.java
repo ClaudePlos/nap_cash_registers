@@ -24,6 +24,7 @@ import kskowronski.data.services.egeria.ek.WorkerService;
 import kskowronski.views.components.ClientDialog;
 import kskowronski.views.components.MyNotification;
 import kskowronski.views.components.WorkerDialog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -32,7 +33,6 @@ import java.util.Optional;
 @UIScope
 @CssImport("./styles/views/cashregister/elements/kpkw-form.css")
 public class KpKwForm extends FormLayout {
-
     private String txtIncome = "Utarg";
     private String txtBank = "Bank";
     private String txtCashInvoice = "Faktura gotówkowa";
@@ -65,6 +65,7 @@ public class KpKwForm extends FormLayout {
 
     private TextField docDef0 = new TextField("Dodatkowe Info.");
     private TextField docDef1 = new TextField("Transfer");
+    private TextField docSettlement = new TextField("Roz?");
 
     private HorizontalLayout divIncome = new HorizontalLayout();
     private HorizontalLayout divBank = new HorizontalLayout();
@@ -80,7 +81,10 @@ public class KpKwForm extends FormLayout {
         docKlKodPod.setEnabled(false);
         docPrcIdPod.setEnabled(false);
         docDef0.setEnabled(false);
+        docDef0.setWidth("100px");
         docDef1.setEnabled(false);
+        docSettlement.setEnabled(false);
+        docSettlement.setWidth("30px");
         docKlKodPod.setWidth("100px");
         docRdocCode.setItems(KpKwType.KP, KpKwType.KW);
         docRdocCode.setClassName("docRdocCode");
@@ -152,15 +156,16 @@ public class KpKwForm extends FormLayout {
         divCommission.setVisible(false);
         divCommission.setClassName("divCommission");
 
-        divClient.add(docKlKodPod, butFindClient);
-        divClient.setClassName("divClient");
-        divClient.setVisible(false);
-
         divWorker.add(docPrcIdPod, butFindWorker);
         divWorker.setClassName("divWorker");
         divWorker.setVisible(false);
 
-        HorizontalLayout divAccount =  new HorizontalLayout(docDef0, docDef1);
+        divClient.add(docKlKodPod, butFindClient);
+        divClient.setClassName("divClient");
+        divClient.setVisible(false);
+
+
+        HorizontalLayout divAccount =  new HorizontalLayout(docDef0, docDef1, docSettlement);
         divAccount.setClassName("divAccount");
 
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -170,7 +175,7 @@ public class KpKwForm extends FormLayout {
         radioWorkerClient.setValue(txtIncome);
         radioWorkerClient.addValueChangeListener(event -> onChangeTransaction(mapperTransaction(radioWorkerClient.getValue())));
 
-        add(docOwnNumber, divTypeAndDate, docAmount, radioWorkerClient
+        add(docOwnNumber, radioWorkerClient, divTypeAndDate, docAmount
                 , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
                 , labCompanyName, labWorkerName
                 , divAccount
@@ -272,10 +277,36 @@ public class KpKwForm extends FormLayout {
                     checkTransaction(radioButtonName,"Zaliczka dla") ? TransactionType.CASH_ADVANCE.name() :
                      checkTransaction(radioButtonName,"Klient") ? TransactionType.CLIENT.name() : null;
         docDef1.setValue(transaction);
+        setupSettingsForTransaction(transaction);
         return transaction;
     }
 
     private Boolean checkTransaction(String t1, String t2){
         return t1.equals(t2);
+    }
+
+    private void setupSettingsForTransaction(String transaction){
+        if (transaction.equals(TransactionType.INCOME.name())){
+            updateDocumentItem(KpKwType.KP, false, "147-" + cashKpKwView.cashCode, "N");
+        } else if (transaction.equals(TransactionType.BANK.name())){
+            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N");
+        } else if (transaction.equals(TransactionType.CASH_INVOICE.name())){
+            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N");
+        } else if (transaction.equals(TransactionType.TRANSFER.name())){
+            updateDocumentItem(KpKwType.KP, true, "148-" + cashKpKwView.cashCode, "N");
+        } else if (transaction.equals(TransactionType.COMMISSION.name())){
+            updateDocumentItem(KpKwType.KW, false, "555-" + cashKpKwView.cashCode, "N");
+        } else if (transaction.equals(TransactionType.CASH_ADVANCE.name())){
+            updateDocumentItem(KpKwType.KP, false, "", "T");
+        } else if (transaction.equals(TransactionType.CLIENT.name())){
+            updateDocumentItem(KpKwType.KP, true, "", "T");
+        }
+    }
+
+    private void updateDocumentItem(KpKwType type, Boolean rdocCodeEnable, String seg, String settlement){
+        docRdocCode.setValue(type);
+        docRdocCode.setEnabled(rdocCodeEnable);
+        docDef0.setValue(seg);
+        docSettlement.setValue(settlement);
     }
 }

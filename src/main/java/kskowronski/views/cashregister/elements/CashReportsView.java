@@ -34,6 +34,7 @@ public class CashReportsView extends VerticalLayout {
 
     private transient List<Document> reports;
     private BigDecimal casId;
+    private String cashCode;
     private BigDecimal frmId;
     private BigDecimal endValue = BigDecimal.ZERO;
 
@@ -71,6 +72,7 @@ public class CashReportsView extends VerticalLayout {
                 item -> {
                     VerticalLayout vertical = new VerticalLayout ();
                     cashKpKwView.openKpKw(item);
+                    cashKpKwView.cashCode = cashCode;
                     cashKpKwView.add(vertical);
                     cashKpKwView.open();
                 }
@@ -110,10 +112,11 @@ public class CashReportsView extends VerticalLayout {
         return this;
     }
 
-    public void setItems(List<Document> reports, BigDecimal casId, BigDecimal frmId){
+    public void setItems(List<Document> reports, BigDecimal casId, String cashCode, BigDecimal frmId){
         gridCashReports.deselectAll();
         this.reports = reports;
         this.casId = casId;
+        this.cashCode = cashCode;
         this.frmId = frmId;
         gridCashReports.setItems(this.reports);
     }

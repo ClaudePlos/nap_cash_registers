@@ -7,15 +7,37 @@ kpkw-form,
 
 .divIncome{
     display: block;
-    height: 60px;
+    height: 65px;
+}
+
+.divBank {
+    display: block;
+    height: 65px;
+}
+
+.divCashInvoice {
+    display: block;
+    height: 65px;
+}
+
+.divTransfer {
+    display: block;
+    height: 65px;
+}
+
+.divCommission {
+    display: block;
+    height: 65px;
 }
 
 .divWorker {
-  display: block;
+    display: block;
+    height: 65px;
 }
 
 .divClient {
     display: block;
+    height: 65px;
 }
 
 .buttonsFooter {

@@ -62,7 +62,7 @@ public class CashRegisterView extends HorizontalLayout {
                 .withProperty("casName", CashRegisterDTO::getCasName)
                 .withProperty("casDesc", CashRegisterDTO::getCasDesc)
                 ).setHeader("KASA");
-        gridCashRegisters.addItemClickListener( event -> getCashReports(event.getItem().getCasId(), event.getItem().getCasFrmId()) );
+        gridCashRegisters.addItemClickListener( event -> getCashReports(event.getItem().getCasId(), event.getItem().getCasName(), event.getItem().getCasFrmId()) );
 
         //second grid
         vlReports = cashReportsView.openReports();
@@ -77,11 +77,11 @@ public class CashRegisterView extends HorizontalLayout {
         gridCashRegisters.setItems(cashRegisters);
     }
 
-    private void getCashReports(BigDecimal casId, BigDecimal frmId){
+    private void getCashReports(BigDecimal casId, String cashCode, BigDecimal frmId){
         Optional<List<Document>> reportsDB = documentService.getAllCashReports(casId, frmId);
         if ( reportsDB.isPresent() ){
             reports = reportsDB.get();
-            cashReportsView.setItems(reports, casId, frmId);
+            cashReportsView.setItems(reports, casId, cashCode, frmId);
         } else {
             Notification.show("Brak raprotów dla tej kasy", 3000, Notification.Position.MIDDLE);
         }

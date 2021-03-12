@@ -37,14 +37,15 @@ public class CashKpKwView extends Dialog {
 
     private Button butAddNewKpKw = new Button("Dodaj KP/KW");
     private KpKwForm formKpKw;
+    public String cashCode;
 
     @Autowired
     public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
         this.formKpKw = new KpKwForm(this, clientService, workerService);
-        setWidth("800px");
-        setHeight("700px");
+        setWidth("750px");
+        setHeight("630px");
 
         butAddNewKpKw.setEnabled(false);
         butAddNewKpKw.addClickListener( e -> {
