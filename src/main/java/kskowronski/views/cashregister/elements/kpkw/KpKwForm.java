@@ -236,10 +236,10 @@ public class KpKwForm extends FormLayout {
 
     private void save() {
         Document doc = binder.getBean();
-        if (doc.getDocDateFrom() == null){
-            MyNotification.openAlert("Brak daty wystawienia. Wypełnij.", 2000, Notification.Position.MIDDLE);
+        if (!validation(doc)){
             return;
         }
+
         Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
         cashKpKwView.updateList(doc.getDocNo().intValue()-1);
         if (docReturned.isPresent()){
@@ -313,6 +313,31 @@ public class KpKwForm extends FormLayout {
         docPrcIdPod.setValue(null);
         docKlKodPod.setValue(null);
     }
+
+    private boolean validation(Document doc){
+        if (doc.getDocDateFrom() == null){
+            MyNotification.openAlert("Brak daty wystawienia. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return false;
+        }
+
+        if (doc.getDocDef1().equals(globalDataService.transactions.get(2).getCode()) && doc.getDocDef2().equals("")){
+            MyNotification.openAlert("Brak numeru dokumentu. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return false;
+        }
+
+        if (doc.getDocDef1().equals(globalDataService.transactions.get(5).getCode()) && doc.getDocPrcIdPod() == null){
+             MyNotification.openAlert("Brak wskazanego pracowinka. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return false;
+        }
+
+        if (doc.getDocDef1().equals(globalDataService.transactions.get(6).getCode())  && doc.getDocKlKodPod() == null){
+            MyNotification.openAlert("Brak wskazanego klienta. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return false;
+        }
+        return true;
+    }
+
+
 }
 
 /*

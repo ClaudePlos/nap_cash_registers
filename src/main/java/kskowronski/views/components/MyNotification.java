@@ -20,6 +20,7 @@ public class MyNotification extends Notification {
         Div content = new Div();
         content.addClassName("my-style");
         content.setText(text);
+        content.setWidth((text.length() * 10) +"px");
 
         Notification notification = new Notification(content);
         notification.setDuration(duration);
@@ -27,7 +28,7 @@ public class MyNotification extends Notification {
 
         // @formatter:off
         String styles = ".my-style { "
-                + "  color: red; font-size: 24px"
+                + "  color: red; font-size: 24px; text-align: center;"
                 + " }";
         // @formatter:on
 
