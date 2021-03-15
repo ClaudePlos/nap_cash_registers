@@ -92,7 +92,7 @@ public class CashKpKwView extends Dialog {
     public void updateList(int index) {
         listDocKpKw = documentService.getAllCashKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
         if (listDocKpKw.isPresent()) {
-            this.listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //order by asc
+            //this.listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //order by asc
             gridCashKpKw.setItems(listDocKpKw.get());
             formKpKw.setDocument(listDocKpKw.get().get(index));
         }

@@ -4,6 +4,18 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 function generateCashReport(container, caseCode, docNumber, period, listDocKpKw) {
     console.log(listDocKpKw);
+    let cellValue = JSON.parse(listDocKpKw);
+
+    var bodyData = [];
+    bodyData.push(['Poz.', 'Data', 'Numer', 'Treść', 'Przychód', 'Rozchód']);
+
+    for (var i = 0; i < cellValue.length; i++) {
+        bodyData.push([cellValue[i].docNo
+            , ''
+            , typeof(cellValue[i].docOwnNumber) != "undefined" ? cellValue[i].docOwnNumber : ''
+            , '', cellValue[i].docAmount, cellValue[i].docAmount]);
+    }
+    console.log(bodyData);
 
     var docDefinition = {
         content: [
@@ -15,9 +27,7 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw)
             {
                 style: 'table1',
                 table: {
-                    body: [
-                        ['Poz.', 'Data', 'Numer', 'Treść', 'Przychód', 'Rozchód']
-                    ]
+                    body: bodyData
                 }
             }
         ],

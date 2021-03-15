@@ -173,6 +173,7 @@ public class CashReportsView extends VerticalLayout {
         Optional<List<Document>> listDocKpKw = documentService.getAllCashKpKw(docId, docFrmId);
         //Run js
         if (listDocKpKw.isPresent()){
+            //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
             String initFunction = "generateCashReport($0, $1, $2, $3, $4);";
             UI.getCurrent().getPage().executeJs(initFunction, this,
                     cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw.get()));
