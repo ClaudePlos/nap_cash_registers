@@ -13,18 +13,20 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.entities.egeria.kg.KpKwType;
 import kskowronski.data.entities.egeria.ckk.Client;
 import kskowronski.data.entities.egeria.ek.Worker;
+import kskowronski.data.entities.egeria.kg.TransactionDTO;
 import kskowronski.data.entities.egeria.kg.TransactionType;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
+import kskowronski.data.services.global.GlobalDataService;
 import kskowronski.views.components.ClientDialog;
 import kskowronski.views.components.MyNotification;
 import kskowronski.views.components.WorkerDialog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -33,11 +35,6 @@ import java.util.Optional;
 @UIScope
 @CssImport("./styles/views/cashregister/elements/kpkw-form.css")
 public class KpKwForm extends FormLayout {
-    private String txtIncome = "Utarg";
-    private String txtBank = "Bank";
-    private String txtCashInvoice = "Faktura gotówkowa";
-    private String txtTransfer = "Przekaz";
-    private String txtCommission = "Prowizja";
 
     private String txtFindClient = "Znajdź Klienta";
     private String txtClient = "Klient";
@@ -61,7 +58,7 @@ public class KpKwForm extends FormLayout {
     private Button butAccept = new Button("Zatwierdź Dokument");
     private Button butClose = new Button("Zamknij");
     private CashKpKwView cashKpKwView;
-    private RadioButtonGroup<String> radioWorkerClient = new RadioButtonGroup<>();
+    private RadioButtonGroup<TransactionDTO> radioWorkerClient = new RadioButtonGroup<>();
 
     private TextField docDef2 = new TextField("Numer dowodu:");
 
@@ -77,8 +74,11 @@ public class KpKwForm extends FormLayout {
     private HorizontalLayout divWorker =  new HorizontalLayout();
     private HorizontalLayout divClient = new HorizontalLayout();
 
-    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService) {
+    private transient GlobalDataService globalDataService;
+
+    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService) {
         this.cashKpKwView = cashKpKwView;
+        this.globalDataService = globalDataService;
         docOwnNumber.setEnabled(false);
         docKlKodPod.setEnabled(false);
         docPrcIdPod.setEnabled(false);
@@ -176,9 +176,14 @@ public class KpKwForm extends FormLayout {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         radioWorkerClient.setLabel("Transakcja:");
-        radioWorkerClient.setItems(txtIncome, txtBank, txtCashInvoice, txtTransfer, txtCommission, txtWorker, txtClient);
-        radioWorkerClient.setValue(txtIncome);
-        radioWorkerClient.addValueChangeListener(event -> onChangeTransaction(mapperTransaction(radioWorkerClient.getValue())));
+        radioWorkerClient.setItems( globalDataService.transactions );
+        radioWorkerClient.setRenderer(new TextRenderer<>(TransactionDTO::getName));
+        radioWorkerClient.setValue(globalDataService.transactions.get(0));
+        radioWorkerClient.addValueChangeListener(event -> {
+            docDef1.setValue(radioWorkerClient.getValue().getCode());
+            setupSettingsForTransaction(radioWorkerClient.getValue().getCode());
+            onChangeTransaction(radioWorkerClient.getValue().getCode());
+        });
 
         add(docOwnNumber, radioWorkerClient, divTypeAndDate, docAmount
                 , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
@@ -217,10 +222,10 @@ public class KpKwForm extends FormLayout {
 
             //TODO
             if (doc.getDocPrcIdPod() != null)
-                radioWorkerClient.setValue(txtWorker);
+                radioWorkerClient.setValue(globalDataService.transactions.get(5));
 
             if (doc.getDocKlKodPod() != null)
-                radioWorkerClient.setValue(txtClient);
+                radioWorkerClient.setValue(globalDataService.transactions.get(6));
 
         }
 
@@ -273,19 +278,6 @@ public class KpKwForm extends FormLayout {
         divClient.setVisible( checkTransaction(transaction, TransactionType.CLIENT.name()) );
     }
 
-    private String mapperTransaction(String radioButtonName){
-         String transaction =
-               checkTransaction(radioButtonName,"Utarg") ? TransactionType.INCOME.name() :
-                checkTransaction(radioButtonName,"Bank") ? TransactionType.BANK.name() :
-                 checkTransaction(radioButtonName,"Faktura gotówkowa") ? TransactionType.CASH_INVOICE.name() :
-                  checkTransaction(radioButtonName,"Przekaz") ? TransactionType.TRANSFER.name() :
-                   checkTransaction(radioButtonName,"Prowizja") ? TransactionType.COMMISSION.name() :
-                    checkTransaction(radioButtonName,"Zaliczka dla") ? TransactionType.CASH_ADVANCE.name() :
-                     checkTransaction(radioButtonName,"Klient") ? TransactionType.CLIENT.name() : null;
-        docDef1.setValue(transaction);
-        setupSettingsForTransaction(transaction);
-        return transaction;
-    }
 
     private Boolean checkTransaction(String t1, String t2){
         return t1.equals(t2);
@@ -316,3 +308,17 @@ public class KpKwForm extends FormLayout {
         docSettlement.setValue(settlement);
     }
 }
+
+/*
+*function write in functional language: private String mapperTransaction(String radioButtonName){
+         String transaction =
+               checkTransaction(radioButtonName,"Utarg") ? TransactionType.INCOME.name() :
+                checkTransaction(radioButtonName,"Bank") ? TransactionType.BANK.name() :
+                 checkTransaction(radioButtonName,"Faktura gotówkowa") ? TransactionType.CASH_INVOICE.name() :
+                  checkTransaction(radioButtonName,"Przekaz") ? TransactionType.TRANSFER.name() :
+                   checkTransaction(radioButtonName,"Prowizja") ? TransactionType.COMMISSION.name() :
+                    checkTransaction(radioButtonName,"Zaliczka dla") ? TransactionType.CASH_ADVANCE.name() :
+                     checkTransaction(radioButtonName,"Klient") ? TransactionType.CLIENT.name() : null;
+        return transaction;
+    }
+ */

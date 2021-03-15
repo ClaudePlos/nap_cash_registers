@@ -2,6 +2,7 @@ package kskowronski.data.services.global;
 
 import kskowronski.data.entities.egeria.kg.CashRegister;
 import kskowronski.data.entities.egeria.kg.CashRegisterDTO;
+import kskowronski.data.entities.egeria.kg.TransactionDTO;
 import kskowronski.data.entities.global.EatFirma;
 import kskowronski.data.entities.inap.User;
 import kskowronski.data.services.egeria.kg.CashRegisterRepo;
@@ -13,7 +14,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,13 +37,16 @@ public class GlobalDataService {
 
     private List<EatFirma> companies;
     public List<CashRegisterDTO> cashRegistersDTO;
+    public List<TransactionDTO> transactions = new ArrayList<>();
 
     public void getGlobalData(UserDetails userDetails, Collection<? extends GrantedAuthority> authorities ){
-        List<CashRegister> crList = new ArrayList<>();
+
+        //1.
+        List<CashRegister> crList;
         cashRegistersDTO = new ArrayList<>();
         companies = eatFirmaRepo.findAll();
 
-        if (authorities.size() == 0){
+        if (authorities.isEmpty()) {
             return;
         }
 
@@ -53,6 +59,23 @@ public class GlobalDataService {
             crList = cashRegisterRepo.findAll(Sort.by("casName").ascending());
         }
         crList.stream().forEach( item -> cashRegistersDTO.add(mapperCashRegister(item)));
+
+        //2.
+        TransactionDTO t =  new TransactionDTO(BigDecimal.valueOf(1L), "Utarg", "INCOME");
+        TransactionDTO t1 = new TransactionDTO(BigDecimal.valueOf(2L), "Bank", "BANK");
+        TransactionDTO t2 = new TransactionDTO(BigDecimal.valueOf(3L), "Faktura gotówkowa", "CASH_INVOICE");
+        TransactionDTO t3 = new TransactionDTO(BigDecimal.valueOf(4L), "Przekaz", "TRANSFER");
+        TransactionDTO t4 = new TransactionDTO(BigDecimal.valueOf(5L), "Prowizja", "COMMISSION");
+        TransactionDTO t5 = new TransactionDTO(BigDecimal.valueOf(6L), "Zaliczka dla", "CASH_ADVANCE");
+        TransactionDTO t6 = new TransactionDTO(BigDecimal.valueOf(7L), "Klient", "CLIENT");
+
+        transactions.add(t);
+        transactions.add(t1);
+        transactions.add(t2);
+        transactions.add(t3);
+        transactions.add(t4);
+        transactions.add(t5);
+        transactions.add(t6);
     }
 
     private CashRegisterDTO mapperCashRegister(CashRegister cr){
