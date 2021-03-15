@@ -115,9 +115,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/VAADIN/**",
                 "/favicon.ico",
                 "/robots.txt",
+                // web application manifest
                 "/manifest.webmanifest",
                 "/sw.js",
-                "/offline.html",
+                "/offline-page.html",
+                "/sw-runtime-resources-precache.js",
                 "/icons/**",
                 "/images/**",
                 "/styles/**",

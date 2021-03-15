@@ -42,15 +42,22 @@ public class KpKwForm extends FormLayout {
     private String txtFindWorker = "Znajdź Pracownika";
     private String txtWorker = "Zaliczka dla";
 
+    //BINDER Document
     private Binder<Document> binder = new Binder<>(Document.class);
     private TextField docOwnNumber = new TextField("Numer");
     private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docDateFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
     private BigDecimalField docPrcIdPod = new BigDecimalField("Numer Pracownika");
-    private Button butFindWorker = new Button(txtFindWorker);
     private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
+    private TextField docDef2 = new TextField("Numer dowodu:");
+    private TextField docDef0 = new TextField("Dodatkowe Info.");
+    private TextField docDef1 = new TextField("Transfer");
+    private TextField docSettlement = new TextField("Roz?");
+
+    private Button butFindWorker = new Button(txtFindWorker);
     private Button butFindClient = new Button(txtFindClient);
+
     private Label labCompanyName = new Label();
     private Label labWorkerName = new Label();
 
@@ -60,11 +67,7 @@ public class KpKwForm extends FormLayout {
     private CashKpKwView cashKpKwView;
     private RadioButtonGroup<TransactionDTO> radioWorkerClient = new RadioButtonGroup<>();
 
-    private TextField docDef2 = new TextField("Numer dowodu:");
 
-    private TextField docDef0 = new TextField("Dodatkowe Info.");
-    private TextField docDef1 = new TextField("Transfer");
-    private TextField docSettlement = new TextField("Roz?");
 
     private HorizontalLayout divIncome = new HorizontalLayout();
     private HorizontalLayout divBank = new HorizontalLayout();
@@ -306,6 +309,9 @@ public class KpKwForm extends FormLayout {
         docRdocCode.setEnabled(rdocCodeEnable);
         docDef0.setValue(seg);
         docSettlement.setValue(settlement);
+        docDef2.setValue("");
+        docPrcIdPod.setValue(null);
+        docKlKodPod.setValue(null);
     }
 }
 
