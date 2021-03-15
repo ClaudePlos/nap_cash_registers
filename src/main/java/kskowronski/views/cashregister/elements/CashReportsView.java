@@ -1,7 +1,9 @@
 package kskowronski.views.cashregister.elements;
 
+import com.google.gson.Gson;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.html.Label;
@@ -19,12 +21,14 @@ import kskowronski.views.components.PeriodLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
 @Component
 @UIScope
+@JavaScript("./js/cash_report.js")
 public class CashReportsView extends VerticalLayout {
 
     private transient DocumentService documentService;
@@ -79,9 +83,11 @@ public class CashReportsView extends VerticalLayout {
         )).setWidth("50px");
         gridCashReports.addColumn(new NativeButtonRenderer<Document>("Raport",
                 item -> {
-                    Dialog dialog = new Dialog();
-                    dialog.add(new Label("TODO"));
-                    dialog.open();
+                    try {
+                        generateCashReport(item.getDocId(), item.getDocOwnNumber(), item.getDocFrmId());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
         )).setWidth("50px");
 
@@ -159,6 +165,17 @@ public class CashReportsView extends VerticalLayout {
             gridCashReports.getDataProvider().refreshAll();
             butAcceptReport.setEnabled(false);
             Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
+        }
+    }
+
+    private void generateCashReport(BigDecimal docId, String docNumber, BigDecimal docFrmId) throws IOException {
+        Gson gson = new Gson();
+        Optional<List<Document>> listDocKpKw = documentService.getAllCashKpKw(docId, docFrmId);
+        //Run js
+        if (listDocKpKw.isPresent()){
+            String initFunction = "generateCashReport($0, $1, $2, $3, $4);";
+            UI.getCurrent().getPage().executeJs(initFunction, this,
+                    cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw.get()));
         }
     }
 }

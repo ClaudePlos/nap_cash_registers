@@ -30,6 +30,7 @@ import kskowronski.views.components.WorkerDialog;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @UIScope
@@ -219,6 +220,12 @@ public class KpKwForm extends FormLayout {
                 editableElements(false);
                 butFindClient.setText(txtClient);
                 butFindWorker.setText(txtWorker);
+            }
+
+            if (!doc.getDocDef1().isEmpty()){
+                radioWorkerClient.setValue(globalDataService.transactions.stream()
+                        .filter(t -> t.getCode().equals(doc.getDocDef1()))
+                        .collect(Collectors.toList()).get(0) );
             }
 
             onChangeTransaction(doc.getDocDef1());
