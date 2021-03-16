@@ -54,7 +54,7 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw,
             {
                 style: 'table1',
                 table: {
-                    widths: [20, 'auto', 'auto', 100, 80, 80],
+                    widths: [20, 45, 90, 160, 80, 80],
                     body: bodyData
                 }
             }
