@@ -6,16 +6,34 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw)
     console.log(listDocKpKw);
     let cellValue = JSON.parse(listDocKpKw);
 
-    var bodyData = [];
-    bodyData.push(['Poz.', 'Data', 'Numer', 'Treść', 'Przychód', 'Rozchód']);
+    let bodyData = [];
+    bodyData.push(['Lp.', 'Data', 'Numer', 'Treść', 'Przychód', 'Rozchód']);
+    let sumMa = 0;
+    let sumWn = 0;
 
     for (var i = 0; i < cellValue.length; i++) {
+        let quotaMa = 0;
+        let quotaWn = 0;
+        if (cellValue[i].docRdocCode === 'KP'){
+            quotaMa = cellValue[i].docAmount;
+            sumMa += cellValue[i].docAmount;
+        } else {
+            quotaWn = cellValue[i].docAmount;
+            sumWn += cellValue[i].docAmount;
+        }
+
+        let year = cellValue[i].docDateFrom.year;
+        let month = "0"+cellValue[i].docDateFrom.month;
+        let day = "0"+cellValue[i].docDateFrom.day;
+
         bodyData.push([cellValue[i].docNo
-            , ''
+            ,  year + "-" + month.substr(month.length-2, month.length) + "-" + day.substr(day.length-2, day.length)
             , typeof(cellValue[i].docOwnNumber) != "undefined" ? cellValue[i].docOwnNumber : ''
-            , '', cellValue[i].docAmount, cellValue[i].docAmount]);
+            , '', {text:  quotaMa.toFixed(2), alignment: 'right'}, {text:  quotaWn.toFixed(2), alignment: 'right'}]);
     }
-    console.log(bodyData);
+    //summarize
+    bodyData.push(['','','','Suma: ', {text:  sumMa.toFixed(2), alignment: 'right'}, {text:  sumWn.toFixed(2), alignment: 'right'}]);
+    //console.log(bodyData);
 
     var docDefinition = {
         content: [
@@ -27,6 +45,7 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw)
             {
                 style: 'table1',
                 table: {
+                    widths: [20, 'auto', 'auto', 'auto', 100, 100],
                     body: bodyData
                 }
             }
