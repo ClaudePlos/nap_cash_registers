@@ -62,12 +62,13 @@ public class GlobalDataService {
         //2.
         if (transactions.isEmpty()){
             TransactionDTO t =  new TransactionDTO(BigDecimal.valueOf(1L), "Utarg", "INCOME");
-            TransactionDTO t1 = new TransactionDTO(BigDecimal.valueOf(2L), "Bank", "BANK");
+            TransactionDTO t1 = new TransactionDTO(BigDecimal.valueOf(2L), "Konwój", "BANK");
             TransactionDTO t2 = new TransactionDTO(BigDecimal.valueOf(3L), "Faktura gotówkowa", "CASH_INVOICE");
             TransactionDTO t3 = new TransactionDTO(BigDecimal.valueOf(4L), "Przekaz", "TRANSFER");
             TransactionDTO t4 = new TransactionDTO(BigDecimal.valueOf(5L), "Prowizja", "COMMISSION");
-            TransactionDTO t5 = new TransactionDTO(BigDecimal.valueOf(6L), "Zaliczka dla", "CASH_ADVANCE");
-            TransactionDTO t6 = new TransactionDTO(BigDecimal.valueOf(7L), "Klient", "CLIENT");
+            TransactionDTO t5 = new TransactionDTO(BigDecimal.valueOf(6L), "Zaliczka pracownika", "CASH_ADVANCE");
+            TransactionDTO t6 = new TransactionDTO(BigDecimal.valueOf(7L), "Wynagrodzenie", "SALARY");
+            TransactionDTO t7 = new TransactionDTO(BigDecimal.valueOf(8L), "Klient", "CLIENT");
 
             transactions.add(t);
             transactions.add(t1);
@@ -76,6 +77,7 @@ public class GlobalDataService {
             transactions.add(t4);
             transactions.add(t5);
             transactions.add(t6);
+            transactions.add(t7);
         }
     }
 

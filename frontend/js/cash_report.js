@@ -2,7 +2,7 @@ import * as pdfMake from './lib/pdfmake.js';
 import * as pdfFonts from './lib/vfs_fonts.js';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-function generateCashReport(container, caseCode, docNumber, period, listDocKpKw) {
+function generateCashReport(container, caseCode, docNumber, period, listDocKpKw, valueInitialState) {
     console.log(listDocKpKw);
     let cellValue = JSON.parse(listDocKpKw);
 
@@ -29,10 +29,19 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw)
         bodyData.push([cellValue[i].docNo
             ,  year + "-" + month.substr(month.length-2, month.length) + "-" + day.substr(day.length-2, day.length)
             , typeof(cellValue[i].docOwnNumber) != "undefined" ? cellValue[i].docOwnNumber : ''
-            , '', {text:  quotaMa.toFixed(2), alignment: 'right'}, {text:  quotaWn.toFixed(2), alignment: 'right'}]);
+            , typeof(cellValue[i].docDescription) != "undefined" ? cellValue[i].docDescription : ''
+            , {text:  quotaMa.toFixed(2), alignment: 'right'}, {text:  quotaWn.toFixed(2), alignment: 'right'}]);
     }
     //summarize
-    bodyData.push(['','','','Suma: ', {text:  sumMa.toFixed(2), alignment: 'right'}, {text:  sumWn.toFixed(2), alignment: 'right'}]);
+    let lValueInitialState = Number(valueInitialState);
+    let allMa = sumMa + lValueInitialState;
+    let lValueEndState = (sumMa - sumWn) + lValueInitialState;
+    let allWn = sumWn + lValueEndState;
+    bodyData.push(['','','',{text:  'Razem obroty:', alignment: 'right'}, {text:  sumMa.toFixed(2), alignment: 'right', fillColor: 'grey'}
+        , {text:  sumWn.toFixed(2), alignment: 'right', fillColor: 'grey',}]);
+    bodyData.push(['','','',{text:  'Stan Kasy poprzedni:', alignment: 'right'},{text:  lValueInitialState.toFixed(2), alignment: 'right'}, '']);
+    bodyData.push(['','','',{text:  'Stan Kasy obecny:', alignment: 'right'}, '', {text:  lValueEndState.toFixed(2), alignment: 'right'}]);
+    bodyData.push(['','','',{text:  'Razem:', alignment: 'right'}, {text:  allMa.toFixed(2), alignment: 'right'}, {text:  allWn.toFixed(2), alignment: 'right'}]);
     //console.log(bodyData);
 
     var docDefinition = {
@@ -45,7 +54,7 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw)
             {
                 style: 'table1',
                 table: {
-                    widths: [20, 'auto', 'auto', 'auto', 100, 100],
+                    widths: [20, 'auto', 'auto', 100, 80, 80],
                     body: bodyData
                 }
             }
@@ -53,13 +62,14 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw)
         styles: {
             normal: {
                 bold: false,
-                fontSize: 15
+                fontSize: 12
             },
             mainTitle : {
                 bold: true,
                 fontSize: 18
             },
             table1: {
+                fontSize: 8,
                 margin: [0, 5, 0, 15]
             },
         },

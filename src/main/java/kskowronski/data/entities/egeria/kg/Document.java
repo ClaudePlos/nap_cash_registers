@@ -85,6 +85,9 @@ public class Document {
     @Column(name = "DOK_F_ROZRACHUNKOWY")
     private String docSettlement;
 
+    @Column(name = "DOK_OPIS")
+    private String docDescription;
+
     public Document() {
     }
 
@@ -290,5 +293,13 @@ public class Document {
 
     public void setDocDef2(String docDef2) {
         this.docDef2 = docDef2;
+    }
+
+    public String getDocDescription() {
+        return docDescription;
+    }
+
+    public void setDocDescription(String docDescription) {
+        this.docDescription = docDescription;
     }
 }
