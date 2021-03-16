@@ -35,13 +35,18 @@ kpkw-form,
     height: 65px;
 }
 
+.divSalary {
+    display: block;
+    height: 65px;
+}
+
 .divClient {
     display: block;
     height: 65px;
 }
 
 .buttonsFooter {
-    margin-top: 40px;
+    margin-top: 10px;
 }
 
 .divTypeAndDate {

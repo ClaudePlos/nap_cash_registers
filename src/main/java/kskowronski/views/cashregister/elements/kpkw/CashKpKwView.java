@@ -16,7 +16,6 @@ import kskowronski.data.services.global.GlobalDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -46,7 +45,7 @@ public class CashKpKwView extends Dialog {
         this.documentService = documentService;
         this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService);
         setWidth("750px");
-        setHeight("630px");
+        setHeight("680px");
 
         butAddNewKpKw.setEnabled(false);
         butAddNewKpKw.addClickListener( e -> {
@@ -76,7 +75,7 @@ public class CashKpKwView extends Dialog {
                 formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue()));
     }
 
-    public void openKpKw(Document item){
+    public void openKpKwView(Document item){
         gridCashKpKw.setItems();
         this.cashReportItem = item;
 

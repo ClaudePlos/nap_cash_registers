@@ -78,7 +78,6 @@ public class KpKwForm extends FormLayout {
     private HorizontalLayout divTransfer = new HorizontalLayout();
     private HorizontalLayout divCommission = new HorizontalLayout();
     private HorizontalLayout divWorker =  new HorizontalLayout();
-    private HorizontalLayout divSalary =  new HorizontalLayout();
     private HorizontalLayout divClient = new HorizontalLayout();
 
     private transient GlobalDataService globalDataService;
@@ -173,10 +172,6 @@ public class KpKwForm extends FormLayout {
         divWorker.setClassName("divWorker");
         divWorker.setVisible(false);
 
-        divSalary.add(docPrcIdPod, butFindWorker);
-        divSalary.setClassName("divSalary");
-        divSalary.setVisible(false);
-
         divClient.add(docKlKodPod, butFindClient);
         divClient.setClassName("divClient");
         divClient.setVisible(false);
@@ -190,7 +185,8 @@ public class KpKwForm extends FormLayout {
         radioWorkerClient.setLabel("Transakcja:");
         radioWorkerClient.setItems( globalDataService.transactions );
         radioWorkerClient.setRenderer(new TextRenderer<>(TransactionDTO::getName));
-        radioWorkerClient.setValue(globalDataService.transactions.get(0));
+        //radioWorkerClient.setValue(globalDataService.transactions.get(0));
+        //setupSettingsForTransaction(globalDataService.transactions.get(0).getCode(), globalDataService.transactions.get(0).getName());
         radioWorkerClient.addValueChangeListener(event -> {
             docDef1.setValue(radioWorkerClient.getValue().getCode());
             setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
@@ -198,7 +194,7 @@ public class KpKwForm extends FormLayout {
         });
 
         add(docOwnNumber, radioWorkerClient, divTypeAndDate, docAmount, docDescription
-                , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divSalary, divClient
+                , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
                 , labCompanyName, labWorkerName
                 , divAccount
                 , buttons);
@@ -234,16 +230,20 @@ public class KpKwForm extends FormLayout {
                 radioWorkerClient.setValue(globalDataService.transactions.stream()
                         .filter(t -> t.getCode().equals(doc.getDocDef1()))
                         .collect(Collectors.toList()).get(0) );
+                setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
+            } else {
+                radioWorkerClient.setValue(globalDataService.transactions.get(0));
+                setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
             }
 
             onChangeTransaction(doc.getDocDef1());
 
             //TODO
-            if (doc.getDocPrcIdPod() != null)
-                radioWorkerClient.setValue(globalDataService.transactions.get(5));
-
-            if (doc.getDocKlKodPod() != null)
-                radioWorkerClient.setValue(globalDataService.transactions.get(7));
+//            if (doc.getDocPrcIdPod() != null)
+//                radioWorkerClient.setValue(globalDataService.transactions.get(5));
+//
+//            if (doc.getDocKlKodPod() != null)
+//                radioWorkerClient.setValue(globalDataService.transactions.get(7));
 
         }
 
@@ -256,7 +256,7 @@ public class KpKwForm extends FormLayout {
         }
 
         Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
-        cashKpKwView.updateList(doc.getDocNo().intValue()-1);
+        //cashKpKwView.updateList(doc.getDocNo().intValue()-1);
         if (docReturned.isPresent()){
             setDocument(docReturned.get());
         } else {
@@ -288,12 +288,12 @@ public class KpKwForm extends FormLayout {
 
     private void onChangeTransaction(String transaction){
         //Div transaction update
-        divIncome.setVisible( checkTransaction(transaction, TransactionType.INCOME.name()) );
+        divIncome.setVisible( checkTransaction(transaction, TransactionType.INCOME.name()) || transaction.equals(""));
         divBank.setVisible( checkTransaction(transaction, TransactionType.BANK.name()) );
         divCashInvoice.setVisible( checkTransaction(transaction, TransactionType.CASH_INVOICE.name()) );
         divTransfer.setVisible( checkTransaction(transaction, TransactionType.TRANSFER.name()) );
         divCommission.setVisible( checkTransaction(transaction, TransactionType.COMMISSION.name()) );
-        divWorker.setVisible( checkTransaction(transaction, TransactionType.CASH_ADVANCE.name()) );
+        divWorker.setVisible( checkTransaction(transaction, TransactionType.CASH_ADVANCE.name()) || checkTransaction(transaction, TransactionType.SALARY.name()) );
         divClient.setVisible( checkTransaction(transaction, TransactionType.CLIENT.name()) );
     }
 
@@ -304,33 +304,37 @@ public class KpKwForm extends FormLayout {
 
     private void setupSettingsForTransaction(String transaction, String transactionPL){
         if (transaction.equals(TransactionType.INCOME.name())){
-            updateDocumentItem(KpKwType.KP, false, "147-" + cashKpKwView.cashCode, "N", transactionPL);
+            updateDocumentItem(KpKwType.KP, false, "147-" + cashKpKwView.cashCode, "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.BANK.name())){
-            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N", transactionPL);
+            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.CASH_INVOICE.name())){
-            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N", transactionPL);
+            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N", transactionPL, false, true, true);
         } else if (transaction.equals(TransactionType.TRANSFER.name())){
-            updateDocumentItem(KpKwType.KP, true, "148-" + cashKpKwView.cashCode, "N", transactionPL);
+            updateDocumentItem(KpKwType.KP, true, "148-" + cashKpKwView.cashCode, "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.COMMISSION.name())){
-            updateDocumentItem(KpKwType.KW, false, "555-AZAR-000-04-u05", "N", transactionPL);
+            updateDocumentItem(KpKwType.KW, false, "555-AZAR-000-04-u05", "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.CASH_ADVANCE.name())){
-            updateDocumentItem(KpKwType.KP, false, "", "T", transactionPL);
+            updateDocumentItem(KpKwType.KP, false, "", "T", transactionPL, true, false, true);
         } else if (transaction.equals(TransactionType.SALARY.name())){
-            updateDocumentItem(KpKwType.KW, false, "", "T", transactionPL);
+            updateDocumentItem(KpKwType.KW, false, "", "T", transactionPL, true, false, true);
         } else if (transaction.equals(TransactionType.CLIENT.name())){
-            updateDocumentItem(KpKwType.KP, true, "", "T", transactionPL);
+            updateDocumentItem(KpKwType.KP, true, "", "T", transactionPL, true, true, false);
         }
     }
 
-    private void updateDocumentItem(KpKwType type, Boolean rdocCodeEnable, String seg, String settlement, String transactionPL){
+    private void updateDocumentItem(KpKwType type, Boolean rdocCodeEnable, String seg, String settlement, String transactionPL
+            , boolean clearDataInvoiceNumber, boolean clearDataWorker, boolean clearDataClient){
         docRdocCode.setValue(type);
         docRdocCode.setEnabled(rdocCodeEnable);
         docDef0.setValue(seg);
         docSettlement.setValue(settlement);
-        docDef2.setValue("");
-        docPrcIdPod.setValue(null);
-        docKlKodPod.setValue(null);
         docDescription.setValue(transactionPL);
+        if (clearDataInvoiceNumber)
+            docDef2.setValue("");
+        if (clearDataWorker)
+            docPrcIdPod.setValue(null);
+        if (clearDataClient)
+            docKlKodPod.setValue(null);
     }
 
     private boolean validation(Document doc){
@@ -349,7 +353,12 @@ public class KpKwForm extends FormLayout {
             return false;
         }
 
-        if (doc.getDocDef1().equals(globalDataService.transactions.get(6).getCode())  && doc.getDocKlKodPod() == null){
+        if (doc.getDocDef1().equals(globalDataService.transactions.get(6).getCode()) && doc.getDocPrcIdPod() == null){
+            MyNotification.openAlert("Brak wskazanego pracowinka. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return false;
+        }
+
+        if (doc.getDocDef1().equals(globalDataService.transactions.get(7).getCode())  && doc.getDocKlKodPod() == null){
             MyNotification.openAlert("Brak wskazanego klienta. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }

@@ -75,7 +75,7 @@ public class CashReportsView extends VerticalLayout {
         gridCashReports.addColumn(new NativeButtonRenderer<Document>("KP/KW",
                 item -> {
                     VerticalLayout vertical = new VerticalLayout ();
-                    cashKpKwView.openKpKw(item);
+                    cashKpKwView.openKpKwView(item);
                     cashKpKwView.cashCode = cashCode;
                     cashKpKwView.add(vertical);
                     cashKpKwView.open();
