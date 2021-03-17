@@ -47,7 +47,7 @@ public class KpKwForm extends FormLayout {
     //BINDER Document
     private Binder<Document> binder = new Binder<>(Document.class);
     private TextField docOwnNumber = new TextField("Numer");
-    private ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
+    public ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docDateFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
     private BigDecimalField docPrcIdPod = new BigDecimalField("Numer Pracownika");
@@ -98,7 +98,7 @@ public class KpKwForm extends FormLayout {
         docKlKodPod.setWidth("100px");
         docRdocCode.setItems(KpKwType.KP, KpKwType.KW);
         docRdocCode.setClassName("docRdocCode");
-        editableElements(false);
+        editableElements(false, false);
 
 
         butFindWorker.addClickListener( e ->{
@@ -189,7 +189,10 @@ public class KpKwForm extends FormLayout {
         //setupSettingsForTransaction(globalDataService.transactions.get(0).getCode(), globalDataService.transactions.get(0).getName());
         radioWorkerClient.addValueChangeListener(event -> {
             docDef1.setValue(radioWorkerClient.getValue().getCode());
-            setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), !docDescription.getValue().isEmpty()?docDescription.getValue():radioWorkerClient.getValue().getName());
+            setupSettingsForTransaction(radioWorkerClient.getValue().getCode()
+                    , radioWorkerClient.getValue().getName()
+                   // , !docDescription.getValue().isEmpty()?docDescription.getValue():radioWorkerClient.getValue().getName()
+            );
             onChangeTransaction(radioWorkerClient.getValue().getCode());
         });
 
@@ -216,7 +219,7 @@ public class KpKwForm extends FormLayout {
             setVisible(false);
         } else {
             setVisible(true);
-            docRdocCode.focus();
+            //docRdocCode.focus();
 
             onChangeTransaction(doc.getDocDef1());
 
@@ -225,18 +228,18 @@ public class KpKwForm extends FormLayout {
                         .filter(t -> t.getCode().equals(doc.getDocDef1()))
                         .collect(Collectors.toList()).get(0);
                 radioWorkerClient.setValue( tran );
-                setupSettingsForTransaction(tran.getCode(), !doc.getDocDescription().isEmpty() ? doc.getDocDescription() : tran.getName() );
+                //setupSettingsForTransaction(tran.getCode(), !doc.getDocDescription().isEmpty() ? doc.getDocDescription() : tran.getName() );
             } else {
                 radioWorkerClient.setValue(globalDataService.transactions.get(0));
-                setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
+                //setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
             }
 
             if (doc.getDocApproved().equals("N")){
-                editableElements(true);
+                editableElements(true, false);
                 butFindClient.setText(txtFindClient);
                 butFindWorker.setText(txtFindWorker);
             } else {
-                editableElements(false);
+                editableElements(false, true);
                 butFindClient.setText(txtClient);
                 butFindWorker.setText(txtWorker);
             }
@@ -260,15 +263,17 @@ public class KpKwForm extends FormLayout {
         Notification.show("Zapisano", 1000, Notification.Position.MIDDLE);
     }
 
-    public void editableElements(Boolean status){
+    public void editableElements(Boolean status, Boolean settlement){
         radioWorkerClient.setEnabled(status);
-        docRdocCode.setEnabled(status);
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
         docDef2.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);
         docDescription.setEnabled(status);
+        if (settlement){
+            docRdocCode.setEnabled(status);
+        }
     }
 
     public void setClient(Client client){
@@ -362,17 +367,3 @@ public class KpKwForm extends FormLayout {
 
 
 }
-
-/*
-*function write in functional language: private String mapperTransaction(String radioButtonName){
-         String transaction =
-               checkTransaction(radioButtonName,"Utarg") ? TransactionType.INCOME.name() :
-                checkTransaction(radioButtonName,"Bank") ? TransactionType.BANK.name() :
-                 checkTransaction(radioButtonName,"Faktura gotówkowa") ? TransactionType.CASH_INVOICE.name() :
-                  checkTransaction(radioButtonName,"Przekaz") ? TransactionType.TRANSFER.name() :
-                   checkTransaction(radioButtonName,"Prowizja") ? TransactionType.COMMISSION.name() :
-                    checkTransaction(radioButtonName,"Zaliczka dla") ? TransactionType.CASH_ADVANCE.name() :
-                     checkTransaction(radioButtonName,"Klient") ? TransactionType.CLIENT.name() : null;
-        return transaction;
-    }
- */

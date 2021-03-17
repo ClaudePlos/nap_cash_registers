@@ -10,6 +10,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entities.egeria.kg.Document;
+import kskowronski.data.entities.egeria.kg.KpKwType;
+import kskowronski.data.entities.egeria.kg.TransactionDTO;
+import kskowronski.data.entities.egeria.kg.TransactionType;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
@@ -17,6 +20,7 @@ import kskowronski.data.services.global.GlobalDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -51,11 +55,23 @@ public class CashKpKwView extends Dialog {
         setHeight("680px");
 
         butAddNewKpKw.setEnabled(false);
+        // Test 1. INSERT NEW item KP or KW
         butAddNewKpKw.addClickListener( e -> {
-            Optional<Document> newKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
-            if (newKpKw.isPresent() && listDocKpKw.isPresent()){
-                listDocKpKw.get().add(newKpKw.get());
+            Optional<Document> newDocKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
+            if (newDocKpKw.isPresent() && listDocKpKw.isPresent()){
+                newDocKpKw.get().setDocDef0("147-"+cashCode);
+                newDocKpKw.get().setDocDef1(globalDataService.transactions.get(0).getCode());
+                newDocKpKw.get().setDocSettlement("N");
+                newDocKpKw.get().setDocDescription("Utarg");
+                formKpKw.docRdocCode.setValue(KpKwType.KP);
+                newDocKpKw.get().setDocDateFrom(LocalDate.now());
+                listDocKpKw.get().add(newDocKpKw.get());
                 gridCashKpKw.getDataProvider().refreshAll();
+                gridCashKpKw.select(newDocKpKw.get());
+                gridCashKpKw.asSingleSelect().addValueChangeListener(event ->
+                        formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue()));
+                formKpKw.docRdocCode.setEnabled(false);
+                documentService.updateKpKw(newDocKpKw.get());
             } else {
                 updateList(0);
             }
