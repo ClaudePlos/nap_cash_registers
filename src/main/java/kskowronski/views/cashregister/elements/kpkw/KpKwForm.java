@@ -185,11 +185,11 @@ public class KpKwForm extends FormLayout {
         radioWorkerClient.setLabel("Transakcja:");
         radioWorkerClient.setItems( globalDataService.transactions );
         radioWorkerClient.setRenderer(new TextRenderer<>(TransactionDTO::getName));
-        //radioWorkerClient.setValue(globalDataService.transactions.get(0));
+        radioWorkerClient.setValue(globalDataService.transactions.get(0));
         //setupSettingsForTransaction(globalDataService.transactions.get(0).getCode(), globalDataService.transactions.get(0).getName());
         radioWorkerClient.addValueChangeListener(event -> {
             docDef1.setValue(radioWorkerClient.getValue().getCode());
-            setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
+            setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), !docDescription.getValue().isEmpty()?docDescription.getValue():radioWorkerClient.getValue().getName());
             onChangeTransaction(radioWorkerClient.getValue().getCode());
         });
 
@@ -210,12 +210,27 @@ public class KpKwForm extends FormLayout {
         binder.setBean(doc);
         labCompanyName.setText("");
         labWorkerName.setText("");
+        radioWorkerClient.setEnabled(true);
 
         if (doc == null) {
             setVisible(false);
         } else {
             setVisible(true);
             docRdocCode.focus();
+
+            onChangeTransaction(doc.getDocDef1());
+
+            if (!doc.getDocDef1().isEmpty()){
+                TransactionDTO tran = globalDataService.transactions.stream()
+                        .filter(t -> t.getCode().equals(doc.getDocDef1()))
+                        .collect(Collectors.toList()).get(0);
+                radioWorkerClient.setValue( tran );
+                setupSettingsForTransaction(tran.getCode(), !doc.getDocDescription().isEmpty() ? doc.getDocDescription() : tran.getName() );
+            } else {
+                radioWorkerClient.setValue(globalDataService.transactions.get(0));
+                setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
+            }
+
             if (doc.getDocApproved().equals("N")){
                 editableElements(true);
                 butFindClient.setText(txtFindClient);
@@ -226,27 +241,7 @@ public class KpKwForm extends FormLayout {
                 butFindWorker.setText(txtWorker);
             }
 
-            if (!doc.getDocDef1().isEmpty()){
-                radioWorkerClient.setValue(globalDataService.transactions.stream()
-                        .filter(t -> t.getCode().equals(doc.getDocDef1()))
-                        .collect(Collectors.toList()).get(0) );
-                setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
-            } else {
-                radioWorkerClient.setValue(globalDataService.transactions.get(0));
-                setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
-            }
-
-            onChangeTransaction(doc.getDocDef1());
-
-            //TODO
-//            if (doc.getDocPrcIdPod() != null)
-//                radioWorkerClient.setValue(globalDataService.transactions.get(5));
-//
-//            if (doc.getDocKlKodPod() != null)
-//                radioWorkerClient.setValue(globalDataService.transactions.get(7));
-
         }
-
     }
 
     private void save() {
@@ -256,7 +251,7 @@ public class KpKwForm extends FormLayout {
         }
 
         Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
-        //cashKpKwView.updateList(doc.getDocNo().intValue()-1);
+        cashKpKwView.updateList(doc.getDocNo().intValue()-1); // select document after inset on grid
         if (docReturned.isPresent()){
             setDocument(docReturned.get());
         } else {

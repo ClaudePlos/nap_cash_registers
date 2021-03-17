@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -25,7 +26,9 @@ import java.util.logging.Logger;
 @UIScope
 @CssImport("./styles/views/cashregister/cash-kpkw-view.css")
 public class CashKpKwView extends Dialog {
-    Html title = new Html("<div>KP/KW</div>");
+
+    private Html title = new Html("<div>KP/KW </div>");
+    private Label labCash = new Label("-");
     static Logger logger = Logger.getLogger(CashKpKwView.class.getName());
 
     private Grid<Document> gridCashKpKw;
@@ -65,11 +68,11 @@ public class CashKpKwView extends Dialog {
         Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("10px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         VerticalLayout v01 = new VerticalLayout();
+        HorizontalLayout h00 = new HorizontalLayout(title, labCash);
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
         v01.add(butAddNewKpKw, h01);
 
-        add(title, v01);
-
+        add(h00, v01);
 
         gridCashKpKw.asSingleSelect().addValueChangeListener(event ->
                 formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue()));
@@ -83,7 +86,7 @@ public class CashKpKwView extends Dialog {
             butAddNewKpKw.setEnabled(false);
         else
             butAddNewKpKw.setEnabled(true);
-
+        labCash.setText(cashCode);
         formKpKw.setDocument(null);
         updateList(0);
     }
