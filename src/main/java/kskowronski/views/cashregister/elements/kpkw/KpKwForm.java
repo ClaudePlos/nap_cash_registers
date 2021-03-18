@@ -55,8 +55,10 @@ public class KpKwForm extends FormLayout {
     private TextField docDef2 = new TextField("Numer dowodu:");
     private TextField docDef0 = new TextField("Dodatkowe Info.");
     private TextField docDef1 = new TextField("Transfer");
+    private String _docDef1 = "";
     private TextField docSettlement = new TextField("Roz?");
     private TextArea docDescription = new TextArea("Opis");
+    private String _docDescription = "";
 
     private Button butFindWorker = new Button(txtFindWorker);
     private Button butFindClient = new Button(txtFindClient);
@@ -188,11 +190,12 @@ public class KpKwForm extends FormLayout {
         radioWorkerClient.setValue(globalDataService.transactions.get(0));
         //setupSettingsForTransaction(globalDataService.transactions.get(0).getCode(), globalDataService.transactions.get(0).getName());
         radioWorkerClient.addValueChangeListener(event -> {
-            docDef1.setValue(radioWorkerClient.getValue().getCode());
             setupSettingsForTransaction(radioWorkerClient.getValue().getCode()
-                    , radioWorkerClient.getValue().getName()
-                   // , !docDescription.getValue().isEmpty()?docDescription.getValue():radioWorkerClient.getValue().getName()
+                    , radioWorkerClient.getValue().getCode().equals(_docDef1)?
+                            !docDescription.getValue().isEmpty() ? _docDescription : radioWorkerClient.getValue().getName()
+                      : radioWorkerClient.getValue().getName()
             );
+            docDef1.setValue(radioWorkerClient.getValue().getCode());
             onChangeTransaction(radioWorkerClient.getValue().getCode());
         });
 
@@ -211,6 +214,8 @@ public class KpKwForm extends FormLayout {
 
     public void setDocument(Document doc) {
         binder.setBean(doc);
+        _docDef1 = docDef1.getValue();
+        _docDescription = docDescription.getValue();
         labCompanyName.setText("");
         labWorkerName.setText("");
         radioWorkerClient.setEnabled(true);
@@ -219,7 +224,6 @@ public class KpKwForm extends FormLayout {
             setVisible(false);
         } else {
             setVisible(true);
-            //docRdocCode.focus();
 
             onChangeTransaction(doc.getDocDef1());
 
