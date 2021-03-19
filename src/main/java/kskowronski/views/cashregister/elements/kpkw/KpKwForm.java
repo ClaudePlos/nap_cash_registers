@@ -232,10 +232,8 @@ public class KpKwForm extends FormLayout {
                         .filter(t -> t.getCode().equals(doc.getDocDef1()))
                         .collect(Collectors.toList()).get(0);
                 radioWorkerClient.setValue( tran );
-                //setupSettingsForTransaction(tran.getCode(), !doc.getDocDescription().isEmpty() ? doc.getDocDescription() : tran.getName() );
             } else {
                 radioWorkerClient.setValue(globalDataService.transactions.get(0));
-                //setupSettingsForTransaction(radioWorkerClient.getValue().getCode(), radioWorkerClient.getValue().getName());
             }
 
             if (doc.getDocApproved().equals("N")){
