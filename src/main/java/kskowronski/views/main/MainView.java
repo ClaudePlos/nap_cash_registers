@@ -103,7 +103,7 @@ public class MainView extends AppLayout {
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
         if (authorities.isEmpty()){
-            MyNotification.openAlert("Brak uprawnień !!!", 3000,  Notification.Position.MIDDLE);
+            MyNotification.openAlert("Brak uprawnień do strony!!!", 3000,  Notification.Position.MIDDLE);
             tabs = new Tab[]{};
             new MyThread().start();
             UI.getCurrent().getPage().executeJs("location.assign('logout')");
