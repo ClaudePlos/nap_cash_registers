@@ -24,6 +24,7 @@ import kskowronski.data.entities.egeria.kg.TransactionDTO;
 import kskowronski.data.entities.egeria.kg.TransactionType;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
+import kskowronski.data.services.egeria.kg.NppMapCashService;
 import kskowronski.data.services.global.GlobalDataService;
 import kskowronski.views.components.ClientDialog;
 import kskowronski.views.components.MyNotification;
@@ -83,10 +84,13 @@ public class KpKwForm extends FormLayout {
     private HorizontalLayout divClient = new HorizontalLayout();
 
     private transient GlobalDataService globalDataService;
+    private transient NppMapCashService nppMapCashService;
 
-    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService) {
+    public KpKwForm(CashKpKwView cashKpKwView, ClientService clientService, WorkerService workerService
+            , GlobalDataService globalDataService, NppMapCashService nppMapCashService) {
         this.cashKpKwView = cashKpKwView;
         this.globalDataService = globalDataService;
+        this.nppMapCashService = nppMapCashService;
         docOwnNumber.setEnabled(false);
         docKlKodPod.setEnabled(false);
         docPrcIdPod.setEnabled(false);
@@ -306,13 +310,13 @@ public class KpKwForm extends FormLayout {
 
     private void setupSettingsForTransaction(String transaction, String transactionPL){
         if (transaction.equals(TransactionType.INCOME.name())){
-            updateDocumentItem(KpKwType.KP, false, "147-" + cashKpKwView.cashCode, "N", transactionPL, true, true, true);
+            updateDocumentItem(KpKwType.KP, false, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getIncomeCode() , "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.BANK.name())){
-            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N", transactionPL, true, true, true);
+            updateDocumentItem(KpKwType.KW, false, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getBankCode(), "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.CASH_INVOICE.name())){
-            updateDocumentItem(KpKwType.KW, false, "148-" + cashKpKwView.cashCode, "N", transactionPL, false, true, true);
+            updateDocumentItem(KpKwType.KW, false, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getCashInvoiceCode(), "N", transactionPL, false, true, true);
         } else if (transaction.equals(TransactionType.TRANSFER.name())){
-            updateDocumentItem(KpKwType.KP, true, "148-" + cashKpKwView.cashCode, "N", transactionPL, true, true, true);
+            updateDocumentItem(KpKwType.KP, true, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getIncomeCode(), "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.COMMISSION.name())){
             updateDocumentItem(KpKwType.KW, false, "555-AZAR-000-04-u05", "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.CASH_ADVANCE.name())){

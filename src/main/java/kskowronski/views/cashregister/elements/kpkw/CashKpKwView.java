@@ -16,6 +16,7 @@ import kskowronski.data.entities.egeria.kg.TransactionType;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
+import kskowronski.data.services.egeria.kg.NppMapCashService;
 import kskowronski.data.services.global.GlobalDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,10 +48,10 @@ public class CashKpKwView extends Dialog {
     public String cashCode;
 
     @Autowired
-    public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService) {
+    public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService, NppMapCashService nppMapCashService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
-        this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService);
+        this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService, nppMapCashService);
         setWidth("750px");
         setHeight("680px");
 

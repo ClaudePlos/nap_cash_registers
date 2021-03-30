@@ -38,7 +38,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         //for FF
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && !"anonymousUser".equals(auth.getName())) {
-            UI.getCurrent().navigate("error");
+            UI.getCurrent().navigate("cashregister");
             UI.getCurrent().getPage().reload();
         }
 

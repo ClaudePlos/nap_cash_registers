@@ -32,6 +32,15 @@ public class NppMapCash {
     public NppMapCash() {
     }
 
+    public NppMapCash(BigDecimal id, String cashCode, String incomeCode, String cashInvoiceCode, String bankCode, String companyName) {
+        this.id = id;
+        this.cashCode = cashCode;
+        this.incomeCode = incomeCode;
+        this.cashInvoiceCode = cashInvoiceCode;
+        this.bankCode = bankCode;
+        this.companyName = companyName;
+    }
+
     public BigDecimal getId() {
         return id;
     }
