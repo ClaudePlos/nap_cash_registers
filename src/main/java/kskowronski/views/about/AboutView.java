@@ -18,7 +18,9 @@ public class AboutView extends Div {
 
         Anchor anchor = new Anchor("https://github.com/ClaudePlos/nap_cash_registers/issues/2", "Analiza");
         anchor.setTarget("_blank");
-        add(anchor);
+        Anchor anchor1 = new Anchor("https://github.com/ClaudePlos", "Analiza");
+        anchor1.setTarget("_blank");
+        add(anchor, anchor1);
     }
 
 }
