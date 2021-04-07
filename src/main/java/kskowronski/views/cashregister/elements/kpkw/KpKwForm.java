@@ -68,8 +68,10 @@ public class KpKwForm extends FormLayout {
     private Label labWorkerName = new Label();
 
     private Button save = new Button("Zapisz");
-    private Button butAccept = new Button("Zatwierdź Dokument");
-    private Button butClose = new Button("Zamknij");
+    private Button butAccept = new Button("Zatwierdź");
+    private Button butUnAccept = new Button("Cofnij Zat.");
+    private Button butDelete = new Button("Usuń");
+    private Button butClose = new Button("X");
     private CashKpKwView cashKpKwView;
     private RadioButtonGroup<TransactionDTO> radioWorkerClient = new RadioButtonGroup<>();
 
@@ -150,9 +152,27 @@ public class KpKwForm extends FormLayout {
             }
         });
 
+        butUnAccept.addClickListener( e -> {
+            Optional<Document> document = cashKpKwView.documentService.unAcceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
+            if ( document.isPresent()){
+                setDocument(document.get());
+                cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
+                Notification.show("Cofnięto Zatwierdzenie",1000, Notification.Position.MIDDLE);
+            }
+        });
+
+        butDelete.addClickListener( e -> {
+            Optional<Document> document = cashKpKwView.documentService.deleteKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
+            if ( document.isPresent()){
+                setDocument(document.get());
+                cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
+                Notification.show("Usunieto",1000, Notification.Position.MIDDLE);
+            }
+        });
+
         butClose.addClickListener( e -> cashKpKwView.close());
 
-        HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butClose);
+        HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butUnAccept, butDelete, butClose);
         buttons.setClassName("buttonsFooter");
 
         HorizontalLayout divTypeAndDate = new HorizontalLayout(docRdocCode, docDateFrom);

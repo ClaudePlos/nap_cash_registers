@@ -137,6 +137,16 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return docs;
     }
 
+    public Optional<Document> unAcceptKpKw(BigDecimal docId, BigDecimal casRapId, BigDecimal docFrmId){
+        Optional<Document> docs =  unAcceptDocument(docId, casRapId, docFrmId);
+        return docs;
+    }
+
+    public Optional<Document> deleteKpKw(BigDecimal docId, BigDecimal casRapId, BigDecimal docFrmId){
+        Optional<Document> docs =  deleteDocument(docId, casRapId, docFrmId);
+        return docs;
+    }
+
     public Optional<Document> acceptDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
         Session session = em.unwrap( Session.class );
         try {
@@ -145,6 +155,52 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                         try (CallableStatement function = connection
                                 .prepareCall(
                                         "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_accept_document(?,?,?) }")) {
+                            function.registerOutParameter(1, Types.INTEGER);
+                            function.setBigDecimal(2, docId);
+                            function.setBigDecimal(3, casRapId);
+                            function.setBigDecimal(4, docFrmId);
+                            function.execute();
+                            return function.getInt(1);
+                        }
+                    });
+        } catch (JDBCException ex){
+            Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+            return null;
+        }
+        return repo.findById(docId);
+    }
+
+    private Optional<Document> unAcceptDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
+        Session session = em.unwrap( Session.class );
+        try {
+            session.doReturningWork(
+                    connection -> {
+                        try (CallableStatement function = connection
+                                .prepareCall(
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_unaccept_document(?,?,?) }")) {
+                            function.registerOutParameter(1, Types.INTEGER);
+                            function.setBigDecimal(2, docId);
+                            function.setBigDecimal(3, casRapId);
+                            function.setBigDecimal(4, docFrmId);
+                            function.execute();
+                            return function.getInt(1);
+                        }
+                    });
+        } catch (JDBCException ex){
+            Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
+            return null;
+        }
+        return repo.findById(docId);
+    }
+
+    private Optional<Document> deleteDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
+        Session session = em.unwrap( Session.class );
+        try {
+            session.doReturningWork(
+                    connection -> {
+                        try (CallableStatement function = connection
+                                .prepareCall(
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_delete_document(?,?,?) }")) {
                             function.registerOutParameter(1, Types.INTEGER);
                             function.setBigDecimal(2, docId);
                             function.setBigDecimal(3, casRapId);
