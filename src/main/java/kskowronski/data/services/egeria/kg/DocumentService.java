@@ -47,9 +47,13 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return this.repo.findByDocCasIdAndFrm(casId, frmId);
     }
 
-    public Optional<List<Document>> getAllCashKpKw(BigDecimal docId, BigDecimal frmId){
+    public List<Document> getAllCashKpKw(BigDecimal docId, BigDecimal frmId){
         consolidationService.setConsolidateCompany();
-        return this.repo.findByDocKpKwAndFrm(docId, frmId);
+        Optional<List<Document>> lKpKw = this.repo.findByDocKpKwAndFrm(docId, frmId);
+        if (lKpKw.isPresent()){
+            return lKpKw.get();
+        }
+        return null;
     }
 
     public Optional<Document> addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
@@ -142,9 +146,9 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return docs;
     }
 
-    public Optional<Document> deleteKpKw(BigDecimal docId, BigDecimal casRapId, BigDecimal docFrmId){
-        Optional<Document> docs =  deleteDocument(docId, casRapId, docFrmId);
-        return docs;
+    public String deleteKpKw(BigDecimal docId, BigDecimal casRapId, BigDecimal docFrmId){
+        String ret =  deleteDocument(docId, casRapId, docFrmId);
+        return ret;
     }
 
     public Optional<Document> acceptDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
@@ -193,7 +197,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return repo.findById(docId);
     }
 
-    private Optional<Document> deleteDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
+    private String deleteDocument(BigDecimal docId, BigDecimal casRapId,BigDecimal docFrmId){
         Session session = em.unwrap( Session.class );
         try {
             session.doReturningWork(
@@ -213,7 +217,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
             Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
             return null;
         }
-        return repo.findById(docId);
+        return "OK";
     }
 
 

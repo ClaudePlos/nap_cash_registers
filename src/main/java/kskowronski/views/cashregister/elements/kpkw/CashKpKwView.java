@@ -21,11 +21,13 @@ import kskowronski.data.services.global.GlobalDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Component
 @UIScope
@@ -40,7 +42,7 @@ public class CashKpKwView extends Dialog {
 
     public transient DocumentService documentService;
 
-    private transient Optional<List<Document>> listDocKpKw;
+    private transient List<Document> listDocKpKw;
     private transient Document cashReportItem;
 
     private Button butAddNewKpKw = new Button("Dodaj KP/KW");
@@ -59,14 +61,14 @@ public class CashKpKwView extends Dialog {
         // Test 1. INSERT NEW item KP or KW
         butAddNewKpKw.addClickListener( e -> {
             Optional<Document> newDocKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
-            if (newDocKpKw.isPresent() && listDocKpKw.isPresent()){
+            if (newDocKpKw.isPresent()){
                 newDocKpKw.get().setDocDef0("147-"+cashCode);
                 newDocKpKw.get().setDocDef1(globalDataService.transactions.get(0).getCode());
                 newDocKpKw.get().setDocSettlement("N");
                 newDocKpKw.get().setDocDescription("Utarg");
                 formKpKw.docRdocCode.setValue(KpKwType.KP);
                 newDocKpKw.get().setDocDateFrom(LocalDate.now());
-                listDocKpKw.get().add(newDocKpKw.get());
+                listDocKpKw.add(newDocKpKw.get());
                 gridCashKpKw.getDataProvider().refreshAll();
                 gridCashKpKw.select(newDocKpKw.get());
                 gridCashKpKw.asSingleSelect().addValueChangeListener(event ->
@@ -74,7 +76,7 @@ public class CashKpKwView extends Dialog {
                 formKpKw.docRdocCode.setEnabled(false);
                 documentService.updateKpKw(newDocKpKw.get());
             } else {
-                updateList(0);
+                updateList(BigDecimal.ZERO);
             }
         });
 
@@ -105,17 +107,21 @@ public class CashKpKwView extends Dialog {
             butAddNewKpKw.setEnabled(true);
         labCash.setText(cashCode);
         formKpKw.setDocument(null);
-        updateList(0);
+        updateList(BigDecimal.ZERO);
     }
 
-    public void updateList(int index) {
+    public void updateList(BigDecimal docId) {
         listDocKpKw = documentService.getAllCashKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
-        if (listDocKpKw.isPresent()) {
-            //this.listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //order by asc
-            gridCashKpKw.setItems(listDocKpKw.get());
-            formKpKw.setDocument(listDocKpKw.get().get(index));
-        }
+        gridCashKpKw.setItems(listDocKpKw);
+        if (docId.equals(BigDecimal.ZERO)) // update the first element from the grid
+            formKpKw.setDocument(listDocKpKw.get(0) );
+        else
+            formKpKw.setDocument(listDocKpKw.stream().filter( document -> document.getDocId().equals(docId)).collect(Collectors.toList()).get(0) );
     }
 
+    public void deleteDocFromList(Document doc){
+        listDocKpKw.remove(doc);
+        gridCashKpKw.getDataProvider().refreshAll();
+    }
 
 }

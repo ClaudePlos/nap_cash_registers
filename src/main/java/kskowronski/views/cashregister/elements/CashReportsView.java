@@ -170,13 +170,12 @@ public class CashReportsView extends VerticalLayout {
 
     private void generateCashReport(BigDecimal docId, String docNumber, BigDecimal docFrmId, BigDecimal valueInitialState) throws IOException {
         Gson gson = new Gson();
-        Optional<List<Document>> listDocKpKw = documentService.getAllCashKpKw(docId, docFrmId);
+        List<Document> listDocKpKw = documentService.getAllCashKpKw(docId, docFrmId);
         //Run js
-        if (listDocKpKw.isPresent()){
-            //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
-            String initFunction = "generateCashReport($0, $1, $2, $3, $4, $5);";
-            UI.getCurrent().getPage().executeJs(initFunction, this,
-                    cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw.get()), valueInitialState.toString());
-        }
+        //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
+        String initFunction = "generateCashReport($0, $1, $2, $3, $4, $5);";
+        UI.getCurrent().getPage().executeJs(initFunction, this,
+                cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw), valueInitialState.toString());
+
     }
 }

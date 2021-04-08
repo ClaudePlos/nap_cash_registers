@@ -7,6 +7,8 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
@@ -71,7 +73,7 @@ public class KpKwForm extends FormLayout {
     private Button butAccept = new Button("Zatwierdź");
     private Button butUnAccept = new Button("Cofnij Zat.");
     private Button butDelete = new Button("Usuń");
-    private Button butClose = new Button("X");
+    private Button butClose = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
     private CashKpKwView cashKpKwView;
     private RadioButtonGroup<TransactionDTO> radioWorkerClient = new RadioButtonGroup<>();
 
@@ -147,7 +149,7 @@ public class KpKwForm extends FormLayout {
             Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
             if ( document.isPresent()){
                 setDocument(document.get());
-                cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
+                cashKpKwView.updateList(document.get().getDocId() );
                 Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
             }
         });
@@ -156,16 +158,15 @@ public class KpKwForm extends FormLayout {
             Optional<Document> document = cashKpKwView.documentService.unAcceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
             if ( document.isPresent()){
                 setDocument(document.get());
-                cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
+                cashKpKwView.updateList(document.get().getDocId());
                 Notification.show("Cofnięto Zatwierdzenie",1000, Notification.Position.MIDDLE);
             }
         });
 
         butDelete.addClickListener( e -> {
-            Optional<Document> document = cashKpKwView.documentService.deleteKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
-            if ( document.isPresent()){
-                setDocument(document.get());
-                cashKpKwView.updateList(document.get().getDocNo().intValue()-1);
+            String ret = cashKpKwView.documentService.deleteKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
+            if ( ret.equals("OK")){
+                cashKpKwView.deleteDocFromList(binder.getBean());
                 Notification.show("Usunieto",1000, Notification.Position.MIDDLE);
             }
         });
@@ -280,7 +281,7 @@ public class KpKwForm extends FormLayout {
         }
 
         Optional<Document> docReturned = cashKpKwView.documentService.updateKpKw(doc);
-        cashKpKwView.updateList(doc.getDocNo().intValue()-1); // select document after inset on grid
+        cashKpKwView.updateList(doc.getDocId()); // select document after inset on grid
         if (docReturned.isPresent()){
             setDocument(docReturned.get());
         } else {
@@ -296,6 +297,8 @@ public class KpKwForm extends FormLayout {
         docDef2.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);
+        butUnAccept.setEnabled(!status);
+        butDelete.setEnabled(status);
         docDescription.setEnabled(status);
         if (settlement){
             docRdocCode.setEnabled(status);
