@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         if (lKpKw.isPresent()){
             return lKpKw.get();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public Optional<Document> addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
@@ -169,7 +170,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                     });
         } catch (JDBCException ex){
             Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
-            return null;
+            return Optional.empty();
         }
         return repo.findById(docId);
     }
@@ -192,7 +193,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                     });
         } catch (JDBCException ex){
             Notification.show(ex.getSQLException().getMessage(),5000, Notification.Position.MIDDLE);
-            return null;
+            return Optional.empty();
         }
         return repo.findById(docId);
     }

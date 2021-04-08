@@ -11,8 +11,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.entities.egeria.kg.KpKwType;
-import kskowronski.data.entities.egeria.kg.TransactionDTO;
-import kskowronski.data.entities.egeria.kg.TransactionType;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
@@ -113,10 +111,12 @@ public class CashKpKwView extends Dialog {
     public void updateList(BigDecimal docId) {
         listDocKpKw = documentService.getAllCashKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
         gridCashKpKw.setItems(listDocKpKw);
-        if (docId.equals(BigDecimal.ZERO)) // update the first element from the grid
-            formKpKw.setDocument(listDocKpKw.get(0) );
-        else
-            formKpKw.setDocument(listDocKpKw.stream().filter( document -> document.getDocId().equals(docId)).collect(Collectors.toList()).get(0) );
+        if (!listDocKpKw.isEmpty()) {
+            if (docId.equals(BigDecimal.ZERO)) // update the first element from the grid
+                formKpKw.setDocument(listDocKpKw.get(0) );
+            else
+                formKpKw.setDocument(listDocKpKw.stream().filter( document -> document.getDocId().equals(docId)).collect(Collectors.toList()).get(0) );
+        }
     }
 
     public void deleteDocFromList(Document doc){
