@@ -46,7 +46,7 @@ public class CashKpKwView extends Dialog {
     private Button butAddNewKpKw = new Button("Dodaj KP/KW");
     private KpKwForm formKpKw;
     public String cashCode;
-
+    private Label cashInCase = new Label();
     @Autowired
     public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService, NppMapCashService nppMapCashService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
@@ -85,7 +85,7 @@ public class CashKpKwView extends Dialog {
         Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("10px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         VerticalLayout v01 = new VerticalLayout();
-        HorizontalLayout h00 = new HorizontalLayout(title, labCash);
+        HorizontalLayout h00 = new HorizontalLayout(title, labCash, cashInCase);
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
         v01.add(butAddNewKpKw, h01);
 
@@ -98,6 +98,7 @@ public class CashKpKwView extends Dialog {
     public void openKpKwView(Document item){
         gridCashKpKw.setItems();
         this.cashReportItem = item;
+        this.cashInCase.setText( item.getDocInitialState() + "");
 
         if (this.cashReportItem.getDocApproved().equals("T"))
             butAddNewKpKw.setEnabled(false);
