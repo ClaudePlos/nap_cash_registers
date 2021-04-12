@@ -6,8 +6,10 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.entities.egeria.kg.KpKwType;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +49,8 @@ public class CashKpKwView extends Dialog {
     private Button butAddNewKpKw = new Button("Dodaj KP/KW");
     private KpKwForm formKpKw;
     public String cashCode;
-    private Label cashInCase = new Label();
+    private BigDecimal moneyInCash = BigDecimal.ZERO;
+    private Label labMoneyInCash = new Label();
     @Autowired
     public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService, NppMapCashService nppMapCashService) {
         logger.log(Level.INFO, "Constructor CashKpKwView");
@@ -85,7 +89,7 @@ public class CashKpKwView extends Dialog {
         Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("10px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         VerticalLayout v01 = new VerticalLayout();
-        HorizontalLayout h00 = new HorizontalLayout(title, labCash, cashInCase);
+        HorizontalLayout h00 = new HorizontalLayout(title, labCash, labMoneyInCash);
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
         v01.add(butAddNewKpKw, h01);
 
@@ -98,7 +102,8 @@ public class CashKpKwView extends Dialog {
     public void openKpKwView(Document item){
         gridCashKpKw.setItems();
         this.cashReportItem = item;
-        this.cashInCase.setText( item.getDocInitialState() + "");
+        this.moneyInCash = item.getDocInitialState();
+        this.labMoneyInCash.setText( this.moneyInCash + "");
 
         if (this.cashReportItem.getDocApproved().equals("T"))
             butAddNewKpKw.setEnabled(false);
@@ -107,6 +112,7 @@ public class CashKpKwView extends Dialog {
         labCash.setText(cashCode);
         formKpKw.setDocument(null);
         updateList(BigDecimal.ZERO);
+        calculateMoneyInCash();
     }
 
     public void updateList(BigDecimal docId) {
@@ -120,9 +126,37 @@ public class CashKpKwView extends Dialog {
         }
     }
 
-    public void deleteDocFromList(Document doc){
+    public void deleteDocFromList(Document doc) {
         listDocKpKw.remove(doc);
         gridCashKpKw.getDataProvider().refreshAll();
+        calculateMoneyInCash();
+    }
+
+    public void calculateMoneyInCash() {
+        DecimalFormat twoPlaces = new DecimalFormat("0.00");
+        List<Document> listKpKw = gridCashKpKw.getDataProvider()
+                .fetch(new Query<>())
+                .collect(Collectors.toList());
+
+        listKpKw.stream().forEach( item -> {
+            if (item.getDocApproved().equals("T"))
+                this.moneyInCash = this.moneyInCash.add(item.getDocAmount());
+        });
+
+        this.labMoneyInCash.setText( "Saldo: " + String.format("%,.2f",this.moneyInCash).replace(",","."));
+    }
+
+    public boolean checkStatusCashSmallerThen0(BigDecimal value, KpKwType docType){
+        BigDecimal valueChecker = moneyInCash;
+        if (docType.equals(KpKwType.KP))
+            valueChecker = valueChecker.add(value);
+        else
+            valueChecker = valueChecker.subtract(value);
+
+        if ( valueChecker.compareTo(BigDecimal.ZERO) < 0) {
+           return true;
+        }
+        return false;
     }
 
 }

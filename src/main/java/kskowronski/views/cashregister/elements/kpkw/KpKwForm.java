@@ -146,12 +146,17 @@ public class KpKwForm extends FormLayout {
         });
 
         butAccept.addClickListener( e -> {
+            if (cashKpKwView.checkStatusCashSmallerThen0(binder.getBean().getDocAmount(), binder.getBean().getDocRdocCode())){
+                MyNotification.openAlert("Stan kasy poniżej zera!!! Nie zatwierdzisz.",3000,  Notification.Position.MIDDLE);
+                return;
+            }
             Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
             if ( document.isPresent()){
                 setDocument(document.get());
                 cashKpKwView.updateList(document.get().getDocId() );
                 Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
             }
+            cashKpKwView.calculateMoneyInCash();
         });
 
         butUnAccept.addClickListener( e -> {
