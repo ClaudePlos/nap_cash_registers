@@ -166,6 +166,7 @@ public class KpKwForm extends FormLayout {
                 cashKpKwView.updateList(document.get().getDocId());
                 Notification.show("Cofnięto Zatwierdzenie",1000, Notification.Position.MIDDLE);
             }
+            cashKpKwView.calculateMoneyInCash();
         });
 
         butDelete.addClickListener( e -> {

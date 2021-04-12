@@ -14,6 +14,9 @@ cash-kpkw-view,
     width: 400px;
 }
 
+.labMoneyInCash {
+    color: green;
+}
 
 .gridClient {
     white-space: normal;

@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +48,8 @@ public class CashKpKwView extends Dialog {
     private Button butAddNewKpKw = new Button("Dodaj KP/KW");
     private KpKwForm formKpKw;
     public String cashCode;
-    private BigDecimal moneyInCash = BigDecimal.ZERO;
+    private BigDecimal cashInitialState = BigDecimal.ZERO;
+    BigDecimal currentMoneyInCash = BigDecimal.ZERO;
     private Label labMoneyInCash = new Label();
     @Autowired
     public CashKpKwView(DocumentService documentService, ClientService clientService, WorkerService workerService, GlobalDataService globalDataService, NppMapCashService nppMapCashService) {
@@ -58,6 +58,7 @@ public class CashKpKwView extends Dialog {
         this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService, nppMapCashService);
         setWidth("750px");
         setHeight("680px");
+        labMoneyInCash.setClassName("labMoneyInCash");
 
         butAddNewKpKw.setEnabled(false);
         // Test 1. INSERT NEW item KP or KW
@@ -102,8 +103,8 @@ public class CashKpKwView extends Dialog {
     public void openKpKwView(Document item){
         gridCashKpKw.setItems();
         this.cashReportItem = item;
-        this.moneyInCash = item.getDocInitialState();
-        this.labMoneyInCash.setText( this.moneyInCash + "");
+        this.cashInitialState = item.getDocInitialState();
+        this.labMoneyInCash.setText( this.cashInitialState + "");
 
         if (this.cashReportItem.getDocApproved().equals("T"))
             butAddNewKpKw.setEnabled(false);
@@ -133,20 +134,26 @@ public class CashKpKwView extends Dialog {
     }
 
     public void calculateMoneyInCash() {
+        final BigDecimal[] moneyInCash = {cashInitialState};
         List<Document> listKpKw = gridCashKpKw.getDataProvider()
                 .fetch(new Query<>())
                 .collect(Collectors.toList());
 
         listKpKw.stream().forEach( item -> {
-            if (item.getDocApproved().equals("T"))
-                this.moneyInCash = this.moneyInCash.add(item.getDocAmount());
-        });
+            if (item.getDocApproved().equals("T")) {
+                if (item.getDocRdocCode().equals(KpKwType.KP))
+                    moneyInCash[0] = moneyInCash[0].add(item.getDocAmount());
+                else
+                    moneyInCash[0] = moneyInCash[0].subtract(item.getDocAmount());
+            }
 
-        this.labMoneyInCash.setText( "Saldo: " + String.format("%,.2f",this.moneyInCash).replace(",","."));
+        });
+        this.currentMoneyInCash = moneyInCash[0];
+        this.labMoneyInCash.setText( "Saldo: " + String.format("%,.2f",this.currentMoneyInCash).replace(",","."));
     }
 
     public boolean checkStatusCashSmallerThen0(BigDecimal value, KpKwType docType){
-        BigDecimal valueChecker = moneyInCash;
+        BigDecimal valueChecker = currentMoneyInCash;
         if (docType.equals(KpKwType.KP))
             valueChecker = valueChecker.add(value);
         else
