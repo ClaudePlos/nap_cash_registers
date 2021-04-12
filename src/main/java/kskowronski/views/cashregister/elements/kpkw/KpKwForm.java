@@ -218,7 +218,6 @@ public class KpKwForm extends FormLayout {
         radioWorkerClient.setItems( globalDataService.transactions );
         radioWorkerClient.setRenderer(new TextRenderer<>(TransactionDTO::getName));
         radioWorkerClient.setValue(globalDataService.transactions.get(0));
-        //setupSettingsForTransaction(globalDataService.transactions.get(0).getCode(), globalDataService.transactions.get(0).getName());
         radioWorkerClient.addValueChangeListener(event -> {
             setupSettingsForTransaction(radioWorkerClient.getValue().getCode()
                     , radioWorkerClient.getValue().getCode().equals(_docDef1)?

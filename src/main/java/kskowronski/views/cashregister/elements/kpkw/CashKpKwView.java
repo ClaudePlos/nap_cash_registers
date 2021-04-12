@@ -133,7 +133,6 @@ public class CashKpKwView extends Dialog {
     }
 
     public void calculateMoneyInCash() {
-        DecimalFormat twoPlaces = new DecimalFormat("0.00");
         List<Document> listKpKw = gridCashKpKw.getDataProvider()
                 .fetch(new Query<>())
                 .collect(Collectors.toList());
