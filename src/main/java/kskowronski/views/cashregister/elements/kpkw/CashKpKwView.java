@@ -64,10 +64,11 @@ public class CashKpKwView extends Dialog {
         butAddNewKpKw.addClickListener( e -> {
             Optional<Document> newDocKpKw = documentService.insertKpKw(cashReportItem.getDocId(), cashReportItem.getDocFrmId());
             if (newDocKpKw.isPresent()){
-                newDocKpKw.get().setDocDef0("147-"+cashCode);
+                newDocKpKw.get().setDocDef0(nppMapCashService.findByCashCode(cashCode).getIncomeCode());
                 newDocKpKw.get().setDocDef1(globalDataService.transactions.get(0).getCode());
                 newDocKpKw.get().setDocSettlement("N");
                 newDocKpKw.get().setDocDescription("Utarg");
+                newDocKpKw.get().setDocAmount(BigDecimal.ZERO);
                 formKpKw.docRdocCode.setValue(KpKwType.KP);
                 newDocKpKw.get().setDocDateFrom(LocalDate.now());
                 listDocKpKw.add(newDocKpKw.get());
