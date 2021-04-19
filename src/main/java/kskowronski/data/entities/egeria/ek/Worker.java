@@ -102,4 +102,7 @@ public class Worker {
     public void setPrcDgKodEk(String prcDgKodEk) {
         this.prcDgKodEk = prcDgKodEk;
     }
+
+
+
 }

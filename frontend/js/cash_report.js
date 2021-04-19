@@ -7,7 +7,7 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw,
     let cellValue = JSON.parse(listDocKpKw);
 
     let bodyData = [];
-    bodyData.push(['Lp.', 'Data', 'Numer', 'Treść', 'Przychód', 'Rozchód']);
+    bodyData.push(['Lp', 'Data', 'Numer', 'Treść', 'Dod. Info.', 'Przychód', 'Rozchód']);
     let sumMa = 0;
     let sumWn = 0;
 
@@ -26,10 +26,12 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw,
         let month = "0"+cellValue[i].docDateFrom.month;
         let day = "0"+cellValue[i].docDateFrom.day;
 
+
         bodyData.push([cellValue[i].docNo
             ,  year + "-" + month.substr(month.length-2, month.length) + "-" + day.substr(day.length-2, day.length)
             , typeof(cellValue[i].docOwnNumber) != "undefined" ? cellValue[i].docOwnNumber : ''
             , typeof(cellValue[i].docDescription) != "undefined" ? cellValue[i].docDescription : ''
+            , getAdditionalInfo(cellValue[i])
             , {text:  quotaMa.toFixed(2), alignment: 'right'}, {text:  quotaWn.toFixed(2), alignment: 'right'}]);
     }
     //summarize
@@ -37,11 +39,11 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw,
     let allMa = sumMa + lValueInitialState;
     let lValueEndState = (sumMa - sumWn) + lValueInitialState;
     let allWn = sumWn + lValueEndState;
-    bodyData.push(['','','',{text:  'Razem obroty:', alignment: 'right'}, {text:  sumMa.toFixed(2), alignment: 'right', fillColor: 'grey'}
+    bodyData.push(['','','','',{text:  'Razem obroty:', alignment: 'right'}, {text:  sumMa.toFixed(2), alignment: 'right', fillColor: 'grey'}
         , {text:  sumWn.toFixed(2), alignment: 'right', fillColor: 'grey',}]);
-    bodyData.push(['','','',{text:  'Stan Kasy poprzedni:', alignment: 'right'},{text:  lValueInitialState.toFixed(2), alignment: 'right'}, '']);
-    bodyData.push(['','','',{text:  'Stan Kasy obecny:', alignment: 'right'}, '', {text:  lValueEndState.toFixed(2), alignment: 'right'}]);
-    bodyData.push(['','','',{text:  'Razem:', alignment: 'right'}, {text:  allMa.toFixed(2), alignment: 'right'}, {text:  allWn.toFixed(2), alignment: 'right'}]);
+    bodyData.push(['','','','',{text:  'Stan Kasy poprzedni:', alignment: 'right'},{text:  lValueInitialState.toFixed(2), alignment: 'right'}, '']);
+    bodyData.push(['','','','',{text:  'Stan Kasy obecny:', alignment: 'right'}, '', {text:  lValueEndState.toFixed(2), alignment: 'right'}]);
+    bodyData.push(['','','','',{text:  'Razem:', alignment: 'right'}, {text:  allMa.toFixed(2), alignment: 'right'}, {text:  allWn.toFixed(2), alignment: 'right'}]);
     //console.log(bodyData);
 
     var docDefinition = {
@@ -54,7 +56,7 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw,
             {
                 style: 'table1',
                 table: {
-                    widths: [20, 45, 90, 160, 80, 80],
+                    widths: [10, 42, 85, 130, 70, 60, 60],
                     body: bodyData
                 }
             }
@@ -83,6 +85,25 @@ function generateCashReport(container, caseCode, docNumber, period, listDocKpKw,
     // pdfMake.createPdf(docDefinition).download('file.pdf', function () {
     //     alert('Plik PDF został wygenerowany');
     // });
+}
+
+
+function getAdditionalInfo( item ) {
+    let ret = '';
+
+    if (typeof(item.docPrcIdPod) != "undefined") {
+        ret = item.fullNameForPrcIdPod;
+    }
+
+    if (typeof(item.docKlKodPod) != "undefined") {
+        ret = item.docKlKodPod;
+    }
+
+    if (typeof(item.docDef2) != "undefined") {
+        ret = item.docDef2;
+    }
+
+    return ret;
 }
 
 function test(){

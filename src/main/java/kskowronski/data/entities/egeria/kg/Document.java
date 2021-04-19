@@ -88,6 +88,9 @@ public class Document {
     @Column(name = "DOK_OPIS")
     private String docDescription;
 
+    @Transient
+    private String fullNameForPrcIdPod;
+
     public Document() {
     }
 
@@ -301,5 +304,13 @@ public class Document {
 
     public void setDocDescription(String docDescription) {
         this.docDescription = docDescription;
+    }
+
+    public String getFullNameForPrcIdPod() {
+        return fullNameForPrcIdPod;
+    }
+
+    public void setFullNameForPrcIdPod(String fullNameForPrcIdPod) {
+        this.fullNameForPrcIdPod = fullNameForPrcIdPod;
     }
 }

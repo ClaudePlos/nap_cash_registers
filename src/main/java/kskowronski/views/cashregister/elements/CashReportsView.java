@@ -14,6 +14,7 @@ import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
 import kskowronski.data.entities.egeria.kg.Document;
+import kskowronski.data.services.egeria.ek.WorkerService;
 import kskowronski.data.services.egeria.kg.DocumentService;
 import kskowronski.views.cashregister.elements.kpkw.CashKpKwView;
 import kskowronski.views.components.MyNotification;
@@ -32,6 +33,7 @@ import java.util.*;
 public class CashReportsView extends VerticalLayout {
 
     private transient DocumentService documentService;
+    private transient WorkerService workerService;
 
     private Grid<Document> gridCashReports;
     private PeriodLayout period = new PeriodLayout();
@@ -51,8 +53,9 @@ public class CashReportsView extends VerticalLayout {
     private CashKpKwView cashKpKwView;
 
     @Autowired
-    public CashReportsView(DocumentService documentService) {
+    public CashReportsView(DocumentService documentService, WorkerService workerService) {
         this.documentService = documentService;
+        this.workerService = workerService;
 
         HorizontalLayout hlReportsHeader = new HorizontalLayout();
         hlReportsHeader.setClassName("hlReportsHeader");
@@ -171,6 +174,13 @@ public class CashReportsView extends VerticalLayout {
     private void generateCashReport(BigDecimal docId, String docNumber, BigDecimal docFrmId, BigDecimal valueInitialState) throws IOException {
         Gson gson = new Gson();
         List<Document> listDocKpKw = documentService.getAllCashKpKw(docId, docFrmId);
+
+        listDocKpKw.stream().forEach( item -> {
+            if ( item.getDocPrcIdPod() != null ){
+                item.setFullNameForPrcIdPod( workerService.findById(item.getDocPrcIdPod()).get().getNazwImie() );
+            }
+        });
+
         //Run js
         //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
         String initFunction = "generateCashReport($0, $1, $2, $3, $4, $5);";
