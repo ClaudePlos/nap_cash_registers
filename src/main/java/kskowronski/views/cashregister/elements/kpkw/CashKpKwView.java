@@ -6,7 +6,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.Query;
@@ -56,7 +55,7 @@ public class CashKpKwView extends Dialog {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
         this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService, nppMapCashService);
-        setWidth("750px");
+        setWidth("770px");
         setHeight("680px");
         labMoneyInCash.setClassName("labMoneyInCash");
 

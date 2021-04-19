@@ -75,7 +75,7 @@ public class KpKwForm extends FormLayout {
     private Button butDelete = new Button("Usuń");
     private Button butClose = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
     private CashKpKwView cashKpKwView;
-    private RadioButtonGroup<TransactionDTO> radioWorkerClient = new RadioButtonGroup<>();
+    private RadioButtonGroup<TransactionDTO> radioTransaction = new RadioButtonGroup<>();
 
 
 
@@ -215,21 +215,21 @@ public class KpKwForm extends FormLayout {
 
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        radioWorkerClient.setLabel("Transakcja:");
-        radioWorkerClient.setItems( globalDataService.transactions );
-        radioWorkerClient.setRenderer(new TextRenderer<>(TransactionDTO::getName));
-        radioWorkerClient.setValue(globalDataService.transactions.get(0));
-        radioWorkerClient.addValueChangeListener(event -> {
-            setupSettingsForTransaction(radioWorkerClient.getValue().getCode()
-                    , radioWorkerClient.getValue().getCode().equals(_docDef1)?
-                            !docDescription.getValue().isEmpty() ? _docDescription : radioWorkerClient.getValue().getName()
-                      : radioWorkerClient.getValue().getName()
+        radioTransaction.setLabel("Wpłaty/Wypłaty:");
+        radioTransaction.setItems( globalDataService.transactions );
+        radioTransaction.setRenderer(new TextRenderer<>(TransactionDTO::getName));
+        radioTransaction.setValue(globalDataService.transactions.get(0));
+        radioTransaction.addValueChangeListener(event -> {
+            setupSettingsForTransaction(radioTransaction.getValue().getCode()
+                    , radioTransaction.getValue().getCode().equals(_docDef1)?
+                            !docDescription.getValue().isEmpty() ? _docDescription : radioTransaction.getValue().getName()
+                      : radioTransaction.getValue().getName()
             );
-            docDef1.setValue(radioWorkerClient.getValue().getCode());
-            onChangeTransaction(radioWorkerClient.getValue().getCode());
+            docDef1.setValue(radioTransaction.getValue().getCode());
+            onChangeTransaction(radioTransaction.getValue().getCode());
         });
 
-        add(docOwnNumber, radioWorkerClient, divTypeAndDate, docAmount, docDescription
+        add(docOwnNumber, radioTransaction, divTypeAndDate, docAmount, docDescription
                 , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
                 , labCompanyName, labWorkerName
                 , divAccount
@@ -248,7 +248,7 @@ public class KpKwForm extends FormLayout {
         _docDescription = docDescription.getValue();
         labCompanyName.setText("");
         labWorkerName.setText("");
-        radioWorkerClient.setEnabled(true);
+        radioTransaction.setEnabled(true);
 
         if (doc == null) {
             setVisible(false);
@@ -261,9 +261,9 @@ public class KpKwForm extends FormLayout {
                 TransactionDTO tran = globalDataService.transactions.stream()
                         .filter(t -> t.getCode().equals(doc.getDocDef1()))
                         .collect(Collectors.toList()).get(0);
-                radioWorkerClient.setValue( tran );
+                radioTransaction.setValue( tran );
             } else {
-                radioWorkerClient.setValue(globalDataService.transactions.get(0));
+                radioTransaction.setValue(globalDataService.transactions.get(0));
             }
 
             if (doc.getDocApproved().equals("N")){
@@ -296,7 +296,7 @@ public class KpKwForm extends FormLayout {
     }
 
     public void editableElements(Boolean status, Boolean settlement){
-        radioWorkerClient.setEnabled(status);
+        radioTransaction.setEnabled(status);
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
         docDef2.setEnabled(status);

@@ -62,13 +62,15 @@ public class GlobalDataService {
         //2.
         if (transactions.isEmpty()){
             TransactionDTO t =  new TransactionDTO(BigDecimal.valueOf(1L), "Utarg", "INCOME");
-            TransactionDTO t1 = new TransactionDTO(BigDecimal.valueOf(2L), "Konwój", "BANK");
-            TransactionDTO t2 = new TransactionDTO(BigDecimal.valueOf(3L), "Faktura gotówkowa", "CASH_INVOICE");
+            TransactionDTO t1 = new TransactionDTO(BigDecimal.valueOf(2L), "Zaliczka pracownika", "CASH_ADVANCE");
+            TransactionDTO t2 = new TransactionDTO(BigDecimal.valueOf(3L), "Klient", "CLIENT");
             TransactionDTO t3 = new TransactionDTO(BigDecimal.valueOf(4L), "Przekaz", "TRANSFER");
-            TransactionDTO t4 = new TransactionDTO(BigDecimal.valueOf(5L), "Prowizja", "COMMISSION");
-            TransactionDTO t5 = new TransactionDTO(BigDecimal.valueOf(6L), "Zaliczka pracownika", "CASH_ADVANCE");
-            TransactionDTO t6 = new TransactionDTO(BigDecimal.valueOf(7L), "Wynagrodzenie", "SALARY");
-            TransactionDTO t7 = new TransactionDTO(BigDecimal.valueOf(8L), "Klient", "CLIENT");
+
+            TransactionDTO t4 = new TransactionDTO(BigDecimal.valueOf(5L), "Konwój", "BANK");
+            TransactionDTO t5 = new TransactionDTO(BigDecimal.valueOf(6L), "Faktura got.", "CASH_INVOICE");
+            TransactionDTO t6 = new TransactionDTO(BigDecimal.valueOf(7L), "Prowizja", "COMMISSION");
+            TransactionDTO t7 = new TransactionDTO(BigDecimal.valueOf(8L), "Wynagrodzenie", "SALARY");
+
 
             transactions.add(t);
             transactions.add(t1);
