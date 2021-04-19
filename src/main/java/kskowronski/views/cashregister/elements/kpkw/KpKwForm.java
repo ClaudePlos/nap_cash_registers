@@ -377,17 +377,17 @@ public class KpKwForm extends FormLayout {
             return false;
         }
 
-        if (doc.getDocDef1().equals(getTransaction("CASH_INVOICE")) && doc.getDocKlKodPod() == null) {
+        if (doc.getDocDef1().equals(getTransaction("CASH_INVOICE")) && doc.getDocDef2().equals("")) {
             MyNotification.openAlert("Brak numeru dokumentu. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
-        if (doc.getDocDef1().equals(getTransaction("CASH_ADVANCE")) && doc.getDocKlKodPod() == null) {
+        if (doc.getDocDef1().equals(getTransaction("CASH_ADVANCE")) && doc.getDocPrcIdPod() == null) {
              MyNotification.openAlert("Brak wskazanego pracowinka. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
-        if (doc.getDocDef1().equals(getTransaction("SALARY")) && doc.getDocKlKodPod() == null) {
+        if (doc.getDocDef1().equals(getTransaction("SALARY")) && doc.getDocPrcIdPod() == null) {
             MyNotification.openAlert("Brak wskazanego pracowinka. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
