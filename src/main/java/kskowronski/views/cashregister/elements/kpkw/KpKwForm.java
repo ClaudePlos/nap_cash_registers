@@ -371,32 +371,36 @@ public class KpKwForm extends FormLayout {
             docKlKodPod.setValue(null);
     }
 
-    private boolean validation(Document doc){
+    private boolean validation(Document doc) {
         if (doc.getDocDateFrom() == null){
             MyNotification.openAlert("Brak daty wystawienia. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
-        if (doc.getDocDef1().equals(globalDataService.transactions.get(2).getCode()) && doc.getDocDef2().equals("")){
+        if (doc.getDocDef1().equals(getTransaction("CASH_INVOICE")) && doc.getDocKlKodPod() == null) {
             MyNotification.openAlert("Brak numeru dokumentu. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
-        if (doc.getDocDef1().equals(globalDataService.transactions.get(5).getCode()) && doc.getDocPrcIdPod() == null){
+        if (doc.getDocDef1().equals(getTransaction("CASH_ADVANCE")) && doc.getDocKlKodPod() == null) {
              MyNotification.openAlert("Brak wskazanego pracowinka. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
-        if (doc.getDocDef1().equals(globalDataService.transactions.get(6).getCode()) && doc.getDocPrcIdPod() == null){
+        if (doc.getDocDef1().equals(getTransaction("SALARY")) && doc.getDocKlKodPod() == null) {
             MyNotification.openAlert("Brak wskazanego pracowinka. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
-        if (doc.getDocDef1().equals(globalDataService.transactions.get(7).getCode())  && doc.getDocKlKodPod() == null){
+        if (doc.getDocDef1().equals(getTransaction("CLIENT")) && doc.getDocKlKodPod() == null) {
             MyNotification.openAlert("Brak wskazanego klienta. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
         return true;
+    }
+
+    private String getTransaction( String transaction) {
+        return globalDataService.transactions.stream().filter( t -> t.getCode().equals(transaction)).collect(Collectors.toList()).get(0).getCode();
     }
 
 
