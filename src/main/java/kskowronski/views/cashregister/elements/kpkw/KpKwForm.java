@@ -150,6 +150,7 @@ public class KpKwForm extends FormLayout {
                 MyNotification.openAlert("Stan kasy poniżej zera!!! Nie zatwierdzisz.",3000,  Notification.Position.MIDDLE);
                 return;
             }
+            save();
             Optional<Document> document = cashKpKwView.documentService.acceptKpKw(binder.getBean().getDocId(), binder.getBean().getDocDocIdZap(), binder.getBean().getDocFrmId());
             if ( document.isPresent()){
                 setDocument(document.get());
