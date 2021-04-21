@@ -82,6 +82,9 @@ public class Document {
     @Column(name = "DOK_DEF_2")
     private String docDef2;
 
+    @Column(name = "DOK_DEF_3")
+    private String docDef3;
+
     @Column(name = "DOK_F_ROZRACHUNKOWY")
     private String docSettlement;
 
@@ -312,5 +315,13 @@ public class Document {
 
     public void setFullNameForPrcIdPod(String fullNameForPrcIdPod) {
         this.fullNameForPrcIdPod = fullNameForPrcIdPod;
+    }
+
+    public String getDocDef3() {
+        return docDef3;
+    }
+
+    public void setDocDef3(String docDef3) {
+        this.docDef3 = docDef3;
     }
 }

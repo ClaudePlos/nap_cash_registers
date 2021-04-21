@@ -113,7 +113,7 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                     connection -> {
                         try (CallableStatement function = connection
                                 .prepareCall(
-                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_update_kpkw(?,?,?,?,?,?,?,?,?,?,?,?) }")) {
+                                        "{ ? = call NAPRZOD2.NPP_CASH_REPORTS.fn_update_kpkw(?,?,?,?,?,?,?,?,?,?,?,?,?) }")) {
                             function.registerOutParameter(1, Types.INTEGER);
                             function.setBigDecimal(2, document.getDocId());
                             function.setString(3, document.getDocRdocCode().toString());
@@ -124,9 +124,10 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
                             function.setString(8, document.getDocDef0());
                             function.setString(9, document.getDocDef1());
                             function.setString(10, document.getDocDef2());
-                            function.setString(11, document.getDocSettlement());
-                            function.setBigDecimal(12, document.getDocFrmId());
-                            function.setString(13, document.getDocDescription());
+                            function.setString(11, document.getDocDef3());
+                            function.setString(12, document.getDocSettlement());
+                            function.setBigDecimal(13, document.getDocFrmId());
+                            function.setString(14, document.getDocDescription());
                             function.execute();
                             return function.getInt(1);
                         }

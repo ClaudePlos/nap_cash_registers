@@ -56,6 +56,7 @@ public class KpKwForm extends FormLayout {
     private BigDecimalField docPrcIdPod = new BigDecimalField("Numer Pracownika");
     private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
     private TextField docDef2 = new TextField("Numer dowodu:");
+    private TextField docDef3 = new TextField("Numer wewnętrzny:");
     private TextField docDef0 = new TextField("Dodatkowe Info.");
     private TextField docDef1 = new TextField("Transfer");
     private String _docDef1 = "";
@@ -100,6 +101,7 @@ public class KpKwForm extends FormLayout {
         docPrcIdPod.setEnabled(false);
         docDescription.setEnabled(false);
         docDef2.setEnabled(false);
+        docDef3.setEnabled(false);
         docDef0.setEnabled(false);
         docDef0.setWidth("100px");
         docDef1.setEnabled(false);
@@ -192,7 +194,7 @@ public class KpKwForm extends FormLayout {
         divBank.setVisible(false);
         divBank.setClassName("divBank");
 
-        divCashInvoice.add(docDef2);
+        divCashInvoice.add(docDef2, docDef3);
         divCashInvoice.setVisible(false);
         divCashInvoice.setClassName("divCashInvoice");
 
@@ -301,6 +303,7 @@ public class KpKwForm extends FormLayout {
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
         docDef2.setEnabled(status);
+        docDef3.setEnabled(status);
         save.setEnabled(status);
         butAccept.setEnabled(status);
         butUnAccept.setEnabled(!status);
@@ -364,8 +367,10 @@ public class KpKwForm extends FormLayout {
         docDef0.setValue(seg);
         docSettlement.setValue(settlement);
         docDescription.setValue(transactionPL);
-        if (clearDataInvoiceNumber)
+        if (clearDataInvoiceNumber) {
             docDef2.setValue("");
+            docDef3.setValue("");
+        }
         if (clearDataWorker)
             docPrcIdPod.setValue(null);
         if (clearDataClient)
@@ -379,7 +384,12 @@ public class KpKwForm extends FormLayout {
         }
 
         if (doc.getDocDef1().equals(getTransaction("CASH_INVOICE")) && doc.getDocDef2().equals("")) {
-            MyNotification.openAlert("Brak numeru dokumentu. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            MyNotification.openAlert("Brak numeru dowodu. Wypełnij.", 2000, Notification.Position.MIDDLE);
+            return false;
+        }
+
+        if (doc.getDocDef1().equals(getTransaction("CASH_INVOICE")) && doc.getDocDef3().equals("")) {
+            MyNotification.openAlert("Brak numeru wewnętrznego. Wypełnij.", 2000, Notification.Position.MIDDLE);
             return false;
         }
 
