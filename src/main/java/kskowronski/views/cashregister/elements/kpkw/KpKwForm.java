@@ -81,6 +81,7 @@ public class KpKwForm extends FormLayout {
 
 
     private HorizontalLayout divIncome = new HorizontalLayout();
+    private HorizontalLayout divIncomeCard = new HorizontalLayout();
     private HorizontalLayout divBank = new HorizontalLayout();
     private HorizontalLayout divCashInvoice = new HorizontalLayout();
     private HorizontalLayout divTransfer = new HorizontalLayout();
@@ -194,6 +195,9 @@ public class KpKwForm extends FormLayout {
         divIncome.setVisible(true);
         divIncome.setClassName("divIncome");
 
+        divIncomeCard.setVisible(true);
+        divIncomeCard.setClassName("divIncomeCard");
+
         divBank.setVisible(false);
         divBank.setClassName("divBank");
 
@@ -236,7 +240,7 @@ public class KpKwForm extends FormLayout {
         });
 
         add(docOwnNumber, radioTransaction, divTypeAndDate, docAmount, docDescription
-                , divIncome, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
+                , divIncome, divIncomeCard, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
                 , labCompanyName, labWorkerName
                 , divAccount
                 , buttons);
@@ -330,6 +334,7 @@ public class KpKwForm extends FormLayout {
     private void onChangeTransaction(String transaction){
         //Div transaction update
         divIncome.setVisible( checkTransaction(transaction, TransactionType.INCOME.name()) || transaction.equals(""));
+        divIncomeCard.setVisible( checkTransaction(transaction, TransactionType.INCOME_CARD.name()) || transaction.equals(""));
         divBank.setVisible( checkTransaction(transaction, TransactionType.BANK.name()) );
         divCashInvoice.setVisible( checkTransaction(transaction, TransactionType.CASH_INVOICE.name()) );
         divTransfer.setVisible( checkTransaction(transaction, TransactionType.TRANSFER.name()) );
@@ -345,6 +350,8 @@ public class KpKwForm extends FormLayout {
 
     private void setupSettingsForTransaction(String transaction, String transactionPL){
         if (transaction.equals(TransactionType.INCOME.name())){
+            updateDocumentItem(KpKwType.KP, false, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getIncomeCode() , "N", transactionPL, true, true, true);
+        } else if (transaction.equals(TransactionType.INCOME_CARD.name())){
             updateDocumentItem(KpKwType.KP, false, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getIncomeCode() , "N", transactionPL, true, true, true);
         } else if (transaction.equals(TransactionType.BANK.name())){
             updateDocumentItem(KpKwType.KW, false, nppMapCashService.findByCashCode(cashKpKwView.cashCode).getBankCode(), "N", transactionPL, true, true, true);

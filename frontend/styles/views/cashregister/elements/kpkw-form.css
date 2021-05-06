@@ -10,6 +10,11 @@ kpkw-form,
     height: 65px;
 }
 
+.divIncomeCard{
+    display: block;
+    height: 65px;
+}
+
 .divBank {
     display: block;
     height: 65px;
