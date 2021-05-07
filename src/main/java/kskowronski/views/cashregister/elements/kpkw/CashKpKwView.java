@@ -55,7 +55,7 @@ public class CashKpKwView extends Dialog {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
         this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService, nppMapCashService);
-        setWidth("770px");
+        setWidth("790px");
         setHeight("680px");
         labMoneyInCash.setClassName("labMoneyInCash");
 
