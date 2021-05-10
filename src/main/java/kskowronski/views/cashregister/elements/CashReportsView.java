@@ -30,6 +30,7 @@ import java.util.*;
 @Component
 @UIScope
 @JavaScript("./js/cash_report.js")
+@JavaScript("./js/cash_report_card.js")
 public class CashReportsView extends VerticalLayout {
 
     private transient DocumentService documentService;
@@ -213,7 +214,7 @@ public class CashReportsView extends VerticalLayout {
 
         //Run js
         //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
-        String initFunction = "generateCashReport($0, $1, $2, $3, $4, $5);";
+        String initFunction = "generateCashReportCard($0, $1, $2, $3, $4, $5);";
         UI.getCurrent().getPage().executeJs(initFunction, this,
                 cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw), valueInitialState.toString());
 
