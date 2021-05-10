@@ -17,4 +17,10 @@ public interface DocumentRepo extends JpaRepository<Document, BigDecimal> {
     @Query("select d from Document d where d.docDocIdZap = :docId and d.docFrmId = :frmId order by d.docNo asc")
     Optional<List<Document>> findByDocKpKwAndFrm(@Param("docId") BigDecimal docId, @Param("frmId") BigDecimal frmId);
 
+    @Query("select d from Document d where d.docDocIdZap = :docId and d.docFrmId = :frmId and d.docDef1 not in ('INCOME_CARD') order by d.docNo asc")
+    Optional<List<Document>> findByDocKpKwAndFrmWithoutIncomeCard(@Param("docId") BigDecimal docId, @Param("frmId") BigDecimal frmId);
+
+    @Query("select d from Document d where d.docDocIdZap = :docId and d.docFrmId = :frmId and d.docDef1 in ('INCOME_CARD') order by d.docNo asc")
+    Optional<List<Document>> findByDocKpKwAndFrmOnlyIncomeCard(@Param("docId") BigDecimal docId, @Param("frmId") BigDecimal frmId);
+
 }

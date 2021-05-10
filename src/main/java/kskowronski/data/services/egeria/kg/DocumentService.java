@@ -57,6 +57,24 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return new ArrayList<>();
     }
 
+    public List<Document> getAllCashKpKwWithoutIncomeCard(BigDecimal docId, BigDecimal frmId){
+        consolidationService.setConsolidateCompany();
+        Optional<List<Document>> lKpKw = this.repo.findByDocKpKwAndFrmWithoutIncomeCard(docId, frmId);
+        if (lKpKw.isPresent()){
+            return lKpKw.get();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Document> getAllCashKpKwOnlyIncomeCard(BigDecimal docId, BigDecimal frmId){
+        consolidationService.setConsolidateCompany();
+        Optional<List<Document>> lKpKw = this.repo.findByDocKpKwAndFrmOnlyIncomeCard(docId, frmId);
+        if (lKpKw.isPresent()){
+            return lKpKw.get();
+        }
+        return new ArrayList<>();
+    }
+
     public Optional<Document> addNewCashReport(BigDecimal casId, BigDecimal frmId, BigDecimal lp, LocalDate from, LocalDate to, BigDecimal initialValue){
         Session session = em.unwrap( Session.class );
         Integer docId = null;
