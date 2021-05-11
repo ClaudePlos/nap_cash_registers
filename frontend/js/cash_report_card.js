@@ -41,9 +41,9 @@ function generateCashReportCard(container, caseCode, docNumber, period, listDocK
     let allWn = sumWn + lValueEndState;
     bodyData.push(['','','','',{text:  'Razem obroty:', alignment: 'right'}, {text:  sumMa.toFixed(2), alignment: 'right', fillColor: 'grey'}
         , {text:  sumWn.toFixed(2), alignment: 'right', fillColor: 'grey',}]);
-    bodyData.push(['','','','',{text:  'Stan Kasy poprzedni:', alignment: 'right'},{text:  lValueInitialState.toFixed(2), alignment: 'right'}, '']);
-    bodyData.push(['','','','',{text:  'Stan Kasy obecny:', alignment: 'right'}, '', {text:  lValueEndState.toFixed(2), alignment: 'right'}]);
-    bodyData.push(['','','','',{text:  'Razem:', alignment: 'right'}, {text:  allMa.toFixed(2), alignment: 'right'}, {text:  allWn.toFixed(2), alignment: 'right'}]);
+    //bodyData.push(['','','','',{text:  'Stan Kasy poprzedni:', alignment: 'right'},{text:  lValueInitialState.toFixed(2), alignment: 'right'}, '']);
+    //bodyData.push(['','','','',{text:  'Stan Kasy obecny:', alignment: 'right'}, '', {text:  lValueEndState.toFixed(2), alignment: 'right'}]);
+    //bodyData.push(['','','','',{text:  'Razem:', alignment: 'right'}, {text:  allMa.toFixed(2), alignment: 'right'}, {text:  allWn.toFixed(2), alignment: 'right'}]);
     //console.log(bodyData);
 
     var docDefinition = {
