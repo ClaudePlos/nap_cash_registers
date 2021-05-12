@@ -127,7 +127,10 @@ public class CashReportsView extends VerticalLayout {
     }
 
     private Label createEndState(Document item) {
-        return new Label(item.docEndState().toString());
+        if (item.existsDocEndState()){
+            return new Label(item.docEndState().toString());
+        }
+        return new Label();
     }
 
     public VerticalLayout openReports(){

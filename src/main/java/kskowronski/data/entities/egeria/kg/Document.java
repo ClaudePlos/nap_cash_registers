@@ -101,6 +101,13 @@ public class Document {
         return docInitialState.add(docWn.subtract(docMa));
     }
 
+    public Boolean existsDocEndState(){
+        if (docInitialState != null) {
+            return true;
+        }
+        return false;
+    }
+
     public BigDecimal getDocId() {
         return docId;
     }
