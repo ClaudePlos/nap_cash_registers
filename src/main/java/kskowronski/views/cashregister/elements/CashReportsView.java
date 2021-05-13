@@ -137,7 +137,7 @@ public class CashReportsView extends VerticalLayout {
         return this;
     }
 
-    public void setItems(List<Document> reports, BigDecimal casId, String cashCode, BigDecimal frmId){
+    public void setItemsCashReports(List<Document> reports, BigDecimal casId, String cashCode, BigDecimal frmId){
         gridCashReports.deselectAll();
         this.reports = reports;
         this.casId = casId;

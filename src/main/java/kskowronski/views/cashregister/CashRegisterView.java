@@ -81,7 +81,7 @@ public class CashRegisterView extends HorizontalLayout {
         Optional<List<Document>> reportsDB = documentService.getAllCashReports(casId, frmId);
         if ( reportsDB.isPresent() ){
             reports = reportsDB.get();
-            cashReportsView.setItems(reports, casId, cashCode, frmId);
+            cashReportsView.setItemsCashReports(reports, casId, cashCode, frmId);
         } else {
             Notification.show("Brak raprotów dla tej kasy", 3000, Notification.Position.MIDDLE);
         }
