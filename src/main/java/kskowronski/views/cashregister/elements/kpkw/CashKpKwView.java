@@ -6,6 +6,8 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.Query;
@@ -36,6 +38,7 @@ public class CashKpKwView extends Dialog {
     private Html title = new Html("<div>KP/KW </div>");
     private Label labCash = new Label("-");
     static Logger logger = Logger.getLogger(CashKpKwView.class.getName());
+    private Button butClose = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
 
     private Grid<Document> gridCashKpKw;
 
@@ -91,11 +94,14 @@ public class CashKpKwView extends Dialog {
         Grid.Column<Document> docNo = gridCashKpKw.addColumn("docNo").setHeader("Lp").setWidth("10px");
         gridCashKpKw.addColumn("docOwnNumber").setHeader("Numer dokumentu");
         VerticalLayout v01 = new VerticalLayout();
-        HorizontalLayout h00 = new HorizontalLayout(title, labCash, labMoneyInCash);
+        butClose.setClassName("butClose");
+        HorizontalLayout h00 = new HorizontalLayout(title, labCash, labMoneyInCash, butClose);
         HorizontalLayout h01 = new HorizontalLayout(gridCashKpKw, formKpKw);
         v01.add(butAddNewKpKw, h01);
 
         add(h00, v01);
+
+        butClose.addClickListener( e -> close());
 
         gridCashKpKw.asSingleSelect().addValueChangeListener(event ->
                 formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue()));

@@ -23,3 +23,9 @@ cash-kpkw-view,
     word-wrap: break-word;
     width: 100%;
 }
+
+.butClose {
+    position: absolute;
+    margin-left: 755px;
+    margin-top: -10px;
+}

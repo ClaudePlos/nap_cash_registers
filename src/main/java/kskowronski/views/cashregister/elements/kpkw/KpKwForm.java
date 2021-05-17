@@ -74,7 +74,6 @@ public class KpKwForm extends FormLayout {
     private Button butAccept = new Button("Zatwierdź");
     private Button butUnAccept = new Button("Cofnij Zat.");
     private Button butDelete = new Button("Usuń");
-    private Button butClose = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
     private CashKpKwView cashKpKwView;
     private RadioButtonGroup<TransactionDTO> radioTransaction = new RadioButtonGroup<>();
 
@@ -184,9 +183,7 @@ public class KpKwForm extends FormLayout {
             }
         });
 
-        butClose.addClickListener( e -> cashKpKwView.close());
-
-        HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butUnAccept, butDelete, butClose);
+        HorizontalLayout buttons = new HorizontalLayout(save, butAccept, butUnAccept, butDelete);
         buttons.setClassName("buttonsFooter");
 
         HorizontalLayout divTypeAndDate = new HorizontalLayout(docRdocCode, docDateFrom);
