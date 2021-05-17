@@ -195,7 +195,7 @@ public class KpKwForm extends FormLayout {
         divIncome.setVisible(true);
         divIncome.setClassName("divIncome");
 
-        divIncomeCard.setVisible(true);
+        divIncomeCard.setVisible(false);
         divIncomeCard.setClassName("divIncomeCard");
 
         divBank.setVisible(false);
@@ -334,7 +334,7 @@ public class KpKwForm extends FormLayout {
     private void onChangeTransaction(String transaction){
         //Div transaction update
         divIncome.setVisible( checkTransaction(transaction, TransactionType.INCOME.name()) || transaction.equals(""));
-        divIncomeCard.setVisible( checkTransaction(transaction, TransactionType.INCOME_CARD.name()) || transaction.equals(""));
+        divIncomeCard.setVisible( checkTransaction(transaction, TransactionType.INCOME_CARD.name()) );
         divBank.setVisible( checkTransaction(transaction, TransactionType.BANK.name()) );
         divCashInvoice.setVisible( checkTransaction(transaction, TransactionType.CASH_INVOICE.name()) );
         divTransfer.setVisible( checkTransaction(transaction, TransactionType.TRANSFER.name()) );

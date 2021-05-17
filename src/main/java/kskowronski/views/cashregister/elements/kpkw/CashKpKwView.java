@@ -55,8 +55,8 @@ public class CashKpKwView extends Dialog {
         logger.log(Level.INFO, "Constructor CashKpKwView");
         this.documentService = documentService;
         this.formKpKw = new KpKwForm(this, clientService, workerService, globalDataService, nppMapCashService);
-        setWidth("790px");
-        setHeight("680px");
+        setWidth("820px");
+        setHeight("660px");
         labMoneyInCash.setClassName("labMoneyInCash");
 
         butAddNewKpKw.setEnabled(false);
@@ -75,7 +75,8 @@ public class CashKpKwView extends Dialog {
                 gridCashKpKw.getDataProvider().refreshAll();
                 gridCashKpKw.select(newDocKpKw.get());
                 gridCashKpKw.asSingleSelect().addValueChangeListener(event ->
-                        formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue()));
+                        formKpKw.setDocument(gridCashKpKw.asSingleSelect().getValue())
+                );
                 formKpKw.docRdocCode.setEnabled(false);
                 documentService.updateKpKw(newDocKpKw.get());
             } else {
