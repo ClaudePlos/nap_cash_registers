@@ -163,7 +163,7 @@ public class KpKwForm extends FormLayout {
                 Notification.show("Zatwierdzono",1000, Notification.Position.MIDDLE);
             }
             cashKpKwView.calculateMoneyInCash();
-            cashKpKwView.cashReportsView.refreshItemCashReport(cashKpKwView.cashReportItem.getDocId());
+            cashKpKwView.cashReportsView.refreshItemCashReport(cashKpKwView.cashReportItem);
         });
 
         butUnAccept.addClickListener( e -> {

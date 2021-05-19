@@ -43,12 +43,16 @@ public class DocumentService extends CrudService<Document, BigDecimal> {
         return repo.findAll();
     }
 
-    public Optional<List<Document>> getAllCashReports(BigDecimal casId, BigDecimal frmId){
+    public Optional<List<Document>> getAllCashReports(BigDecimal casId, BigDecimal frmId) {
         consolidationService.setConsolidateCompany();
         return this.repo.findByDocCasIdAndFrm(casId, frmId);
     }
 
-    public List<Document> getAllCashKpKw(BigDecimal docId, BigDecimal frmId){
+    public Optional<Document> getDocument(BigDecimal docId) {
+        return this.repo.findById(docId);
+    }
+
+    public List<Document> getAllCashKpKw(BigDecimal docId, BigDecimal frmId) {
         consolidationService.setConsolidateCompany();
         Optional<List<Document>> lKpKw = this.repo.findByDocKpKwAndFrm(docId, frmId);
         if (lKpKw.isPresent()){

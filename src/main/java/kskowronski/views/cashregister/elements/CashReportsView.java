@@ -222,8 +222,15 @@ public class CashReportsView extends VerticalLayout {
 
     }
 
-    public void refreshItemCashReport(BigDecimal casId) {
-        System.out.printf(casId + "");
+    public void refreshItemCashReport(Document item) {
+        Optional<Document> docAfterAccept = documentService.getDocument(item.getDocId());
+        if (docAfterAccept.isPresent()) {
+            Document currentDocItem = (Document) gridCashReports.getDataProvider().getId(item);
+            currentDocItem.setDocWn(docAfterAccept.get().getDocWn());
+            currentDocItem.setDocMa(docAfterAccept.get().getDocMa());
+            currentDocItem.setDocAmount(docAfterAccept.get().getDocAmount());
+            gridCashReports.getDataProvider().refreshAll();
+        }
     }
 
 }
