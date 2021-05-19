@@ -19,6 +19,7 @@ import kskowronski.data.services.egeria.ckk.ClientService;
 import kskowronski.data.services.egeria.ek.WorkerService;
 import kskowronski.data.services.egeria.kg.NppMapCashService;
 import kskowronski.data.services.global.GlobalDataService;
+import kskowronski.views.cashregister.elements.CashReportsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,12 +41,14 @@ public class CashKpKwView extends Dialog {
     static Logger logger = Logger.getLogger(CashKpKwView.class.getName());
     private Button butClose = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
 
+    public CashReportsView cashReportsView;
+
     private Grid<Document> gridCashKpKw;
 
     public transient DocumentService documentService;
 
     private transient List<Document> listDocKpKw;
-    private transient Document cashReportItem;
+    public transient Document cashReportItem;
 
     private Button butAddNewKpKw = new Button("Dodaj KP/KW");
     private KpKwForm formKpKw;

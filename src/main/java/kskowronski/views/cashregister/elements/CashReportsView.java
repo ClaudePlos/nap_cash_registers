@@ -81,6 +81,7 @@ public class CashReportsView extends VerticalLayout {
                 item -> {
                     cashKpKwView.cashCode = cashCode;
                     cashKpKwView.openKpKwView(item);
+                    cashKpKwView.cashReportsView = this;
                     cashKpKwView.open();
                 }
         )).setWidth("50px");
@@ -220,4 +221,9 @@ public class CashReportsView extends VerticalLayout {
                 cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw), valueInitialState.toString());
 
     }
+
+    public void refreshItemCashReport(BigDecimal casId) {
+        System.out.printf(casId + "");
+    }
+
 }
