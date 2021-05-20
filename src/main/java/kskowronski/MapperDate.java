@@ -12,6 +12,7 @@ public class MapperDate {
     public SimpleDateFormat dtDD = new SimpleDateFormat("dd");
 
     public DateTimeFormatter localDateYYYYMMDD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public DateTimeFormatter localDateMMYYYY = DateTimeFormatter.ofPattern("MM-yyyy");
 
     public String getCurrentlyYear(){
         Date today = new Date();

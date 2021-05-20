@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.spring.annotation.UIScope;
+import kskowronski.MapperDate;
 import kskowronski.data.entities.egeria.kg.Document;
 import kskowronski.data.services.egeria.ek.WorkerService;
 import kskowronski.data.services.egeria.kg.DocumentService;
@@ -46,6 +47,8 @@ public class CashReportsView extends VerticalLayout {
     private BigDecimal endValue = BigDecimal.ZERO;
 
     private transient Document selectedDocument = null;
+
+    private MapperDate mapperDate = new MapperDate();
 
     Button butAdd = new Button("Dodaj Raport Kasowy", e -> addNewReportItem());
     Button butAcceptReport = new Button("Zatwierdź", e -> acceptReportItem());
@@ -89,7 +92,8 @@ public class CashReportsView extends VerticalLayout {
         gridCashReports.addColumn(new NativeButtonRenderer<Document>("Raport",
                 item -> {
                     try {
-                        generateCashReport(item.getDocId(), item.getDocOwnNumber(), item.getDocFrmId(), item.getDocInitialState());
+                        generateCashReport(item.getDocId(), item.getDocOwnNumber(), item.getDocFrmId(), item.getDocInitialState()
+                                , mapperDate.localDateMMYYYY.format(item.getDocDateFrom()) );
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -99,7 +103,8 @@ public class CashReportsView extends VerticalLayout {
         gridCashReports.addColumn(new NativeButtonRenderer<Document>("RapKart",
                 item -> {
                     try {
-                        generateCashReportCard(item.getDocId(), item.getDocOwnNumber(), item.getDocFrmId(), item.getDocInitialState());
+                        generateCashReportCard(item.getDocId(), item.getDocOwnNumber(), item.getDocFrmId(), item.getDocInitialState()
+                                , mapperDate.localDateMMYYYY.format(item.getDocDateFrom()) );
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -186,7 +191,7 @@ public class CashReportsView extends VerticalLayout {
         }
     }
 
-    private void generateCashReport(BigDecimal docId, String docNumber, BigDecimal docFrmId, BigDecimal valueInitialState) throws IOException {
+    private void generateCashReport(BigDecimal docId, String docNumber, BigDecimal docFrmId, BigDecimal valueInitialState, String period) throws IOException {
         Gson gson = new Gson();
         List<Document> listDocKpKw = documentService.getAllCashKpKwWithoutIncomeCard(docId, docFrmId);
 
@@ -200,11 +205,11 @@ public class CashReportsView extends VerticalLayout {
         //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
         String initFunction = "generateCashReport($0, $1, $2, $3, $4, $5);";
         UI.getCurrent().getPage().executeJs(initFunction, this,
-                cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw), valueInitialState.toString());
+                cashCode, docNumber == null ? "" : docNumber, period, gson.toJson(listDocKpKw), valueInitialState.toString());
 
     }
 
-    private void generateCashReportCard(BigDecimal docId, String docNumber, BigDecimal docFrmId, BigDecimal valueInitialState) throws IOException {
+    private void generateCashReportCard(BigDecimal docId, String docNumber, BigDecimal docFrmId, BigDecimal valueInitialState, String period) throws IOException {
         Gson gson = new Gson();
         List<Document> listDocKpKw = documentService.getAllCashKpKwOnlyIncomeCard(docId, docFrmId);
 
@@ -218,7 +223,7 @@ public class CashReportsView extends VerticalLayout {
         //listDocKpKw.get().sort(Comparator.comparing(Document::getDocNo)); //asc
         String initFunction = "generateCashReportCard($0, $1, $2, $3, $4, $5);";
         UI.getCurrent().getPage().executeJs(initFunction, this,
-                cashCode, docNumber, period.getPeriod(), gson.toJson(listDocKpKw), valueInitialState.toString());
+                cashCode, docNumber == null ? "" : docNumber, period, gson.toJson(listDocKpKw), valueInitialState.toString());
 
     }
 
