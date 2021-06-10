@@ -33,6 +33,7 @@ import kskowronski.views.components.MyNotification;
 import kskowronski.views.components.WorkerDialog;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -106,6 +107,7 @@ public class KpKwForm extends FormLayout {
         docDef0.setEnabled(false);
         docDef0.setWidth("100px");
         docDef1.setEnabled(false);
+        docAmountCard.setVisible(false);
         docSettlement.setEnabled(false);
         docSettlement.setWidth("30px");
         docKlKodPod.setWidth("100px");
@@ -342,6 +344,18 @@ public class KpKwForm extends FormLayout {
         divCommission.setVisible( checkTransaction(transaction, TransactionType.COMMISSION.name()) );
         divWorker.setVisible( checkTransaction(transaction, TransactionType.CASH_ADVANCE.name()) || checkTransaction(transaction, TransactionType.SALARY.name()) );
         divClient.setVisible( checkTransaction(transaction, TransactionType.CLIENT.name()) );
+
+        if (transaction == TransactionType.INCOME.name()) {
+            docAmount.setVisible(true);
+            docAmountCard.setVisible(false);
+            docAmountCard.setValue(null);
+        }
+
+        if (transaction == TransactionType.INCOME_CARD.name()) {
+            docAmount.setVisible(false);
+            docAmountCard.setVisible(true);
+            docAmount.setValue(BigDecimal.ZERO);
+        }
     }
 
 
