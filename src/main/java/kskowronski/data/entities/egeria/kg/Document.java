@@ -27,6 +27,9 @@ public class Document {
     @Column(name = "DOK_KWOTA")
     private BigDecimal docAmount;
 
+    @Column(name = "DOK_KWOTA_UC")
+    private BigDecimal docAmountCard;
+
     @Column(name = "DOK_NUMER_W_PACZCE")
     private BigDecimal docNumberInPackage;
 
@@ -330,5 +333,13 @@ public class Document {
 
     public void setDocDef3(String docDef3) {
         this.docDef3 = docDef3;
+    }
+
+    public BigDecimal getDocAmountCard() {
+        return docAmountCard;
+    }
+
+    public void setDocAmountCard(BigDecimal docAmountCard) {
+        this.docAmountCard = docAmountCard;
     }
 }

@@ -53,6 +53,7 @@ public class KpKwForm extends FormLayout {
     public ComboBox<KpKwType> docRdocCode = new ComboBox<>("Kod rodzaju");
     private DatePicker docDateFrom = new DatePicker("Data wyst.");
     private BigDecimalField docAmount = new BigDecimalField("Kwota");
+    private BigDecimalField docAmountCard = new BigDecimalField("Kwota");
     private BigDecimalField docPrcIdPod = new BigDecimalField("Numer Pracownika");
     private BigDecimalField docKlKodPod = new BigDecimalField("Kod Klienta");
     private TextField docDef2 = new TextField("Numer dowodu:");
@@ -238,7 +239,7 @@ public class KpKwForm extends FormLayout {
             onChangeTransaction(radioTransaction.getValue().getCode());
         });
 
-        add(docOwnNumber, radioTransaction, divTypeAndDate, docAmount, docDescription
+        add(docOwnNumber, radioTransaction, divTypeAndDate, docAmount, docAmountCard, docDescription
                 , divIncome, divIncomeCard, divBank, divCashInvoice, divTransfer, divCommission, divWorker, divClient
                 , labCompanyName, labWorkerName
                 , divAccount
@@ -308,6 +309,7 @@ public class KpKwForm extends FormLayout {
         radioTransaction.setEnabled(status);
         docDateFrom.setEnabled(status);
         docAmount.setEnabled(status);
+        docAmountCard.setEnabled(status);
         docDef2.setEnabled(status);
         docDef3.setEnabled(status);
         save.setEnabled(status);
