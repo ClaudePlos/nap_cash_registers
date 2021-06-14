@@ -15,11 +15,11 @@ function generateCashReportCard(container, caseCode, docNumber, period, listDocK
         let quotaMa = 0;
         let quotaWn = 0;
         if (cellValue[i].docRdocCode === 'KP'){
-            quotaMa = cellValue[i].docAmount;
-            sumMa += cellValue[i].docAmount;
+            quotaMa = cellValue[i].docAmountCard;
+            sumMa += cellValue[i].docAmountCard;
         } else {
-            quotaWn = cellValue[i].docAmount;
-            sumWn += cellValue[i].docAmount;
+            quotaWn = cellValue[i].docAmountCard;
+            sumWn += cellValue[i].docAmountCard;
         }
 
         let year = cellValue[i].docDateFrom.year;
